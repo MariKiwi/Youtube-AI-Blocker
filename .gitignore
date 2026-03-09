@@ -3,4 +3,5 @@ node_modules/
 .pnpm-store/
 server/generated/
 server/prisma/migrations/
+examples/
 

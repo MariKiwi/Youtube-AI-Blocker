@@ -248,6 +248,14 @@ The server is ready for client work when:
 
 Only start this phase after the API contract is stable.
 
+### Client UI constraints
+
+- [ ] The primary in-page controls must be injected into the default YouTube watch page player action row
+- [ ] The injected controls should sit next to the native like buttons, not in a detached overlay
+- [ ] The visual styling should take inspiration from YouTube's own like/dislike button language
+- [ ] The client must display confidence level and score directly in the watch page controls
+- [ ] The client must provide a popup UI accessible from the extension icon for settings
+
 ### Extension setup
 
 - [ ] Create the browser extension project
@@ -255,6 +263,7 @@ Only start this phase after the API contract is stable.
 - [ ] Set up content scripts
 - [ ] Set up background/service worker logic if needed
 - [ ] Set up storage for extension settings
+- [ ] Create the extension popup scaffold for settings
 
 ### API integration layer
 
@@ -267,6 +276,7 @@ Only start this phase after the API contract is stable.
 
 ### Detect videos on YouTube pages
 
+- [ ] Support the default YouTube watch page first
 - [ ] Identify which YouTube page types to support first
 - [ ] Detect visible video elements on the homepage
 - [ ] Detect video elements in search results
@@ -280,6 +290,16 @@ Only start this phase after the API contract is stable.
 - [ ] Add different styles for low, medium, and high confidence
 - [ ] Make sure highlights remain stable when YouTube dynamically updates the page
 
+### Watch page action-bar UI
+
+- [ ] Detect the player action row under the default YouTube video player
+- [ ] Inject the client controls next to the native like/dislike buttons
+- [ ] Match YouTube-like spacing, button sizing, and pill/button rhythm
+- [ ] Display the confidence level directly in the injected controls
+- [ ] Display the score directly in the injected controls
+- [ ] Keep the injected controls stable across YouTube dynamic page updates
+- [ ] Avoid breaking the native action row layout on desktop and mobile widths
+
 ### Blocking
 
 - [ ] Add a setting to enable or disable blocking
@@ -292,14 +312,25 @@ Only start this phase after the API contract is stable.
 ### Mark as AI
 
 - [ ] Add a UI action to mark a video as AI
+- [ ] Show `Flag as AI` instead of vote buttons when a video is still `unknown`
+- [ ] Place the `Flag as AI` control in the watch page action row next to the native buttons
 - [ ] Send the flag request to the server
 - [ ] Refresh the local video state after submission
 
 ### Vote on an existing flag
 
+- [ ] Only show vote controls when the video is no longer `unknown`
 - [ ] Add UI controls for voting for the AI flag
 - [ ] Add UI controls for voting against the AI flag
+- [ ] Show vote controls in the same YouTube-like action row UI as the score and confidence
 - [ ] Update the visible confidence state after voting
+
+### Conditional watch page states
+
+- [ ] For `unknown` videos, show `Unknown` state and `Flag as AI`
+- [ ] For known videos, show confidence level, score, upvote button, and downvote button
+- [ ] Do not show vote controls for videos that have no database record yet
+- [ ] For `unflagged` videos, still show the score and state clearly as not flagged
 
 ### UX details
 
@@ -310,10 +341,13 @@ Only start this phase after the API contract is stable.
 ## Phase 8: Settings Page
 
 - [ ] Create a settings page UI
+- [ ] Create the popup UI accessible from the extension icon
 - [ ] Add toggle for blocking functionality
 - [ ] Add API server URL setting
 - [ ] Add reset-to-default behavior
 - [ ] Add future-friendly storage structure for more settings
+- [ ] Show current API server value in the popup/settings UI
+- [ ] Keep popup focused on extension settings, not per-video voting actions
 
 ## Phase 9: Client Testing and Hardening
 
