@@ -11,6 +11,9 @@
   --yaib-button-hover-bg: rgba(0, 0, 0, 0.08);
   --yaib-button-active-bg: rgba(6, 95, 212, 0.14);
   --yaib-button-active-border: rgba(6, 95, 212, 0.4);
+  --yaib-group-bg: rgba(255, 255, 255, 0.78);
+  --yaib-group-border: rgba(15, 15, 15, 0.1);
+  --yaib-group-shadow: 0 8px 20px rgba(15, 15, 15, 0.06);
   --yaib-card-badge-bg: rgba(15, 15, 15, 0.82);
   --yaib-card-badge-border: rgba(255, 255, 255, 0.14);
   --yaib-card-badge-text: #ffffff;
@@ -41,6 +44,9 @@ html[data-color-scheme="dark"] {
   --yaib-button-hover-bg: rgba(255, 255, 255, 0.16);
   --yaib-button-active-bg: rgba(138, 180, 248, 0.2);
   --yaib-button-active-border: rgba(138, 180, 248, 0.45);
+  --yaib-group-bg: rgba(32, 32, 32, 0.88);
+  --yaib-group-border: rgba(255, 255, 255, 0.12);
+  --yaib-group-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
   --yaib-card-badge-bg: rgba(15, 15, 15, 0.84);
   --yaib-card-badge-border: rgba(255, 255, 255, 0.18);
   --yaib-card-badge-text: #ffffff;
@@ -56,11 +62,31 @@ html[data-color-scheme="dark"] {
   --yaib-toast-error-border: rgba(242, 139, 130, 0.9);
 }
 
+.yaib-watch-menu {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.yaib-watch-menu > ytd-menu-renderer {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
 .yaib-controls {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   gap: 8px;
-  margin-left: 8px;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid var(--yaib-group-border);
+  border-radius: 18px;
+  background: var(--yaib-group-bg);
+  box-shadow: var(--yaib-group-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   flex-wrap: wrap;
   flex: 0 1 auto;
   max-width: 100%;
@@ -322,10 +348,14 @@ html[data-color-scheme="dark"] {
 }
 
 @media (max-width: 900px) {
+  .yaib-watch-menu {
+    gap: 8px;
+  }
+
   .yaib-controls {
-    margin-left: 0;
     width: 100%;
     gap: 6px;
+    padding: 5px;
   }
 
   .yaib-pill,

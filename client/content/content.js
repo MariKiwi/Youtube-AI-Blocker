@@ -13,6 +13,7 @@
   };
 
   const ROOT_ID = "yaib-watch-controls";
+  const WATCH_MENU_CLASS = "yaib-watch-menu";
   const TOAST_ID = "yaib-watch-toast";
   const CARD_BADGE_CLASS = "yaib-card-badge";
   const BLOCK_OVERLAY_CLASS = "yaib-block-overlay";
@@ -67,7 +68,9 @@
   }
 
   function findActionRow() {
-    return document.querySelector("#menu ytd-menu-renderer #top-level-buttons-computed");
+    return document
+      .querySelector("#menu ytd-menu-renderer #top-level-buttons-computed")
+      ?.closest("#menu") ?? null;
   }
 
   function findWatchBlockHost() {
@@ -314,6 +317,7 @@
 
   function findOrCreateRoot(actionRow) {
     let root = document.getElementById(ROOT_ID);
+    actionRow.classList.add(WATCH_MENU_CLASS);
 
     if (!root) {
       root = document.createElement("div");

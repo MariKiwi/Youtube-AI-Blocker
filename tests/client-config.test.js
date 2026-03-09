@@ -21,8 +21,10 @@ test("client manifest declares popup, background, content script, and storage pe
 test("popup scaffold exposes blocking and API server settings", async () => {
   const popupHtml = await readFile(`${root}/client/popup/popup.html`, "utf8");
 
+  assert.match(popupHtml, /popup__brand-mark/);
   assert.match(popupHtml, /id="blockingEnabled"/);
   assert.match(popupHtml, /id="debugUnknownIndicators"/);
+  assert.match(popupHtml, /toggle__slider/);
   assert.match(popupHtml, /id="apiBaseUrl"/);
   assert.match(popupHtml, /id="saveButton"/);
   assert.match(popupHtml, /id="resetButton"/);
@@ -44,6 +46,8 @@ test("content script scaffold includes interactive watch page controls", async (
   const contentScript = await readFile(`${root}/client/content/content.js`, "utf8");
 
   assert.match(contentScript, /findActionRow/);
+  assert.match(contentScript, /closest\("#menu"\)/);
+  assert.match(contentScript, /yaib-watch-menu/);
   assert.match(contentScript, /Flag as AI/);
   assert.match(contentScript, /Upvote/);
   assert.match(contentScript, /Downvote/);
@@ -96,8 +100,11 @@ test("content CSS defines dark mode variables and toast styles for injected cont
   assert.match(css, /var\(--yaib-pill-text\)/);
   assert.match(css, /var\(--yaib-pill-bg\)/);
   assert.match(css, /--yaib-button-active-bg/);
+  assert.match(css, /--yaib-group-bg/);
   assert.match(css, /--yaib-card-badge-bg/);
   assert.match(css, /\.yaib-button--active/);
+  assert.match(css, /\.yaib-watch-menu/);
+  assert.match(css, /\.yaib-controls/);
   assert.match(css, /\.yaib-card-badge/);
   assert.match(css, /\.yaib-card--high/);
   assert.match(css, /\.yaib-card-blocked/);
@@ -110,4 +117,15 @@ test("content CSS defines dark mode variables and toast styles for injected cont
   assert.match(css, /--yaib-toast-success-border/);
   assert.match(css, /\.yaib-toast/);
   assert.match(css, /\.yaib-toast--visible/);
+});
+
+test("popup CSS defines YouTube-like themed surfaces for light and dark mode", async () => {
+  const css = await readFile(`${root}/client/popup/popup.css`, "utf8");
+
+  assert.match(css, /color-scheme: light dark/);
+  assert.match(css, /@media \(prefers-color-scheme: dark\)/);
+  assert.match(css, /--primary: #ff0033/);
+  assert.match(css, /\.popup__brand-mark/);
+  assert.match(css, /\.toggle__slider/);
+  assert.match(css, /\.button--primary/);
 });

@@ -9,28 +9,39 @@
   <body>
     <main class="popup">
       <header class="popup__header">
-        <p class="popup__eyebrow">Extension Settings</p>
-        <h1>YouTube AI Blocker</h1>
-        <p class="popup__subtitle">Configure blocking behavior and the API server used by the extension.</p>
+        <div class="popup__brand">
+          <span class="popup__brand-mark" aria-hidden="true"></span>
+          <div>
+            <p class="popup__eyebrow">Extension Settings</p>
+            <h1>YouTube AI Blocker</h1>
+          </div>
+        </div>
+        <p class="popup__subtitle">Configure detection, blocking, and API behavior with a UI that stays readable in both YouTube light and dark setups.</p>
       </header>
 
       <section class="panel">
         <label class="toggle" for="blockingEnabled">
-          <span>
+          <span class="toggle__copy">
             <strong>Block flagged videos</strong>
             <small>Hide flagged content instead of only highlighting it.</small>
           </span>
-          <input id="blockingEnabled" name="blockingEnabled" type="checkbox">
+          <span class="toggle__control">
+            <input id="blockingEnabled" name="blockingEnabled" type="checkbox">
+            <span class="toggle__slider" aria-hidden="true"></span>
+          </span>
         </label>
       </section>
 
       <section class="panel">
         <label class="toggle" for="debugUnknownIndicators">
-          <span>
+          <span class="toggle__copy">
             <strong>Debug unknown indicators</strong>
             <small>Show temporary badges for videos with no database entry to help verify page detection.</small>
           </span>
-          <input id="debugUnknownIndicators" name="debugUnknownIndicators" type="checkbox">
+          <span class="toggle__control">
+            <input id="debugUnknownIndicators" name="debugUnknownIndicators" type="checkbox">
+            <span class="toggle__slider" aria-hidden="true"></span>
+          </span>
         </label>
       </section>
 
@@ -43,11 +54,11 @@
       </section>
 
       <section class="panel panel--status">
-        <div>
+        <div class="status-card">
           <span class="field__label">Current server</span>
           <p id="currentServer" class="status__value"></p>
         </div>
-        <div>
+        <div class="status-card">
           <span class="field__label">Save state</span>
           <p id="saveStatus" class="status__value">Idle</p>
         </div>
