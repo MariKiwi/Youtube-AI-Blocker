@@ -29,8 +29,9 @@ test("GET /health returns service status", async () => {
 test("GET /videos/:youtubeVideoId returns unknown for missing videos", async () => {
   const app = buildApp({
     videoService: {
-      async getVideoById(youtubeVideoId) {
+      async getVideoById(youtubeVideoId, deviceId) {
         assert.equal(youtubeVideoId, "dQw4w9WgXcQ");
+        assert.equal(deviceId, "device-123");
         return null;
       },
     },
@@ -38,7 +39,7 @@ test("GET /videos/:youtubeVideoId returns unknown for missing videos", async () 
 
   const response = await app.inject({
     method: "GET",
-    url: "/videos/dQw4w9WgXcQ",
+    url: "/videos/dQw4w9WgXcQ?deviceId=device-123",
   });
 
   assert.equal(response.statusCode, 200);
@@ -50,6 +51,7 @@ test("GET /videos/:youtubeVideoId returns unknown for missing videos", async () 
     score: 0,
     confidenceLevel: "unknown",
     status: "unknown",
+    currentDeviceVote: null,
   });
 
   await app.close();
@@ -66,6 +68,7 @@ test("GET /videos/:youtubeVideoId returns mapped video data", async () => {
           downvotes: 2,
           score: 8,
           confidenceLevel: "MEDIUM",
+          currentDeviceVote: "UP",
         };
       },
     },
@@ -85,6 +88,7 @@ test("GET /videos/:youtubeVideoId returns mapped video data", async () => {
     score: 8,
     confidenceLevel: "medium",
     status: "flagged",
+    currentDeviceVote: "up",
   });
 
   await app.close();
@@ -119,8 +123,9 @@ test("POST /videos/bulk-lookup returns stored and unknown videos in request orde
       async getVideoById() {
         return null;
       },
-      async getVideosByIds(youtubeVideoIds) {
+      async getVideosByIds(youtubeVideoIds, deviceId) {
         assert.deepEqual(youtubeVideoIds, ["dQw4w9WgXcQ", "aaaaaaaaaaa"]);
+        assert.equal(deviceId, "device-123");
 
         return [
           {
@@ -130,6 +135,7 @@ test("POST /videos/bulk-lookup returns stored and unknown videos in request orde
             downvotes: 1,
             score: 3,
             confidenceLevel: "LOW",
+            currentDeviceVote: "DOWN",
           },
         ];
       },
@@ -141,6 +147,7 @@ test("POST /videos/bulk-lookup returns stored and unknown videos in request orde
     url: "/videos/bulk-lookup",
     payload: {
       youtubeVideoIds: ["dQw4w9WgXcQ", "aaaaaaaaaaa", "dQw4w9WgXcQ"],
+      deviceId: "device-123",
     },
   });
 
@@ -155,6 +162,7 @@ test("POST /videos/bulk-lookup returns stored and unknown videos in request orde
         score: 3,
         confidenceLevel: "low",
         status: "flagged",
+        currentDeviceVote: "down",
       },
       {
         youtubeVideoId: "aaaaaaaaaaa",
@@ -164,6 +172,7 @@ test("POST /videos/bulk-lookup returns stored and unknown videos in request orde
         score: 0,
         confidenceLevel: "unknown",
         status: "unknown",
+        currentDeviceVote: null,
       },
       {
         youtubeVideoId: "dQw4w9WgXcQ",
@@ -173,6 +182,7 @@ test("POST /videos/bulk-lookup returns stored and unknown videos in request orde
         score: 3,
         confidenceLevel: "low",
         status: "flagged",
+        currentDeviceVote: "down",
       },
     ],
   });
@@ -255,6 +265,7 @@ test("POST write endpoints are rate limited", async () => {
           downvotes: 0,
           score: 1,
           confidenceLevel: "LOW",
+          currentDeviceVote: "UP",
         };
       },
     },
@@ -304,6 +315,7 @@ test("POST /videos/:youtubeVideoId/flag trims device IDs before use", async () =
           downvotes: 0,
           score: 1,
           confidenceLevel: "LOW",
+          currentDeviceVote: "UP",
         };
       },
     },
@@ -339,6 +351,7 @@ test("POST /videos/:youtubeVideoId/flag creates or updates a flagged record", as
           downvotes: 0,
           score: 1,
           confidenceLevel: "LOW",
+          currentDeviceVote: "UP",
         };
       },
     },
@@ -361,6 +374,7 @@ test("POST /videos/:youtubeVideoId/flag creates or updates a flagged record", as
     score: 1,
     confidenceLevel: "low",
     status: "flagged",
+    currentDeviceVote: "up",
   });
 
   await app.close();
@@ -471,6 +485,7 @@ test("POST /videos/:youtubeVideoId/vote records an upvote on an existing video",
           downvotes: 0,
           score: 2,
           confidenceLevel: "LOW",
+          currentDeviceVote: "UP",
         };
       },
     },
@@ -494,6 +509,7 @@ test("POST /videos/:youtubeVideoId/vote records an upvote on an existing video",
     score: 2,
     confidenceLevel: "low",
     status: "flagged",
+    currentDeviceVote: "up",
   });
 
   await app.close();
@@ -516,6 +532,7 @@ test("POST /videos/:youtubeVideoId/vote records a downvote on an existing video"
           downvotes: 1,
           score: 0,
           confidenceLevel: "DISPUTED",
+          currentDeviceVote: "DOWN",
         };
       },
     },
@@ -539,6 +556,7 @@ test("POST /videos/:youtubeVideoId/vote records a downvote on an existing video"
     score: 0,
     confidenceLevel: "disputed",
     status: "disputed",
+    currentDeviceVote: "down",
   });
 
   await app.close();
@@ -555,6 +573,7 @@ test("GET /videos/:youtubeVideoId maps unflagged videos as not flagged", async (
           downvotes: 10,
           score: -7,
           confidenceLevel: "UNFLAGGED",
+          currentDeviceVote: "DOWN",
         };
       },
     },
@@ -574,6 +593,7 @@ test("GET /videos/:youtubeVideoId maps unflagged videos as not flagged", async (
     score: -7,
     confidenceLevel: "unflagged",
     status: "unflagged",
+    currentDeviceVote: "down",
   });
 
   await app.close();

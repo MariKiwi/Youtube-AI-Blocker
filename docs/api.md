@@ -12,10 +12,15 @@ Returns server health.
 
 Returns one video record.
 
+Optional query parameters:
+
+- `deviceId`: include the current device's own vote in the response
+
 Behavior:
 - Known videos return their stored score, votes, confidence, and status
 - Unknown videos return `status: "unknown"`
 - Invalid YouTube IDs return `400`
+- Responses include `currentDeviceVote` as `up`, `down`, or `null`
 
 ### `POST /videos/bulk-lookup`
 
@@ -25,7 +30,8 @@ Request:
 
 ```json
 {
-  "youtubeVideoIds": ["dQw4w9WgXcQ", "aaaaaaaaaaa"]
+  "youtubeVideoIds": ["dQw4w9WgXcQ", "aaaaaaaaaaa"],
+  "deviceId": "device-123"
 }
 ```
 
@@ -33,6 +39,7 @@ Behavior:
 - Response order matches request order
 - Unknown videos are returned explicitly as `unknown`
 - Invalid IDs return `400`
+- Responses include `currentDeviceVote` as `up`, `down`, or `null` when `deviceId` is provided
 
 ### `POST /videos/:youtubeVideoId/flag`
 

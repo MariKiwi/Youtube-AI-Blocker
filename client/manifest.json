@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube AI Blocker",
+  "version": "0.1.0",
+  "description": "Community-driven detection, highlighting, and blocking for AI-made YouTube videos.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.youtube.com/*",
+    "http://localhost:3000/*",
+    "http://127.0.0.1:3000/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "YouTube AI Blocker"
+  },
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*"
+      ],
+      "css": [
+        "content/content.css"
+      ],
+      "js": [
+        "common/logger.js",
+        "common/settings.js",
+        "common/api.js",
+        "content/content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

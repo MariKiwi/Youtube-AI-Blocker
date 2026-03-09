@@ -12,6 +12,18 @@ const paramsSchema = {
   },
 };
 
+const videoQuerySchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    deviceId: {
+      type: "string",
+      minLength: 1,
+      maxLength: 255,
+    },
+  },
+};
+
 const flagBodySchema = {
   type: "object",
   required: ["deviceId"],
@@ -52,6 +64,7 @@ const videoResponseSchema = {
     "score",
     "confidenceLevel",
     "status",
+    "currentDeviceVote",
   ],
   properties: {
     youtubeVideoId: {
@@ -66,6 +79,12 @@ const videoResponseSchema = {
     score: { type: "integer" },
     confidenceLevel: { type: "string" },
     status: { type: "string" },
+    currentDeviceVote: {
+      anyOf: [
+        { type: "string", enum: ["up", "down"] },
+        { type: "null" },
+      ],
+    },
   },
 };
 
@@ -81,6 +100,11 @@ const bulkLookupBodySchema = {
       items: {
         type: "string",
       },
+    },
+    deviceId: {
+      type: "string",
+      minLength: 1,
+      maxLength: 255,
     },
   },
 };
@@ -107,6 +131,7 @@ export async function videoRoutes(fastify) {
   fastify.get("/videos/:youtubeVideoId", {
     schema: {
       params: paramsSchema,
+      querystring: videoQuerySchema,
       response: {
         200: videoResponseSchema,
         400: {
@@ -121,6 +146,7 @@ export async function videoRoutes(fastify) {
     },
   }, async (request, reply) => {
     const youtubeVideoId = sanitizeString(request.params.youtubeVideoId);
+    const deviceId = sanitizeString(request.query.deviceId);
 
     if (!isValidYoutubeVideoId(youtubeVideoId)) {
       return reply.status(400).send({
@@ -129,7 +155,7 @@ export async function videoRoutes(fastify) {
       });
     }
 
-    const video = await getVideoById(youtubeVideoId);
+    const video = await getVideoById(youtubeVideoId, deviceId || null);
 
     if (!video) {
       return toUnknownVideoResponse(youtubeVideoId);
@@ -155,6 +181,7 @@ export async function videoRoutes(fastify) {
     },
   }, async (request, reply) => {
     const requestedIds = sanitizeStringArray(request.body.youtubeVideoIds);
+    const deviceId = sanitizeString(request.body.deviceId);
     const uniqueIds = [...new Set(requestedIds)];
 
     for (const youtubeVideoId of uniqueIds) {
@@ -166,7 +193,7 @@ export async function videoRoutes(fastify) {
       }
     }
 
-    const videos = await getVideosByIds(uniqueIds);
+    const videos = await getVideosByIds(uniqueIds, deviceId || null);
     const videoMap = new Map(videos.map((video) => [video.youtubeVideoId, video]));
 
     return {

@@ -1,0 +1,224 @@
+:root {
+  --yaib-pill-border: rgba(0, 0, 0, 0.08);
+  --yaib-pill-bg: rgba(0, 0, 0, 0.04);
+  --yaib-pill-text: #0f0f0f;
+  --yaib-pill-unknown-bg: rgba(0, 0, 0, 0.04);
+  --yaib-pill-low-bg: rgba(255, 196, 0, 0.18);
+  --yaib-pill-medium-bg: rgba(255, 136, 0, 0.2);
+  --yaib-pill-high-bg: rgba(204, 0, 0, 0.16);
+  --yaib-pill-disputed-bg: rgba(25, 118, 210, 0.14);
+  --yaib-pill-unflagged-bg: rgba(15, 15, 15, 0.08);
+  --yaib-button-hover-bg: rgba(0, 0, 0, 0.08);
+  --yaib-button-active-bg: rgba(6, 95, 212, 0.14);
+  --yaib-button-active-border: rgba(6, 95, 212, 0.4);
+  --yaib-toast-bg: rgba(15, 15, 15, 0.92);
+  --yaib-toast-text: #f1f1f1;
+  --yaib-toast-info-border: rgba(6, 95, 212, 0.75);
+  --yaib-toast-success-border: rgba(15, 157, 88, 0.75);
+  --yaib-toast-error-border: rgba(198, 40, 40, 0.75);
+}
+
+html[dark],
+ytd-app[dark],
+html[data-color-scheme="dark"] {
+  --yaib-pill-border: rgba(255, 255, 255, 0.12);
+  --yaib-pill-bg: rgba(255, 255, 255, 0.1);
+  --yaib-pill-text: #f1f1f1;
+  --yaib-pill-unknown-bg: rgba(255, 255, 255, 0.1);
+  --yaib-pill-low-bg: rgba(255, 196, 0, 0.26);
+  --yaib-pill-medium-bg: rgba(255, 136, 0, 0.28);
+  --yaib-pill-high-bg: rgba(255, 74, 74, 0.28);
+  --yaib-pill-disputed-bg: rgba(80, 160, 255, 0.28);
+  --yaib-pill-unflagged-bg: rgba(255, 255, 255, 0.14);
+  --yaib-button-hover-bg: rgba(255, 255, 255, 0.16);
+  --yaib-button-active-bg: rgba(138, 180, 248, 0.2);
+  --yaib-button-active-border: rgba(138, 180, 248, 0.45);
+  --yaib-toast-bg: rgba(15, 15, 15, 0.92);
+  --yaib-toast-text: #f1f1f1;
+  --yaib-toast-info-border: rgba(138, 180, 248, 0.9);
+  --yaib-toast-success-border: rgba(129, 201, 149, 0.9);
+  --yaib-toast-error-border: rgba(242, 139, 130, 0.9);
+}
+
+.yaib-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  flex-wrap: wrap;
+  flex: 0 1 auto;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.yaib-thumbnail-host {
+  position: relative;
+}
+
+.yaib-card-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  line-height: 1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+}
+
+.yaib-card--low,
+.yaib-card--medium,
+.yaib-card--high,
+.yaib-card--disputed,
+.yaib-card--unflagged {
+  border-radius: 16px;
+  transition: box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.yaib-card--low {
+  box-shadow: inset 0 0 0 1px rgba(255, 196, 0, 0.35);
+}
+
+.yaib-card--medium {
+  box-shadow: inset 0 0 0 1px rgba(255, 136, 0, 0.4);
+}
+
+.yaib-card--high {
+  box-shadow: inset 0 0 0 1px rgba(204, 0, 0, 0.45);
+}
+
+.yaib-card--disputed {
+  box-shadow: inset 0 0 0 1px rgba(25, 118, 210, 0.4);
+}
+
+.yaib-card--unflagged {
+  box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.28);
+}
+
+.yaib-pill,
+.yaib-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--yaib-pill-border);
+  background: var(--yaib-pill-bg);
+  color: var(--yaib-pill-text);
+  font: 500 14px/1 "Roboto", "Arial", sans-serif;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.yaib-pill strong,
+.yaib-button strong {
+  font-weight: 600;
+}
+
+.yaib-pill--unknown {
+  background: var(--yaib-pill-unknown-bg);
+}
+
+.yaib-pill--low {
+  background: var(--yaib-pill-low-bg);
+}
+
+.yaib-pill--medium {
+  background: var(--yaib-pill-medium-bg);
+}
+
+.yaib-pill--high {
+  background: var(--yaib-pill-high-bg);
+}
+
+.yaib-pill--disputed {
+  background: var(--yaib-pill-disputed-bg);
+}
+
+.yaib-pill--unflagged {
+  background: var(--yaib-pill-unflagged-bg);
+}
+
+.yaib-button {
+  cursor: pointer;
+}
+
+.yaib-button[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.yaib-button:hover:not([disabled]) {
+  background: var(--yaib-button-hover-bg);
+}
+
+.yaib-button--active {
+  background: var(--yaib-button-active-bg);
+  border-color: var(--yaib-button-active-border);
+}
+
+.yaib-toast {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 2147483647;
+  max-width: min(320px, calc(100vw - 32px));
+  padding: 10px 14px;
+  border-left: 3px solid var(--yaib-toast-info-border);
+  border-radius: 12px;
+  background: var(--yaib-toast-bg);
+  color: var(--yaib-toast-text);
+  font: 500 13px/1.35 "Roboto", "Arial", sans-serif;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.yaib-toast--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.yaib-toast--success {
+  border-left-color: var(--yaib-toast-success-border);
+}
+
+.yaib-toast--error {
+  border-left-color: var(--yaib-toast-error-border);
+}
+
+@media (max-width: 900px) {
+  .yaib-controls {
+    margin-left: 0;
+    width: 100%;
+    gap: 6px;
+  }
+
+  .yaib-pill,
+  .yaib-button {
+    min-height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+
+  .yaib-card-badge {
+    top: 8px;
+    left: 8px;
+    min-height: 24px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  .yaib-toast {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: none;
+  }
+}

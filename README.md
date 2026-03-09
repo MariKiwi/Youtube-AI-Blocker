@@ -47,3 +47,7 @@ Expected local setup flow:
 
 - API reference: `docs/api.md`
 - Deployment notes: `docs/server-deployment.md`
+
+## Client docs
+
+- Extension foundation: `docs/client-extension.md`

@@ -1,3 +1,15 @@
+function toCurrentDeviceVote(value) {
+  if (value === "UP") {
+    return "up";
+  }
+
+  if (value === "DOWN") {
+    return "down";
+  }
+
+  return null;
+}
+
 export function toVideoResponse(video) {
   if (!video) {
     return {
@@ -8,8 +20,13 @@ export function toVideoResponse(video) {
       score: 0,
       confidenceLevel: "unknown",
       status: "unknown",
+      currentDeviceVote: null,
     };
   }
+
+  const currentDeviceVote = toCurrentDeviceVote(
+    video.currentDeviceVote ?? video.votes?.[0]?.value ?? null,
+  );
 
   return {
     youtubeVideoId: video.youtubeVideoId,
@@ -19,6 +36,7 @@ export function toVideoResponse(video) {
     score: video.score,
     confidenceLevel: video.confidenceLevel.toLowerCase(),
     status: video.status.toLowerCase(),
+    currentDeviceVote,
   };
 }
 
@@ -31,5 +49,6 @@ export function toUnknownVideoResponse(youtubeVideoId) {
     score: 0,
     confidenceLevel: "unknown",
     status: "unknown",
+    currentDeviceVote: null,
   };
 }

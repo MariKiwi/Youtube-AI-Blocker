@@ -2,15 +2,34 @@ import { prisma } from "../db.js";
 import { ConflictError, NotFoundError } from "../errors.js";
 import { calculateVideoState } from "../lib/confidence.js";
 
-export async function getVideoById(youtubeVideoId) {
+function buildDeviceVoteInclude(deviceId) {
+  if (!deviceId) {
+    return undefined;
+  }
+
+  return {
+    votes: {
+      where: {
+        deviceId,
+      },
+      select: {
+        value: true,
+      },
+      take: 1,
+    },
+  };
+}
+
+export async function getVideoById(youtubeVideoId, deviceId = null) {
   return prisma.video.findUnique({
     where: {
       youtubeVideoId,
     },
+    include: buildDeviceVoteInclude(deviceId),
   });
 }
 
-export async function getVideosByIds(youtubeVideoIds) {
+export async function getVideosByIds(youtubeVideoIds, deviceId = null) {
   if (youtubeVideoIds.length === 0) {
     return [];
   }
@@ -21,6 +40,7 @@ export async function getVideosByIds(youtubeVideoIds) {
         in: youtubeVideoIds,
       },
     },
+    include: buildDeviceVoteInclude(deviceId),
   });
 }
 
@@ -84,7 +104,10 @@ export async function flagVideo({ youtubeVideoId, deviceId }) {
       },
     });
 
-    return video;
+    return {
+      ...video,
+      currentDeviceVote: "UP",
+    };
   });
 }
 
@@ -170,7 +193,10 @@ export async function voteOnVideo({ youtubeVideoId, deviceId, voteValue }) {
       });
     }
 
-    return video;
+    return {
+      ...video,
+      currentDeviceVote: voteValue,
+    };
   });
 }
 

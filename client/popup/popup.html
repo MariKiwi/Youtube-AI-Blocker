@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YouTube AI Blocker</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main class="popup">
+      <header class="popup__header">
+        <p class="popup__eyebrow">Extension Settings</p>
+        <h1>YouTube AI Blocker</h1>
+        <p class="popup__subtitle">Configure blocking behavior and the API server used by the extension.</p>
+      </header>
+
+      <section class="panel">
+        <label class="toggle" for="blockingEnabled">
+          <span>
+            <strong>Block flagged videos</strong>
+            <small>Hide flagged content instead of only highlighting it.</small>
+          </span>
+          <input id="blockingEnabled" name="blockingEnabled" type="checkbox">
+        </label>
+      </section>
+
+      <section class="panel">
+        <label class="toggle" for="debugUnknownIndicators">
+          <span>
+            <strong>Debug unknown indicators</strong>
+            <small>Show temporary badges for videos with no database entry to help verify page detection.</small>
+          </span>
+          <input id="debugUnknownIndicators" name="debugUnknownIndicators" type="checkbox">
+        </label>
+      </section>
+
+      <section class="panel">
+        <label class="field" for="apiBaseUrl">
+          <span class="field__label">API server URL</span>
+          <input id="apiBaseUrl" name="apiBaseUrl" type="url" placeholder="http://127.0.0.1:3000">
+        </label>
+        <p class="field__hint">Default is the local development server for now.</p>
+      </section>
+
+      <section class="panel panel--status">
+        <div>
+          <span class="field__label">Current server</span>
+          <p id="currentServer" class="status__value"></p>
+        </div>
+        <div>
+          <span class="field__label">Save state</span>
+          <p id="saveStatus" class="status__value">Idle</p>
+        </div>
+      </section>
+
+      <footer class="popup__actions">
+        <button id="resetButton" class="button button--secondary" type="button">Reset</button>
+        <button id="saveButton" class="button button--primary" type="button">Save</button>
+      </footer>
+    </main>
+
+    <script src="../common/settings.js"></script>
+    <script src="../common/logger.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
