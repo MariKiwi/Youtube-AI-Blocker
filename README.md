@@ -1,0 +1,26 @@
+# YouTube AI Blocker
+
+This repository contains the server and browser client for YouTube AI Blocker.
+
+## Repository structure
+
+- `server/`: Fastify API, Prisma schema, database access, and server-side logic
+- `client/`: Chromium browser extension that integrates with YouTube and the API
+
+## Local development plan
+
+Phase 1 starts with the server.
+
+Expected local setup flow:
+
+1. Run PostgreSQL with Docker
+2. Configure the server with environment variables
+3. Run the API locally
+4. Build the browser extension after the API is stable
+
+## Notes
+
+- The first version uses anonymous voting
+- One vote is allowed per device per video
+- Videos with no record are treated as `unknown`
+- The client should default to the official API server, but allow a custom server URL
