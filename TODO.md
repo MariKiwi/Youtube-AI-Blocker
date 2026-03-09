@@ -98,37 +98,37 @@ Phase 0 is complete when:
 
 ### Basic server setup
 
-- [ ] Create the server project
-- [ ] Add configuration support for environment variables
-- [ ] Add a database connection layer
-- [ ] Add migration support
-- [ ] Add a basic app entrypoint
-- [ ] Add health check endpoint
-- [ ] Add basic error handling
-- [ ] Add request logging
+- [x] Create the server project
+- [x] Add configuration support for environment variables
+- [x] Add a database connection layer
+- [x] Add migration support
+- [x] Add a basic app entrypoint
+- [x] Add health check endpoint
+- [x] Add basic error handling
+- [x] Add request logging
 
 ### Database schema
 
 Create the first database schema for videos and votes.
 
-- [ ] Create a `videos` table
-- [ ] Store at minimum:
-  - [ ] `youtube_video_id`
-  - [ ] `status`
-  - [ ] `upvotes`
-  - [ ] `downvotes`
-  - [ ] `score`
-  - [ ] `confidence_level`
-  - [ ] `created_at`
-  - [ ] `updated_at`
-- [ ] Create a `votes` table for one-vote-per-device enforcement
-- [ ] Add indexes for fast lookup by YouTube video ID
+- [x] Create a `videos` table
+- [x] Store at minimum:
+  - [x] `youtube_video_id`
+  - [x] `status`
+  - [x] `upvotes`
+  - [x] `downvotes`
+  - [x] `score`
+  - [x] `confidence_level`
+  - [x] `created_at`
+  - [x] `updated_at`
+- [x] Create a `votes` table for one-vote-per-device enforcement
+- [x] Add indexes for fast lookup by YouTube video ID
 
 Recommended first statuses:
 
-- [ ] `flagged`
-- [ ] `disputed`
-- [ ] Omit records for videos with no report so they remain `unknown`
+- [x] `flagged`
+- [x] `disputed`
+- [x] Omit records for videos with no report so they remain `unknown`
 
 ## Phase 2: API Design
 
@@ -136,16 +136,16 @@ Define the initial API contract before building the extension.
 
 ### Core read endpoints
 
-- [ ] `GET /health`
-- [ ] `GET /videos/:youtubeVideoId`
+- [x] `GET /health`
+- [x] `GET /videos/:youtubeVideoId`
 - [ ] `POST /videos/bulk-lookup`
 
 The bulk lookup endpoint is important because the extension will often need to check many visible videos on a YouTube page at once.
 
 ### Core write endpoints
 
-- [ ] `POST /videos/:youtubeVideoId/flag`
-- [ ] `POST /videos/:youtubeVideoId/vote`
+- [x] `POST /videos/:youtubeVideoId/flag`
+- [x] `POST /videos/:youtubeVideoId/vote`
 
 ### Optional early endpoints
 
@@ -154,59 +154,59 @@ The bulk lookup endpoint is important because the extension will often need to c
 
 ### Response design
 
-- [ ] Define a shared response shape for a video record
-- [ ] Return vote totals and computed confidence level
-- [ ] Return whether the video is currently considered AI-flagged
-- [ ] Return `unknown` state when no record exists
-- [ ] Return enough data for the client to render highlight severity
+- [x] Define a shared response shape for a video record
+- [x] Return vote totals and computed confidence level
+- [x] Return whether the video is currently considered AI-flagged
+- [x] Return `unknown` state when no record exists
+- [x] Return enough data for the client to render highlight severity
 
 Example response fields:
 
-- [ ] `youtubeVideoId`
-- [ ] `isFlaggedAi`
-- [ ] `upvotes`
-- [ ] `downvotes`
-- [ ] `score`
-- [ ] `confidenceLevel`
-- [ ] `status`
+- [x] `youtubeVideoId`
+- [x] `isFlaggedAi`
+- [x] `upvotes`
+- [x] `downvotes`
+- [x] `score`
+- [x] `confidenceLevel`
+- [x] `status`
 
 ## Phase 3: Server Feature Implementation
 
 ### Flagging a video
 
-- [ ] Implement logic to create a new video record when a user marks a video as AI
-- [ ] Prevent duplicate initial creation issues
-- [ ] Decide how repeated flag submissions should behave
+- [x] Implement logic to create a new video record when a user marks a video as AI
+- [x] Prevent duplicate initial creation issues
+- [x] Decide how repeated flag submissions should behave
 - [x] Define whether the initial flag action also counts as the first positive vote
 
 ### Voting on a video
 
-- [ ] Implement vote-for-AI logic
-- [ ] Implement vote-against-AI logic
-- [ ] Recalculate score and confidence after each vote
-- [ ] Prevent invalid votes on unknown videos
-- [ ] Enforce one vote per device per video
+- [x] Implement vote-for-AI logic
+- [x] Implement vote-against-AI logic
+- [x] Recalculate score and confidence after each vote
+- [x] Prevent invalid votes on unknown videos
+- [x] Enforce one vote per device per video
 
 ### Confidence calculation
 
 Start simple and make the formula easy to inspect.
 
-- [ ] Define how score is calculated
-- [ ] Define thresholds for `low`, `medium`, and `high` confidence
-- [ ] Define how a disputed result is represented
-- [ ] Keep the confidence algorithm in one isolated module for future changes
+- [x] Define how score is calculated
+- [x] Define thresholds for `low`, `medium`, and `high` confidence
+- [x] Define how a disputed result is represented
+- [x] Keep the confidence algorithm in one isolated module for future changes
 
 Possible first version:
 
-- [ ] Low confidence: 1-4 net positive votes
-- [ ] Medium confidence: 5-14 net positive votes
-- [ ] High confidence: 15+ net positive votes
-- [ ] Disputed: close vote totals or weak consensus
+- [x] Low confidence: 1-4 net positive votes
+- [x] Medium confidence: 5-14 net positive votes
+- [x] High confidence: 15+ net positive votes
+- [x] Disputed: close vote totals or weak consensus
 
 ### Validation and safety
 
-- [ ] Validate YouTube video IDs
-- [ ] Validate request payloads
+- [x] Validate YouTube video IDs
+- [x] Validate request payloads
 - [ ] Add rate limiting for write endpoints
 - [ ] Add CORS configuration for the extension
 - [ ] Add input sanitization where needed
@@ -215,16 +215,16 @@ Possible first version:
 
 ### Tests
 
-- [ ] Add unit tests for confidence calculation
-- [ ] Add API tests for lookup, flagging, and voting
-- [ ] Add tests for invalid requests
-- [ ] Add tests for duplicate or repeated actions
+- [x] Add unit tests for confidence calculation
+- [x] Add API tests for lookup, flagging, and voting
+- [x] Add tests for invalid requests
+- [x] Add tests for duplicate or repeated actions
 
 ### Local dev and deployment prep
 
 - [ ] Add seed data for local development
-- [ ] Add `.env.example`
-- [ ] Add server run instructions
+- [x] Add `.env.example`
+- [x] Add server run instructions
 - [ ] Add deployment notes
 - [ ] Define how the production database will be hosted
 
@@ -233,8 +233,8 @@ Possible first version:
 The server is ready for client work when:
 
 - [ ] A client can look up one or many videos
-- [ ] A client can flag a video as AI
-- [ ] A client can vote for or against a flag
+- [x] A client can flag a video as AI
+- [x] A client can vote for or against a flag
 - [ ] Confidence levels are returned in a stable format
 - [ ] The API is documented well enough for client integration
 

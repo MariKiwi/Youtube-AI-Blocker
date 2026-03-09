@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum VideoStatus {
+  FLAGGED
+  DISPUTED
+}
+
+enum ConfidenceLevel {
+  LOW
+  MEDIUM
+  HIGH
+  DISPUTED
+}
+
+enum VoteValue {
+  UP
+  DOWN
+}
+
+model Video {
+  youtubeVideoId   String          @id
+  status           VideoStatus
+  upvotes          Int             @default(0)
+  downvotes        Int             @default(0)
+  score            Int             @default(0)
+  confidenceLevel  ConfidenceLevel
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  votes            Vote[]
+
+  @@map("videos")
+}
+
+model Vote {
+  id               String     @id @default(cuid())
+  youtubeVideoId   String
+  deviceId         String
+  value            VoteValue
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  video            Video      @relation(fields: [youtubeVideoId], references: [youtubeVideoId], onDelete: Cascade)
+
+  @@unique([youtubeVideoId, deviceId])
+  @@index([youtubeVideoId])
+  @@map("votes")
+}
+

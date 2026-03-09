@@ -15,7 +15,9 @@ Expected local setup flow:
 
 1. Run PostgreSQL with Docker
 2. Configure the server with environment variables
-3. Run the API locally
+3. Install server dependencies
+4. Run Prisma generate and migrations
+5. Run the API locally
 4. Build the browser extension after the API is stable
 
 ## Notes
@@ -24,3 +26,15 @@ Expected local setup flow:
 - One vote is allowed per device per video
 - Videos with no record are treated as `unknown`
 - The client should default to the official API server, but allow a custom server URL
+
+## Current repository status
+
+- `server/` contains the initial Fastify and Prisma scaffold
+- `client/` is reserved for the Chromium extension
+- `docker-compose.yml` starts the local PostgreSQL instance
+
+## Testing
+
+- Execute all current tests with `make test-all`
+- Test documentation lives in `docs/testing.md`
+- The test index lives in `tests/TEST_CATALOG.md`
