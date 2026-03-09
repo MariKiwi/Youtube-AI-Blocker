@@ -33,3 +33,15 @@ Coverage:
 - High confidence for net positive scores of 15 or more
 - Disputed results for scores from `-5` to `0`
 - Unflagged results for scores below `-5`
+
+## `tests/docker-config.test.js`
+
+Purpose:
+- Verifies that the Compose and Docker configuration required to run the API stack exists and stays wired correctly
+
+Coverage:
+- `docker-compose.yml` defines both `api` and `postgres`
+- Compose wires API startup to PostgreSQL health
+- The server Dockerfile installs dependencies, generates Prisma, and starts through the container entrypoint
+- The root environment example includes the required deployment variables
+- Backup and reset operational scripts exist and reference the expected Docker commands

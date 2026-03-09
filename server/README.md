@@ -18,13 +18,15 @@ Planned responsibilities:
 
 ## Initial setup
 
-1. Copy `.env.example` to `.env`
-2. Start PostgreSQL from the repository root with `docker compose up -d`
-3. Install dependencies in `server/`
-4. Run Prisma generate and migrations
-5. Start the API locally
+Compose-first setup from the repository root:
 
-Expected commands:
+1. Copy root `.env.example` to `.env`
+2. Run `docker compose up --build`
+3. Optionally seed the database with `docker compose exec api npm run seed`
+4. Use `make backup-db` for manual dumps
+5. Use `make reset-stack` for a clean start with an empty database
+
+Local non-Docker server commands are still available:
 
 ```bash
 cd server

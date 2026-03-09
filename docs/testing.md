@@ -10,6 +10,7 @@ This keeps the early test setup simple and avoids introducing a larger test stac
 
 - `tests/server.routes.test.js`: route-level tests for the current Fastify API
 - `tests/confidence.test.js`: unit tests for confidence and status calculation
+- `tests/docker-config.test.js`: deployment config tests for Compose and Docker
 
 ## Running tests
 

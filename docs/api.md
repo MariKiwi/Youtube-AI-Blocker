@@ -2,6 +2,8 @@
 
 ## Endpoints
 
+This API is exposed by the `api` service in `docker-compose.yml` and defaults to port `3000`.
+
 ### `GET /health`
 
 Returns server health.
@@ -83,4 +85,3 @@ Behavior:
 - `high`: score `15` or greater
 - `disputed`: score from `-5` to `0`
 - `unflagged`: score below `-5`
-

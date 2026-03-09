@@ -13,11 +13,9 @@ Phase 1 starts with the server.
 
 Expected local setup flow:
 
-1. Run PostgreSQL with Docker
-2. Configure the server with environment variables
-3. Install server dependencies
-4. Run Prisma generate and migrations
-5. Run the API locally
+1. Copy `.env.example` to `.env`
+2. Start the API stack with `docker compose up --build`
+3. Optionally seed sample data with `docker compose exec api npm run seed`
 4. Build the browser extension after the API is stable
 
 ## Notes
@@ -30,9 +28,14 @@ Expected local setup flow:
 
 ## Current repository status
 
-- `server/` contains the initial Fastify and Prisma scaffold
+- `server/` contains the Fastify API, Prisma schema, and Docker image definition
 - `client/` is reserved for the Chromium extension
-- `docker-compose.yml` starts the local PostgreSQL instance
+- `docker-compose.yml` starts the full API stack
+
+## Operations
+
+- Clean reset: `make reset-stack`
+- Manual database backup: `make backup-db`
 
 ## Testing
 
