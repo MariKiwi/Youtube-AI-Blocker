@@ -30,3 +30,6 @@ node --test tests/*.test.js
 - Route tests use Fastify's injection support
 - Database-backed behavior is mocked through service injection
 - This allows API behavior to be tested without requiring a live PostgreSQL instance
+- Confidence tests enforce the current point-based flagging model, including the unflagged threshold below `-5`
+- Bulk lookup tests verify that API responses preserve request order and fill unknown videos explicitly
+- Rate-limit tests verify write-endpoint throttling without needing a real network server

@@ -113,6 +113,215 @@ test("GET /videos/:youtubeVideoId rejects invalid YouTube IDs", async () => {
   await app.close();
 });
 
+test("POST /videos/bulk-lookup returns stored and unknown videos in request order", async () => {
+  const app = buildApp({
+    videoService: {
+      async getVideoById() {
+        return null;
+      },
+      async getVideosByIds(youtubeVideoIds) {
+        assert.deepEqual(youtubeVideoIds, ["dQw4w9WgXcQ", "aaaaaaaaaaa"]);
+
+        return [
+          {
+            youtubeVideoId: "dQw4w9WgXcQ",
+            status: "FLAGGED",
+            upvotes: 4,
+            downvotes: 1,
+            score: 3,
+            confidenceLevel: "LOW",
+          },
+        ];
+      },
+    },
+  });
+
+  const response = await app.inject({
+    method: "POST",
+    url: "/videos/bulk-lookup",
+    payload: {
+      youtubeVideoIds: ["dQw4w9WgXcQ", "aaaaaaaaaaa", "dQw4w9WgXcQ"],
+    },
+  });
+
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(response.json(), {
+    videos: [
+      {
+        youtubeVideoId: "dQw4w9WgXcQ",
+        isFlaggedAi: true,
+        upvotes: 4,
+        downvotes: 1,
+        score: 3,
+        confidenceLevel: "low",
+        status: "flagged",
+      },
+      {
+        youtubeVideoId: "aaaaaaaaaaa",
+        isFlaggedAi: false,
+        upvotes: 0,
+        downvotes: 0,
+        score: 0,
+        confidenceLevel: "unknown",
+        status: "unknown",
+      },
+      {
+        youtubeVideoId: "dQw4w9WgXcQ",
+        isFlaggedAi: true,
+        upvotes: 4,
+        downvotes: 1,
+        score: 3,
+        confidenceLevel: "low",
+        status: "flagged",
+      },
+    ],
+  });
+
+  await app.close();
+});
+
+test("POST /videos/bulk-lookup rejects invalid YouTube IDs", async () => {
+  const app = buildApp({
+    videoService: {
+      async getVideoById() {
+        return null;
+      },
+      async getVideosByIds() {
+        throw new Error("should not be called");
+      },
+    },
+  });
+
+  const response = await app.inject({
+    method: "POST",
+    url: "/videos/bulk-lookup",
+    payload: {
+      youtubeVideoIds: ["invalid-id"],
+    },
+  });
+
+  assert.equal(response.statusCode, 400);
+  assert.deepEqual(response.json(), {
+    error: "Bad Request",
+    message: "Invalid YouTube video ID: invalid-id",
+  });
+
+  await app.close();
+});
+
+test("POST /videos/bulk-lookup validates request payloads", async () => {
+  const app = buildApp({
+    videoService: {
+      async getVideoById() {
+        return null;
+      },
+      async getVideosByIds() {
+        throw new Error("should not be called");
+      },
+    },
+  });
+
+  const response = await app.inject({
+    method: "POST",
+    url: "/videos/bulk-lookup",
+    payload: {
+      youtubeVideoIds: [],
+    },
+  });
+
+  assert.equal(response.statusCode, 400);
+
+  await app.close();
+});
+
+test("POST write endpoints are rate limited", async () => {
+  const app = buildApp({
+    rateLimit: {
+      windowMs: 60_000,
+      maxRequests: 1,
+    },
+    videoService: {
+      async getVideoById() {
+        return null;
+      },
+      async getVideosByIds() {
+        return [];
+      },
+      async flagVideo() {
+        return {
+          youtubeVideoId: "dQw4w9WgXcQ",
+          status: "FLAGGED",
+          upvotes: 1,
+          downvotes: 0,
+          score: 1,
+          confidenceLevel: "LOW",
+        };
+      },
+    },
+  });
+
+  const first = await app.inject({
+    method: "POST",
+    url: "/videos/dQw4w9WgXcQ/flag",
+    payload: {
+      deviceId: "device-123",
+    },
+  });
+
+  const second = await app.inject({
+    method: "POST",
+    url: "/videos/dQw4w9WgXcQ/flag",
+    payload: {
+      deviceId: "device-456",
+    },
+  });
+
+  assert.equal(first.statusCode, 200);
+  assert.equal(second.statusCode, 429);
+  assert.deepEqual(second.json(), {
+    error: "Too Many Requests",
+    message: "Rate limit exceeded for write requests",
+  });
+
+  await app.close();
+});
+
+test("POST /videos/:youtubeVideoId/flag trims device IDs before use", async () => {
+  const app = buildApp({
+    videoService: {
+      async getVideoById() {
+        return null;
+      },
+      async getVideosByIds() {
+        return [];
+      },
+      async flagVideo({ deviceId }) {
+        assert.equal(deviceId, "device-123");
+        return {
+          youtubeVideoId: "dQw4w9WgXcQ",
+          status: "FLAGGED",
+          upvotes: 1,
+          downvotes: 0,
+          score: 1,
+          confidenceLevel: "LOW",
+        };
+      },
+    },
+  });
+
+  const response = await app.inject({
+    method: "POST",
+    url: "/videos/dQw4w9WgXcQ/flag",
+    payload: {
+      deviceId: "  device-123  ",
+    },
+  });
+
+  assert.equal(response.statusCode, 200);
+
+  await app.close();
+});
+
 test("POST /videos/:youtubeVideoId/flag creates or updates a flagged record", async () => {
   const app = buildApp({
     videoService: {
@@ -330,6 +539,41 @@ test("POST /videos/:youtubeVideoId/vote records a downvote on an existing video"
     score: 0,
     confidenceLevel: "disputed",
     status: "disputed",
+  });
+
+  await app.close();
+});
+
+test("GET /videos/:youtubeVideoId maps unflagged videos as not flagged", async () => {
+  const app = buildApp({
+    videoService: {
+      async getVideoById() {
+        return {
+          youtubeVideoId: "dQw4w9WgXcQ",
+          status: "UNFLAGGED",
+          upvotes: 3,
+          downvotes: 10,
+          score: -7,
+          confidenceLevel: "UNFLAGGED",
+        };
+      },
+    },
+  });
+
+  const response = await app.inject({
+    method: "GET",
+    url: "/videos/dQw4w9WgXcQ",
+  });
+
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(response.json(), {
+    youtubeVideoId: "dQw4w9WgXcQ",
+    isFlaggedAi: false,
+    upvotes: 3,
+    downvotes: 10,
+    score: -7,
+    confidenceLevel: "unflagged",
+    status: "unflagged",
   });
 
   await app.close();

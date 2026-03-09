@@ -25,6 +25,7 @@ Expected local setup flow:
 - The first version uses anonymous voting
 - One vote is allowed per device per video
 - Videos with no record are treated as `unknown`
+- Video score is point-based: upvotes add `+1`, downvotes add `-1`, and videos below `-5` become `unflagged`
 - The client should default to the official API server, but allow a custom server URL
 
 ## Current repository status
@@ -38,3 +39,8 @@ Expected local setup flow:
 - Execute all current tests with `make test-all`
 - Test documentation lives in `docs/testing.md`
 - The test index lives in `tests/TEST_CATALOG.md`
+
+## Server docs
+
+- API reference: `docs/api.md`
+- Deployment notes: `docs/server-deployment.md`

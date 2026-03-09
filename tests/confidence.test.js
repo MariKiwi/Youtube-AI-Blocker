@@ -35,10 +35,18 @@ test("calculateVideoState returns disputed when the score is not positive", () =
   });
 });
 
-test("calculateVideoState returns disputed for weak consensus with downvotes", () => {
-  assert.deepEqual(calculateVideoState({ upvotes: 5, downvotes: 4 }), {
-    score: 1,
+test("calculateVideoState returns disputed for negative scores down to -5", () => {
+  assert.deepEqual(calculateVideoState({ upvotes: 2, downvotes: 5 }), {
+    score: -3,
     confidenceLevel: "DISPUTED",
     status: "DISPUTED",
+  });
+});
+
+test("calculateVideoState returns unflagged below -5", () => {
+  assert.deepEqual(calculateVideoState({ upvotes: 2, downvotes: 8 }), {
+    score: -6,
+    confidenceLevel: "UNFLAGGED",
+    status: "UNFLAGGED",
   });
 });

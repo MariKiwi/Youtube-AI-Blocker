@@ -12,11 +12,25 @@ const parsePort = (value) => {
   return port;
 };
 
+const parseOrigins = (value, fallback) => {
+  const origins = (value ?? fallback)
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  return [...new Set(origins)];
+};
+
 export const config = {
   port: parsePort(process.env.PORT),
   host: process.env.HOST ?? "0.0.0.0",
   databaseUrl: process.env.DATABASE_URL ?? "",
-  defaultClientOrigin: process.env.DEFAULT_CLIENT_ORIGIN ?? "https://www.youtube.com",
+  allowedOrigins: parseOrigins(
+    process.env.CORS_ALLOWED_ORIGINS,
+    process.env.DEFAULT_CLIENT_ORIGIN ?? "https://www.youtube.com",
+  ),
+  writeRateLimitWindowMs: Number.parseInt(process.env.WRITE_RATE_LIMIT_WINDOW_MS ?? "60000", 10),
+  writeRateLimitMaxRequests: Number.parseInt(process.env.WRITE_RATE_LIMIT_MAX_REQUESTS ?? "30", 10),
 };
 
 export function validateConfig() {

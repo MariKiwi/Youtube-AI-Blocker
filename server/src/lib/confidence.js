@@ -1,9 +1,15 @@
 export function calculateVideoState({ upvotes, downvotes }) {
   const score = upvotes - downvotes;
-  const totalVotes = upvotes + downvotes;
-  const positiveRatio = totalVotes === 0 ? 0 : upvotes / totalVotes;
 
-  if (score <= 0 || (downvotes > 0 && positiveRatio < 0.6)) {
+  if (score < -5) {
+    return {
+      score,
+      confidenceLevel: "UNFLAGGED",
+      status: "UNFLAGGED",
+    };
+  }
+
+  if (score <= 0) {
     return {
       score,
       confidenceLevel: "DISPUTED",
@@ -33,4 +39,3 @@ export function calculateVideoState({ upvotes, downvotes }) {
     status: "FLAGGED",
   };
 }
-

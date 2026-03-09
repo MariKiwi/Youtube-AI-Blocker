@@ -22,3 +22,14 @@ export function toVideoResponse(video) {
   };
 }
 
+export function toUnknownVideoResponse(youtubeVideoId) {
+  return {
+    youtubeVideoId,
+    isFlaggedAi: false,
+    upvotes: 0,
+    downvotes: 0,
+    score: 0,
+    confidenceLevel: "unknown",
+    status: "unknown",
+  };
+}

@@ -1,5 +1,6 @@
 import { isValidYoutubeVideoId } from "../lib/video-id.js";
-import { toVideoResponse } from "../serializers/videos.js";
+import { sanitizeString, sanitizeStringArray } from "../lib/sanitize.js";
+import { toUnknownVideoResponse, toVideoResponse } from "../serializers/videos.js";
 
 const paramsSchema = {
   type: "object",
@@ -68,8 +69,40 @@ const videoResponseSchema = {
   },
 };
 
+const bulkLookupBodySchema = {
+  type: "object",
+  required: ["youtubeVideoIds"],
+  additionalProperties: false,
+  properties: {
+    youtubeVideoIds: {
+      type: "array",
+      minItems: 1,
+      maxItems: 100,
+      items: {
+        type: "string",
+      },
+    },
+  },
+};
+
+const bulkLookupResponseSchema = {
+  type: "object",
+  required: ["videos"],
+  properties: {
+    videos: {
+      type: "array",
+      items: videoResponseSchema,
+    },
+  },
+};
+
 export async function videoRoutes(fastify) {
-  const { getVideoById, flagVideo, voteOnVideo } = fastify.videoService;
+  const {
+    getVideoById,
+    getVideosByIds,
+    flagVideo,
+    voteOnVideo,
+  } = fastify.videoService;
 
   fastify.get("/videos/:youtubeVideoId", {
     schema: {
@@ -87,7 +120,7 @@ export async function videoRoutes(fastify) {
       },
     },
   }, async (request, reply) => {
-    const { youtubeVideoId } = request.params;
+    const youtubeVideoId = sanitizeString(request.params.youtubeVideoId);
 
     if (!isValidYoutubeVideoId(youtubeVideoId)) {
       return reply.status(400).send({
@@ -99,13 +132,54 @@ export async function videoRoutes(fastify) {
     const video = await getVideoById(youtubeVideoId);
 
     if (!video) {
-      return {
-        ...toVideoResponse(null),
-        youtubeVideoId,
-      };
+      return toUnknownVideoResponse(youtubeVideoId);
     }
 
     return toVideoResponse(video);
+  });
+
+  fastify.post("/videos/bulk-lookup", {
+    schema: {
+      body: bulkLookupBodySchema,
+      response: {
+        200: bulkLookupResponseSchema,
+        400: {
+          type: "object",
+          required: ["error", "message"],
+          properties: {
+            error: { type: "string" },
+            message: { type: "string" },
+          },
+        },
+      },
+    },
+  }, async (request, reply) => {
+    const requestedIds = sanitizeStringArray(request.body.youtubeVideoIds);
+    const uniqueIds = [...new Set(requestedIds)];
+
+    for (const youtubeVideoId of uniqueIds) {
+      if (!isValidYoutubeVideoId(youtubeVideoId)) {
+        return reply.status(400).send({
+          error: "Bad Request",
+          message: `Invalid YouTube video ID: ${youtubeVideoId}`,
+        });
+      }
+    }
+
+    const videos = await getVideosByIds(uniqueIds);
+    const videoMap = new Map(videos.map((video) => [video.youtubeVideoId, video]));
+
+    return {
+      videos: requestedIds.map((youtubeVideoId) => {
+        const video = videoMap.get(youtubeVideoId);
+
+        if (!video) {
+          return toUnknownVideoResponse(youtubeVideoId);
+        }
+
+        return toVideoResponse(video);
+      }),
+    };
   });
 
   fastify.post("/videos/:youtubeVideoId/flag", {
@@ -133,7 +207,8 @@ export async function videoRoutes(fastify) {
       },
     },
   }, async (request, reply) => {
-    const { youtubeVideoId } = request.params;
+    const youtubeVideoId = sanitizeString(request.params.youtubeVideoId);
+    const deviceId = sanitizeString(request.body.deviceId);
 
     if (!isValidYoutubeVideoId(youtubeVideoId)) {
       return reply.status(400).send({
@@ -144,7 +219,7 @@ export async function videoRoutes(fastify) {
 
     const video = await flagVideo({
       youtubeVideoId,
-      deviceId: request.body.deviceId,
+      deviceId,
     });
 
     return toVideoResponse(video);
@@ -183,7 +258,8 @@ export async function videoRoutes(fastify) {
       },
     },
   }, async (request, reply) => {
-    const { youtubeVideoId } = request.params;
+    const youtubeVideoId = sanitizeString(request.params.youtubeVideoId);
+    const deviceId = sanitizeString(request.body.deviceId);
 
     if (!isValidYoutubeVideoId(youtubeVideoId)) {
       return reply.status(400).send({
@@ -194,7 +270,7 @@ export async function videoRoutes(fastify) {
 
     const video = await voteOnVideo({
       youtubeVideoId,
-      deviceId: request.body.deviceId,
+      deviceId,
       voteValue: request.body.vote.toUpperCase(),
     });
 

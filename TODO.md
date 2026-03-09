@@ -68,6 +68,7 @@ Recommended first-version simplifications:
 - [x] `medium`: 5-14 net positive votes
 - [x] `high`: 15+ net positive votes
 - [x] `disputed`: close vote split or weak consensus
+- [x] Add explicit `unflagged` state for videos that fall below the negative threshold
 
 ### Open planning items still left in Phase 0
 
@@ -128,6 +129,7 @@ Recommended first statuses:
 
 - [x] `flagged`
 - [x] `disputed`
+- [x] `unflagged`
 - [x] Omit records for videos with no report so they remain `unknown`
 
 ## Phase 2: API Design
@@ -138,7 +140,7 @@ Define the initial API contract before building the extension.
 
 - [x] `GET /health`
 - [x] `GET /videos/:youtubeVideoId`
-- [ ] `POST /videos/bulk-lookup`
+- [x] `POST /videos/bulk-lookup`
 
 The bulk lookup endpoint is important because the extension will often need to check many visible videos on a YouTube page at once.
 
@@ -159,6 +161,7 @@ The bulk lookup endpoint is important because the extension will often need to c
 - [x] Return whether the video is currently considered AI-flagged
 - [x] Return `unknown` state when no record exists
 - [x] Return enough data for the client to render highlight severity
+- [x] Return explicit `unflagged` state for videos that fall below the negative threshold
 
 Example response fields:
 
@@ -195,21 +198,23 @@ Start simple and make the formula easy to inspect.
 - [x] Define thresholds for `low`, `medium`, and `high` confidence
 - [x] Define how a disputed result is represented
 - [x] Keep the confidence algorithm in one isolated module for future changes
+- [x] Define how videos become explicitly unflagged
 
 Possible first version:
 
 - [x] Low confidence: 1-4 net positive votes
 - [x] Medium confidence: 5-14 net positive votes
 - [x] High confidence: 15+ net positive votes
-- [x] Disputed: close vote totals or weak consensus
+- [x] Disputed: scores from -5 to 0
+- [x] Unflagged: scores below -5
 
 ### Validation and safety
 
 - [x] Validate YouTube video IDs
 - [x] Validate request payloads
-- [ ] Add rate limiting for write endpoints
-- [ ] Add CORS configuration for the extension
-- [ ] Add input sanitization where needed
+- [x] Add rate limiting for write endpoints
+- [x] Add CORS configuration for the extension
+- [x] Add input sanitization where needed
 
 ## Phase 4: Server Testing and Stabilization
 
@@ -219,24 +224,25 @@ Possible first version:
 - [x] Add API tests for lookup, flagging, and voting
 - [x] Add tests for invalid requests
 - [x] Add tests for duplicate or repeated actions
+- [x] Add tests for bulk lookup behavior
 
 ### Local dev and deployment prep
 
-- [ ] Add seed data for local development
+- [x] Add seed data for local development
 - [x] Add `.env.example`
 - [x] Add server run instructions
-- [ ] Add deployment notes
-- [ ] Define how the production database will be hosted
+- [x] Add deployment notes
+- [x] Define how the production database will be hosted
 
 ### Server done criteria
 
 The server is ready for client work when:
 
-- [ ] A client can look up one or many videos
+- [x] A client can look up one or many videos
 - [x] A client can flag a video as AI
 - [x] A client can vote for or against a flag
-- [ ] Confidence levels are returned in a stable format
-- [ ] The API is documented well enough for client integration
+- [x] Confidence levels are returned in a stable format
+- [x] The API is documented well enough for client integration
 
 ## Phase 5: Browser Extension Foundation
 

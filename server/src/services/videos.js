@@ -10,6 +10,20 @@ export async function getVideoById(youtubeVideoId) {
   });
 }
 
+export async function getVideosByIds(youtubeVideoIds) {
+  if (youtubeVideoIds.length === 0) {
+    return [];
+  }
+
+  return prisma.video.findMany({
+    where: {
+      youtubeVideoId: {
+        in: youtubeVideoIds,
+      },
+    },
+  });
+}
+
 export async function flagVideo({ youtubeVideoId, deviceId }) {
   return prisma.$transaction(async (tx) => {
     const existingVote = await tx.vote.findUnique({
@@ -163,6 +177,7 @@ export async function voteOnVideo({ youtubeVideoId, deviceId, voteValue }) {
 export function buildVideoService(overrides = {}) {
   return {
     getVideoById,
+    getVideosByIds,
     flagVideo,
     voteOnVideo,
     ...overrides,

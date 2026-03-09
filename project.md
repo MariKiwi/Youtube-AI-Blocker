@@ -53,6 +53,13 @@ Users can:
 
 Over time, the number and balance of votes should make the system more reliable. Videos with stronger agreement from the community can be shown with a higher confidence level.
 
+The core score model is point-based:
+
+- An upvote adds `+1`
+- A downvote adds `-1`
+- Scores can go negative
+- If a video's score drops below `-5`, it becomes unflagged
+
 ## Client Features
 
 ### Mark a Video as AI
@@ -74,9 +81,11 @@ The browser add-on should visually highlight videos that have been flagged as AI
 
 The highlight should indicate different confidence levels based on community votes. For example:
 
-- Low confidence: only a few supporting votes
-- Medium confidence: a stronger pattern of agreement
-- High confidence: many supporting votes and strong consensus
+- Low confidence: score from `1` to `4`
+- Medium confidence: score from `5` to `14`
+- High confidence: score of `15` or more
+
+Videos with scores from `-5` to `0` can be treated as disputed, while videos below `-5` should be treated as unflagged.
 
 This allows users to judge the signal strength instead of seeing only a binary yes/no label.
 

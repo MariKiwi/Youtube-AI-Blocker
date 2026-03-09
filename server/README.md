@@ -31,6 +31,7 @@ cd server
 pnpm install
 pnpm prisma:generate
 pnpm prisma:migrate
+pnpm seed
 pnpm dev
 ```
 
@@ -42,6 +43,13 @@ pnpm dev
 - Prisma client setup in `src/db.js`
 - Health endpoint at `GET /health`
 - Video lookup endpoint at `GET /videos/:youtubeVideoId`
+- Bulk video lookup endpoint at `POST /videos/bulk-lookup`
 - Video flag endpoint at `POST /videos/:youtubeVideoId/flag`
 - Video vote endpoint at `POST /videos/:youtubeVideoId/vote`
 - Prisma schema in `prisma/schema.prisma`
+
+## Runtime configuration
+
+- `CORS_ALLOWED_ORIGINS`: comma-separated allowed origins
+- `WRITE_RATE_LIMIT_WINDOW_MS`: rate-limit window for write endpoints
+- `WRITE_RATE_LIMIT_MAX_REQUESTS`: max write requests per IP and route per window
