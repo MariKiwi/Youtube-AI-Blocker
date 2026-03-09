@@ -44,6 +44,8 @@ Current UI behavior:
 - if the current device already voted, the matching vote button is shown as active
 - visible video cards show a confidence badge and subtle state-colored highlight when the video is known
 - if `debugUnknownIndicators` is enabled, unknown video cards also show an `AI Unknown` badge for DOM/debug verification
+- if `blockingEnabled` is on, videos still considered AI-flagged are covered by a block overlay on cards and on the watch page
+- blocked videos can be temporarily revealed with `Show anyway` for the current session
 - API failures show an `AI Error` state instead of failing silently
 - request feedback is shown as a temporary bottom-left toast instead of inline in the action row
 - the extension generates one anonymous local device ID for one-vote-per-device enforcement

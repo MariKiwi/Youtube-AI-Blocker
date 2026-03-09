@@ -67,6 +67,10 @@ test("content script scaffold includes interactive watch page controls", async (
   assert.match(contentScript, /ytd-rich-grid-slim-media/);
   assert.match(contentScript, /debugUnknownIndicators/);
   assert.match(contentScript, /AI Unknown/);
+  assert.match(contentScript, /Show anyway/);
+  assert.match(contentScript, /temporarilyRevealedVideoIds/);
+  assert.match(contentScript, /blockingEnabled/);
+  assert.match(contentScript, /AI Video Hidden/);
   assert.match(contentScript, /Video-card detection snapshot/);
   assert.match(contentScript, /Video-card bulk lookup failed/);
   assert.match(contentScript, /SUCCESS_STATUS_MS/);
@@ -92,10 +96,17 @@ test("content CSS defines dark mode variables and toast styles for injected cont
   assert.match(css, /var\(--yaib-pill-text\)/);
   assert.match(css, /var\(--yaib-pill-bg\)/);
   assert.match(css, /--yaib-button-active-bg/);
+  assert.match(css, /--yaib-card-badge-bg/);
   assert.match(css, /\.yaib-button--active/);
   assert.match(css, /\.yaib-card-badge/);
   assert.match(css, /\.yaib-card--high/);
+  assert.match(css, /\.yaib-card-blocked/);
+  assert.match(css, /\.yaib-watch-blocked/);
+  assert.match(css, /\.yaib-block-overlay/);
+  assert.match(css, /\.yaib-block-overlay__button/);
   assert.match(css, /\.yaib-thumbnail-host/);
+  assert.match(css, /text-shadow:/);
+  assert.match(css, /backdrop-filter: blur/);
   assert.match(css, /--yaib-toast-success-border/);
   assert.match(css, /\.yaib-toast/);
   assert.match(css, /\.yaib-toast--visible/);

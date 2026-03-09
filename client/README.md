@@ -36,6 +36,8 @@ Current rendering behavior:
 - known videos: show confidence, score, and working `Upvote` / `Downvote` buttons
 - if this browser device already voted on the video, the matching button renders as active
 - known video cards get a confidence badge on the thumbnail plus a subtle highlight on the card shell
+- when blocking is enabled, AI-flagged videos are covered by a blocking overlay on cards and on the watch page
+- blocked videos can be temporarily revealed with `Show anyway`
 - request states: show temporary toast feedback while flags or votes are being submitted
 
 The extension also generates a local anonymous device ID so one-vote-per-device enforcement works with the server API.

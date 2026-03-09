@@ -11,6 +11,14 @@
   --yaib-button-hover-bg: rgba(0, 0, 0, 0.08);
   --yaib-button-active-bg: rgba(6, 95, 212, 0.14);
   --yaib-button-active-border: rgba(6, 95, 212, 0.4);
+  --yaib-card-badge-bg: rgba(15, 15, 15, 0.82);
+  --yaib-card-badge-border: rgba(255, 255, 255, 0.14);
+  --yaib-card-badge-text: #ffffff;
+  --yaib-block-overlay-bg: rgba(15, 15, 15, 0.78);
+  --yaib-block-overlay-panel-bg: rgba(15, 15, 15, 0.92);
+  --yaib-block-overlay-border: rgba(255, 255, 255, 0.16);
+  --yaib-block-overlay-text: #f1f1f1;
+  --yaib-block-overlay-muted: rgba(241, 241, 241, 0.72);
   --yaib-toast-bg: rgba(15, 15, 15, 0.92);
   --yaib-toast-text: #f1f1f1;
   --yaib-toast-info-border: rgba(6, 95, 212, 0.75);
@@ -33,6 +41,14 @@ html[data-color-scheme="dark"] {
   --yaib-button-hover-bg: rgba(255, 255, 255, 0.16);
   --yaib-button-active-bg: rgba(138, 180, 248, 0.2);
   --yaib-button-active-border: rgba(138, 180, 248, 0.45);
+  --yaib-card-badge-bg: rgba(15, 15, 15, 0.84);
+  --yaib-card-badge-border: rgba(255, 255, 255, 0.18);
+  --yaib-card-badge-text: #ffffff;
+  --yaib-block-overlay-bg: rgba(15, 15, 15, 0.8);
+  --yaib-block-overlay-panel-bg: rgba(15, 15, 15, 0.94);
+  --yaib-block-overlay-border: rgba(255, 255, 255, 0.18);
+  --yaib-block-overlay-text: #f1f1f1;
+  --yaib-block-overlay-muted: rgba(241, 241, 241, 0.72);
   --yaib-toast-bg: rgba(15, 15, 15, 0.92);
   --yaib-toast-text: #f1f1f1;
   --yaib-toast-info-border: rgba(138, 180, 248, 0.9);
@@ -62,9 +78,15 @@ html[data-color-scheme="dark"] {
   z-index: 2;
   min-height: 28px;
   padding: 0 10px;
+  border-color: var(--yaib-card-badge-border);
+  background: var(--yaib-card-badge-bg);
+  color: var(--yaib-card-badge-text);
   font-size: 12px;
   line-height: 1;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   pointer-events: none;
 }
 
@@ -95,6 +117,112 @@ html[data-color-scheme="dark"] {
 
 .yaib-card--unflagged {
   box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.28);
+}
+
+.yaib-card-blocked,
+.yaib-watch-blocked {
+  position: relative;
+  overflow: hidden;
+}
+
+.yaib-card-blocked > *,
+.yaib-watch-blocked > * {
+  filter: blur(8px);
+  opacity: 0.14;
+  pointer-events: none;
+  user-select: none;
+}
+
+.yaib-card-blocked > .yaib-block-overlay,
+.yaib-watch-blocked > .yaib-block-overlay {
+  filter: none;
+  opacity: 1;
+  pointer-events: auto;
+  user-select: auto;
+}
+
+.yaib-watch-blocked {
+  min-height: min(70vh, 720px);
+}
+
+.yaib-block-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--yaib-block-overlay-bg);
+}
+
+.yaib-block-overlay__panel {
+  width: min(100%, 360px);
+  padding: 18px 18px 16px;
+  border: 1px solid var(--yaib-block-overlay-border);
+  border-radius: 18px;
+  background: var(--yaib-block-overlay-panel-bg);
+  color: var(--yaib-block-overlay-text);
+  text-align: center;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.34);
+}
+
+.yaib-block-overlay__eyebrow {
+  margin: 0 0 8px;
+  color: #ff8a80;
+  font: 700 11px/1 "Roboto", "Arial", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.yaib-block-overlay__title {
+  margin: 0;
+  font: 700 20px/1.15 "Roboto", "Arial", sans-serif;
+}
+
+.yaib-block-overlay__meta {
+  margin: 8px 0 0;
+  color: var(--yaib-block-overlay-muted);
+  font: 500 13px/1.35 "Roboto", "Arial", sans-serif;
+}
+
+.yaib-block-overlay__button {
+  margin-top: 14px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--yaib-block-overlay-text);
+  font: 600 14px/1 "Roboto", "Arial", sans-serif;
+  cursor: pointer;
+}
+
+.yaib-block-overlay__button:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.yaib-block-overlay--card {
+  padding: 12px;
+}
+
+.yaib-block-overlay--card .yaib-block-overlay__panel {
+  width: min(100%, 280px);
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+}
+
+.yaib-block-overlay--card .yaib-block-overlay__title {
+  font-size: 16px;
+}
+
+.yaib-block-overlay--card .yaib-block-overlay__meta {
+  font-size: 12px;
+}
+
+.yaib-block-overlay--card .yaib-block-overlay__button {
+  min-height: 34px;
+  font-size: 13px;
 }
 
 .yaib-pill,
@@ -213,6 +341,19 @@ html[data-color-scheme="dark"] {
     min-height: 24px;
     padding: 0 8px;
     font-size: 11px;
+  }
+
+  .yaib-block-overlay {
+    padding: 14px;
+  }
+
+  .yaib-block-overlay__panel {
+    width: 100%;
+    padding: 16px 14px 14px;
+  }
+
+  .yaib-block-overlay__title {
+    font-size: 18px;
   }
 
   .yaib-toast {

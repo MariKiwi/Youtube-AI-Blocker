@@ -15,6 +15,8 @@
   const ROOT_ID = "yaib-watch-controls";
   const TOAST_ID = "yaib-watch-toast";
   const CARD_BADGE_CLASS = "yaib-card-badge";
+  const BLOCK_OVERLAY_CLASS = "yaib-block-overlay";
+  const WATCH_BLOCK_HOST_ID = "primary-inner";
   const FETCH_FAILURE_COOLDOWN_MS = 5000;
   const SUCCESS_STATUS_MS = 2400;
   const INFO_STATUS_MS = 2800;
@@ -52,6 +54,7 @@
   let lastRenderedCardSignature = "";
   let lastCardDiscoveryLogKey = null;
   const videoStateCache = new Map();
+  const temporarilyRevealedVideoIds = new Set();
 
   function isWatchPage() {
     return global.location.pathname === "/watch";
@@ -65,6 +68,10 @@
 
   function findActionRow() {
     return document.querySelector("#menu ytd-menu-renderer #top-level-buttons-computed");
+  }
+
+  function findWatchBlockHost() {
+    return document.getElementById(WATCH_BLOCK_HOST_ID);
   }
 
   function getVideoIdFromHref(href) {
@@ -155,6 +162,48 @@
     }
   }
 
+  function removeCardBlockState(card) {
+    const overlay = card.querySelector(`.${BLOCK_OVERLAY_CLASS}`);
+    overlay?.remove();
+    card.classList.remove("yaib-card-blocked");
+  }
+
+  function isVideoBlocked(video) {
+    return Boolean(
+      clientContext?.settings.blockingEnabled
+      && video?.isFlaggedAi
+      && !temporarilyRevealedVideoIds.has(video.youtubeVideoId),
+    );
+  }
+
+  function buildBlockOverlay(video, variant = "card") {
+    const overlay = document.createElement("div");
+    overlay.className = `${BLOCK_OVERLAY_CLASS} ${BLOCK_OVERLAY_CLASS}--${variant}`;
+    overlay.innerHTML = `
+      <div class="yaib-block-overlay__panel">
+        <p class="yaib-block-overlay__eyebrow">AI Video Hidden</p>
+        <h3 class="yaib-block-overlay__title">${formatConfidenceLabel(video)}</h3>
+        <p class="yaib-block-overlay__meta">Score ${video.score}</p>
+        <button class="yaib-block-overlay__button" type="button" data-yaib-reveal-video-id="${video.youtubeVideoId}">
+          Show anyway
+        </button>
+      </div>
+    `;
+
+    return overlay;
+  }
+
+  function applyVideoCardBlockState(target, video) {
+    removeCardBlockState(target.card);
+
+    if (!isVideoBlocked(video)) {
+      return;
+    }
+
+    target.card.classList.add("yaib-card-blocked");
+    target.card.append(buildBlockOverlay(video, "card"));
+  }
+
   function applyVideoCardHighlight(target, video) {
     removeCardHighlight(target.card);
 
@@ -229,8 +278,38 @@
     lastRenderedCardSignature = cardSignature;
 
     for (const target of targets) {
-      applyVideoCardHighlight(target, videoStateCache.get(target.videoId));
+      const video = videoStateCache.get(target.videoId);
+      applyVideoCardHighlight(target, video);
+      applyVideoCardBlockState(target, video);
     }
+  }
+
+  function removeWatchPageBlockState() {
+    const host = findWatchBlockHost();
+
+    if (!host) {
+      return;
+    }
+
+    host.classList.remove("yaib-watch-blocked");
+    host.querySelector(`.${BLOCK_OVERLAY_CLASS}--watch`)?.remove();
+  }
+
+  function applyWatchPageBlockState(video) {
+    const host = findWatchBlockHost();
+
+    if (!host) {
+      return;
+    }
+
+    removeWatchPageBlockState();
+
+    if (!isVideoBlocked(video)) {
+      return;
+    }
+
+    host.classList.add("yaib-watch-blocked");
+    host.append(buildBlockOverlay(video, "watch"));
   }
 
   function findOrCreateRoot(actionRow) {
@@ -459,14 +538,37 @@
     }
   }
 
+  function onDocumentClick(event) {
+    const button = event.target.closest("[data-yaib-reveal-video-id]");
+
+    if (!button) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const videoId = button.dataset.yaibRevealVideoId;
+
+    if (!videoId) {
+      return;
+    }
+
+    temporarilyRevealedVideoIds.add(videoId);
+    setStatus("Blocked video revealed for this session", "info", INFO_STATUS_MS);
+    scheduleRender();
+  }
+
   async function renderWatchPageControls() {
     if (!clientContext || !isWatchPage()) {
+      removeWatchPageBlockState();
       return;
     }
 
     const videoId = getVideoIdFromLocation();
 
     if (!videoId) {
+      removeWatchPageBlockState();
       return;
     }
 
@@ -488,10 +590,12 @@
 
     if (pendingAction && currentVideo && videoId === observedVideoId) {
       if (currentVideo.status === "unknown") {
+        applyWatchPageBlockState(currentVideo);
         renderUnknownState(root);
         return;
       }
 
+      applyWatchPageBlockState(currentVideo);
       renderKnownState(root, currentVideo);
       return;
     }
@@ -529,10 +633,12 @@
     lastLoggedFetchFailureKey = null;
 
     if (video.status === "unknown") {
+      applyWatchPageBlockState(video);
       renderUnknownState(root);
       return;
     }
 
+    applyWatchPageBlockState(video);
     renderKnownState(root, video);
   }
 
@@ -546,6 +652,10 @@
       settingsApi.getSettings()
         .then((settings) => {
           if (clientContext) {
+            if (!settings.blockingEnabled) {
+              temporarilyRevealedVideoIds.clear();
+            }
+
             clientContext.settings = settings;
           }
 
@@ -609,6 +719,7 @@
     scheduleRender();
     startObserver();
     global.addEventListener("yt-navigate-finish", scheduleRender);
+    document.addEventListener("click", onDocumentClick, true);
   }
 
   initializeClient().catch((error) => {

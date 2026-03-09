@@ -302,10 +302,10 @@ Only start this phase after the API contract is stable.
 
 ### Blocking
 
-- [ ] Add a setting to enable or disable blocking
-- [ ] Hide or collapse videos marked as AI when blocking is enabled
-- [ ] Make sure blocking does not break page layout badly
-- [ ] Decide whether blocked items can be temporarily revealed by the user
+- [x] Add a setting to enable or disable blocking
+- [x] Hide or collapse videos marked as AI when blocking is enabled
+- [x] Make sure blocking does not break page layout badly
+- [x] Decide whether blocked items can be temporarily revealed by the user
 
 ## Phase 7: User Actions in the Extension
 

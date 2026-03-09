@@ -55,6 +55,6 @@ Coverage:
 - The manifest defines MV3 popup, background worker, content script, and storage permission
 - The popup contains controls for blocking, debug unknown indicators, and API server configuration
 - Shared client settings define the default API URL, normal sync settings, a debug toggle, and local anonymous device ID storage
-- The content script includes watch-page action-row injection scaffolding, interactive flag/vote controls, per-device active vote state, card-level bulk lookups, and transient toast feedback states
+- The content script includes watch-page action-row injection scaffolding, interactive flag/vote controls, per-device active vote state, card-level bulk lookups, blocking overlays with reveal controls, and transient toast feedback states
 - The extension includes a stable `[YAIB]` logger prefix for filtering console output
-- The content CSS includes dark-mode-safe variables, active vote button styling, card highlight/badge styling, and toast styling for action feedback
+- The content CSS includes dark-mode-safe variables, active vote button styling, card highlight/badge styling, blocking overlays, and toast styling for action feedback
