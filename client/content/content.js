@@ -13,7 +13,6 @@
   };
 
   const ROOT_ID = "yaib-watch-controls";
-  const WATCH_MENU_CLASS = "yaib-watch-menu";
   const TOAST_ID = "yaib-watch-toast";
   const CARD_BADGE_CLASS = "yaib-card-badge";
   const BLOCK_OVERLAY_CLASS = "yaib-block-overlay";
@@ -54,6 +53,7 @@
   let statusTimer = null;
   let lastRenderedCardSignature = "";
   let lastCardDiscoveryLogKey = null;
+  let rerenderRequested = false;
   const videoStateCache = new Map();
   const temporarilyRevealedVideoIds = new Set();
 
@@ -68,9 +68,7 @@
   }
 
   function findActionRow() {
-    return document
-      .querySelector("#menu ytd-menu-renderer #top-level-buttons-computed")
-      ?.closest("#menu") ?? null;
+    return document.querySelector("#menu ytd-menu-renderer #top-level-buttons-computed");
   }
 
   function findWatchBlockHost() {
@@ -317,7 +315,6 @@
 
   function findOrCreateRoot(actionRow) {
     let root = document.getElementById(ROOT_ID);
-    actionRow.classList.add(WATCH_MENU_CLASS);
 
     if (!root) {
       root = document.createElement("div");
@@ -648,6 +645,7 @@
 
   function scheduleRender() {
     if (renderScheduled) {
+      rerenderRequested = true;
       return;
     }
 
@@ -673,6 +671,11 @@
         })
         .finally(() => {
           renderScheduled = false;
+
+          if (rerenderRequested) {
+            rerenderRequested = false;
+            scheduleRender();
+          }
         });
     });
   }
@@ -723,6 +726,7 @@
     scheduleRender();
     startObserver();
     global.addEventListener("yt-navigate-finish", scheduleRender);
+    document.addEventListener("yt-page-data-updated", scheduleRender);
     document.addEventListener("click", onDocumentClick, true);
   }
 

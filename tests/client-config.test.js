@@ -46,8 +46,7 @@ test("content script scaffold includes interactive watch page controls", async (
   const contentScript = await readFile(`${root}/client/content/content.js`, "utf8");
 
   assert.match(contentScript, /findActionRow/);
-  assert.match(contentScript, /closest\("#menu"\)/);
-  assert.match(contentScript, /yaib-watch-menu/);
+  assert.match(contentScript, /#top-level-buttons-computed/);
   assert.match(contentScript, /Flag as AI/);
   assert.match(contentScript, /Upvote/);
   assert.match(contentScript, /Downvote/);
@@ -79,7 +78,9 @@ test("content script scaffold includes interactive watch page controls", async (
   assert.match(contentScript, /Video-card bulk lookup failed/);
   assert.match(contentScript, /SUCCESS_STATUS_MS/);
   assert.match(contentScript, /yt-navigate-finish/);
+  assert.match(contentScript, /yt-page-data-updated/);
   assert.match(contentScript, /renderScheduled/);
+  assert.match(contentScript, /rerenderRequested/);
   assert.match(contentScript, /Watch-page API request failed/);
 });
 
@@ -103,7 +104,6 @@ test("content CSS defines dark mode variables and toast styles for injected cont
   assert.match(css, /--yaib-group-bg/);
   assert.match(css, /--yaib-card-badge-bg/);
   assert.match(css, /\.yaib-button--active/);
-  assert.match(css, /\.yaib-watch-menu/);
   assert.match(css, /\.yaib-controls/);
   assert.match(css, /\.yaib-card-badge/);
   assert.match(css, /\.yaib-card--high/);
