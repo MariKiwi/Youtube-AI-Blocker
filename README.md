@@ -35,6 +35,10 @@ Expected local setup flow:
 
 ## Operations
 
+- First deploy or rebuild-and-start: `make deploy-stack`
+- Update a running stack without data loss: `make update-stack`
+- Stop the stack without data loss: `make stop-stack`
+- Start a previously stopped stack: `make start-stack`
 - Clean reset: `make reset-stack`
 - Manual database backup: `make backup-db`
 
@@ -52,6 +56,7 @@ Expected local setup flow:
 ## Client docs
 
 - Extension foundation: `docs/client-extension.md`
+- Extension packaging and publishing: `docs/client-publishing.md`
 
 ## Website
 

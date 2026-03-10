@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Install | YouTube AI Blocker</title>
+  <meta
+    name="description"
+    content="Manual installation guide for YouTube AI Blocker on Chromium-based browsers using the unpacked extension flow."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="hero hero--compact">
+      <nav class="topbar">
+        <a class="brand" href="./index.html" aria-label="YouTube AI Blocker home">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__text">YouTube AI Blocker</span>
+        </a>
+        <div class="topbar__links">
+          <a href="./index.html#install">Install</a>
+          <a href="./index.html#features">Features</a>
+          <a href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </nav>
+
+      <section class="section section--compact">
+        <div class="section__heading">
+          <p class="eyebrow">Manual install</p>
+          <h1 class="page-title">Install the extension manually on Chromium-based browsers.</h1>
+          <p class="section__lede">
+            This path is mainly for local testing, self-hosted distribution, and pre-store releases.
+            It uses the browser’s developer-mode unpacked extension flow.
+          </p>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="steps steps--manual">
+          <article class="step">
+            <span class="step__number">01</span>
+            <h3>Download or unpack the extension</h3>
+            <p>Use the release ZIP or build output and make sure you have the unpacked extension folder available on disk.</p>
+          </article>
+          <article class="step">
+            <span class="step__number">02</span>
+            <h3>Open the extensions page</h3>
+            <p>In Chrome, Brave, Edge, or another Chromium browser, open <code>chrome://extensions</code>.</p>
+          </article>
+          <article class="step">
+            <span class="step__number">03</span>
+            <h3>Enable Developer mode</h3>
+            <p>Turn on Developer mode so the browser shows manual extension loading controls.</p>
+          </article>
+          <article class="step">
+            <span class="step__number">04</span>
+            <h3>Load the unpacked folder</h3>
+            <p>Choose <strong>Load unpacked</strong> and select the extracted extension directory, not just the ZIP file itself.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="install-grid">
+          <article class="install-card install-card--primary">
+            <p class="install-card__eyebrow">Recommended</p>
+            <h3>Use the built extension folder</h3>
+            <p>If you build from this repo, the cleanest folder to load is <code>dist/extension/</code>.</p>
+          </article>
+          <article class="install-card">
+            <p class="install-card__eyebrow">Release artifact</p>
+            <h3>ZIP is for download, not direct install</h3>
+            <p>Browsers usually do not install the ZIP directly from a website. Extract it first, then load the folder manually.</p>
+          </article>
+          <article class="install-card">
+            <p class="install-card__eyebrow">Store later</p>
+            <h3>Store install will be simpler</h3>
+            <p>Once the store listing is live, users should prefer that route because it is trusted and updates cleanly.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="install-note">
+          <h3>Quick links</h3>
+          <div class="hero__actions">
+            <a class="button button--primary" href="https://github.com/MattiKiwi/Youtube-AI-Blocker/releases" target="_blank" rel="noreferrer">Open releases</a>
+            <a class="button button--secondary" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">View source</a>
+            <a class="button button--secondary" href="./index.html#install">Back to install section</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Open source YouTube AI moderation tooling.</p>
+      <p>&copy; <span id="currentYear"></span> YouTube AI Blocker</p>
+    </footer>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

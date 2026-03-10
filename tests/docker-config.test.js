@@ -54,8 +54,13 @@ test("compose environment example includes required deployment variables", async
 test("backup and reset scripts exist for operations", async () => {
   const backupScript = await readFile(`${root}/scripts/backup-db.sh`, "utf8");
   const resetScript = await readFile(`${root}/scripts/reset-stack.sh`, "utf8");
+  const makefile = await readFile(`${root}/Makefile`, "utf8");
 
   assert.match(backupScript, /pg_dump/);
   assert.match(backupScript, /BACKUP_DIR/);
   assert.match(resetScript, /docker compose down -v --remove-orphans/);
+  assert.match(makefile, /^deploy-stack:\n\tdocker compose up --build -d/m);
+  assert.match(makefile, /^update-stack:\n\tdocker compose up --build -d/m);
+  assert.match(makefile, /^stop-stack:\n\tdocker compose stop/m);
+  assert.match(makefile, /^start-stack:\n\tdocker compose start/m);
 });

@@ -129,3 +129,29 @@ test("popup CSS defines YouTube-like themed surfaces for light and dark mode", a
   assert.match(css, /\.toggle__slider/);
   assert.match(css, /\.button--primary/);
 });
+
+test("extension packaging workflow exists for local builds and store upload zips", async () => {
+  const buildScript = await readFile(`${root}/scripts/build-extension.sh`, "utf8");
+  const firefoxBuildScript = await readFile(`${root}/scripts/build-firefox-addon.sh`, "utf8");
+  const makefile = await readFile(`${root}/Makefile`, "utf8");
+  const clientReadme = await readFile(`${root}/client/README.md`, "utf8");
+  const publishingDoc = await readFile(`${root}/docs/client-publishing.md`, "utf8");
+
+  assert.match(buildScript, /CLIENT_DIR=.*client/);
+  assert.match(buildScript, /DIST_DIR=.*dist/);
+  assert.match(buildScript, /ZIP_PATH=.*youtube-ai-blocker-extension\.zip/);
+  assert.match(buildScript, /cp -R "\$CLIENT_DIR"\/\. "\$BUILD_DIR"\//);
+  assert.match(buildScript, /bsdtar -a -cf "\$ZIP_PATH" \./);
+  assert.match(firefoxBuildScript, /FIREFOX_ADDON_ID/);
+  assert.match(firefoxBuildScript, /browser_specific_settings/);
+  assert.match(firefoxBuildScript, /strict_min_version/);
+  assert.match(firefoxBuildScript, /youtube-ai-blocker-firefox-addon\.zip/);
+  assert.match(makefile, /^build-extension:\n\tsh \.\/scripts\/build-extension\.sh/m);
+  assert.match(makefile, /^build-firefox-addon:\n\tsh \.\/scripts\/build-firefox-addon\.sh/m);
+  assert.match(clientReadme, /make build-extension/);
+  assert.match(clientReadme, /make build-firefox-addon/);
+  assert.match(publishingDoc, /Chrome Web Store/i);
+  assert.match(publishingDoc, /Firefox Add-ons/i);
+  assert.match(publishingDoc, /dist\/youtube-ai-blocker-extension\.zip/);
+  assert.match(publishingDoc, /dist\/youtube-ai-blocker-firefox-addon\.zip/);
+});

@@ -57,6 +57,7 @@
           <span class="brand__text">YouTube AI Blocker</span>
         </a>
         <div class="topbar__links">
+          <a href="#install">Install</a>
           <a href="#how-it-works">How it works</a>
           <a href="#features">Features</a>
           <a href="#faq">FAQ</a>
@@ -156,6 +157,47 @@
     </header>
 
     <main>
+      <section class="section" id="install">
+        <div class="section__heading">
+          <p class="eyebrow">Install</p>
+          <h2>Store install when available, manual install when needed.</h2>
+          <p class="section__lede">
+            Chrome and Firefox do not generally allow true one-click third-party extension installs from arbitrary websites.
+            The normal path is the browser store. Until that is live, the practical fallback is a release download plus manual install.
+          </p>
+        </div>
+        <div class="install-grid">
+          <article class="install-card install-card--primary">
+            <p class="install-card__eyebrow">Preferred</p>
+            <h3>Chrome Web Store</h3>
+            <p>Use the official store install once the listing is published.</p>
+            <a class="button button--primary" href="#" aria-disabled="true">Chrome listing soon</a>
+          </article>
+          <article class="install-card">
+            <p class="install-card__eyebrow">Planned</p>
+            <h3>Firefox Add-ons</h3>
+            <p>Firefox packaging and store submission will come after the Chromium release is stable.</p>
+            <a class="button button--secondary" href="#" aria-disabled="true">Firefox listing soon</a>
+          </article>
+          <article class="install-card">
+            <p class="install-card__eyebrow">Manual</p>
+            <h3>GitHub Releases</h3>
+            <p>Download packaged releases and follow the manual install instructions for local testing or self-hosted distribution.</p>
+            <a class="button button--secondary" href="https://github.com/MattiKiwi/Youtube-AI-Blocker/releases" target="_blank" rel="noreferrer">Open releases</a>
+          </article>
+        </div>
+        <div class="install-note">
+          <h3>Manual install notes</h3>
+          <p>
+            For Chromium-based browsers, manual installation usually means loading the unpacked extension from developer mode.
+            A ZIP download is useful as a release artifact, but it is not the same as a trusted one-click browser install.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--secondary" href="./manual-install.html">Manual install guide</a>
+          </div>
+        </div>
+      </section>
+
       <section class="section section--split" id="how-it-works">
         <div class="section__heading">
           <p class="eyebrow">How it works</p>

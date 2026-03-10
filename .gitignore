@@ -4,4 +4,4 @@ node_modules/
 server/generated/
 server/prisma/migrations/
 examples/
-
+dist/

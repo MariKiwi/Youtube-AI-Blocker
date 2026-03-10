@@ -46,6 +46,7 @@ Coverage:
 - The website Dockerfile serves the static landing page through Nginx
 - The root environment example includes the required deployment variables
 - Backup and reset operational scripts exist and reference the expected Docker commands
+- Make targets exist for deploy, update, stop, and start stack lifecycle operations
 
 ## `tests/client-config.test.js`
 
@@ -59,6 +60,7 @@ Coverage:
 - The content script includes watch-page action-row injection scaffolding, interactive flag/vote controls, per-device active vote state, card-level bulk lookups, blocking overlays with reveal controls, and transient toast feedback states
 - The extension includes a stable `[YAIB]` logger prefix for filtering console output
 - The content CSS includes dark-mode-safe variables, active vote button styling, card highlight/badge styling, blocking overlays, and toast styling for action feedback
+- The repository includes Chromium and Firefox packaging scripts, build targets, and publishing docs for generating clean unpacked bundles and store upload ZIPs
 
 ## `tests/website.test.js`
 

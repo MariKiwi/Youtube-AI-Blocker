@@ -144,6 +144,10 @@ strong {
   padding: 28px 0 12px;
 }
 
+.hero--compact {
+  padding-bottom: 0;
+}
+
 .hero__content {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
@@ -172,6 +176,11 @@ h1 {
   font-size: clamp(3rem, 7vw, 6.2rem);
 }
 
+.page-title {
+  max-width: 14ch;
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+}
+
 h2 {
   font-size: clamp(2rem, 4vw, 3.3rem);
 }
@@ -183,13 +192,19 @@ h3 {
 }
 
 .hero__lede,
-.section__heading {
+.section__heading,
+.section__lede {
   max-width: 760px;
 }
 
 .hero__lede {
   margin: 18px 0 0;
   font-size: 1.2rem;
+  color: var(--text-muted);
+}
+
+.section__lede {
+  margin: 14px 0 0;
   color: var(--text-muted);
 }
 
@@ -439,6 +454,10 @@ h3 {
   margin-top: 72px;
 }
 
+.section--compact {
+  margin-top: 32px;
+}
+
 .section__heading {
   margin-bottom: 22px;
 }
@@ -449,7 +468,8 @@ h3 {
 
 .steps,
 .feature-grid,
-.info-grid {
+.info-grid,
+.install-grid {
   display: grid;
   gap: 16px;
 }
@@ -458,16 +478,65 @@ h3 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.steps--manual {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .feature-grid,
-.info-grid {
+.info-grid,
+.install-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .step,
 .feature-card,
-.info-card {
+.info-card,
+.install-card {
   padding: 22px;
   border-radius: 24px;
+}
+
+.install-card {
+  border: 1px solid var(--surface-border);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.install-card--primary {
+  background:
+    linear-gradient(135deg, rgba(255, 47, 67, 0.08), transparent 58%),
+    var(--surface);
+}
+
+.install-card__eyebrow {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font: 700 0.8rem/1.1 "Space Grotesk", "Arial", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.install-card .button[aria-disabled="true"] {
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.install-note {
+  margin-top: 16px;
+  padding: 20px 22px;
+  border: 1px solid var(--surface-border);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
+  box-shadow: var(--shadow-card);
+}
+
+@media (prefers-color-scheme: dark) {
+  .install-note {
+    background: rgba(36, 22, 29, 0.72);
+  }
 }
 
 .step__number {
@@ -572,6 +641,7 @@ h3 {
 
   .feature-grid,
   .info-grid,
+  .install-grid,
   .hero__bullets {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -606,6 +676,7 @@ h3 {
   .steps,
   .feature-grid,
   .info-grid,
+  .install-grid,
   .hero__bullets {
     grid-template-columns: 1fr;
   }

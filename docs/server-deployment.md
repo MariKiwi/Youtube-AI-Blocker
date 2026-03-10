@@ -7,7 +7,7 @@ The repository now supports a single Compose-based workflow for both local start
 From the repository root:
 
 1. Copy `.env.example` to `.env`
-2. Run `docker compose up --build -d`
+2. Run `make deploy-stack`
 3. Optionally seed data with `docker compose exec api npm run seed`
 4. Open the website on `http://localhost:8080` unless `WEBSITE_PORT` was changed
 5. Create manual backups with `make backup-db`
@@ -47,14 +47,25 @@ Recommended production flow:
 
 ```bash
 cp .env.example .env
-docker compose build
-docker compose up -d
+make deploy-stack
 ```
 
 To update after code changes:
 
 ```bash
-docker compose up --build -d
+make update-stack
+```
+
+To stop the stack without removing data:
+
+```bash
+make stop-stack
+```
+
+To start a previously stopped stack again:
+
+```bash
+make start-stack
 ```
 
 ## Clean start
@@ -63,7 +74,7 @@ If you need a guaranteed clean database on a host, use:
 
 ```bash
 make reset-stack
-docker compose up --build -d
+make deploy-stack
 ```
 
 This removes the containers and the configured Postgres volume.

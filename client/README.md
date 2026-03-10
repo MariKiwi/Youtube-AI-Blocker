@@ -57,3 +57,27 @@ Default local API URL:
 Additional debug option:
 
 - `debugUnknownIndicators`: show `AI Unknown` badges on videos with no DB record so page detection can be verified
+
+## Build package
+
+From the repository root:
+
+```bash
+make build-extension
+```
+
+This creates:
+
+- `dist/extension/`: clean unpacked extension bundle
+- `dist/youtube-ai-blocker-extension.zip`: ZIP package for Chrome Web Store upload
+
+Firefox packaging:
+
+```bash
+make build-firefox-addon
+```
+
+This creates:
+
+- `dist/firefox-addon/`: Firefox-targeted unpacked add-on bundle
+- `dist/youtube-ai-blocker-firefox-addon.zip`: ZIP package for Firefox Add-ons upload
