@@ -13,6 +13,7 @@ This keeps the early test setup simple and avoids introducing a larger test stac
 - `tests/docker-config.test.js`: deployment config tests for Compose and Docker
 - `tests/client-config.test.js`: extension scaffold tests for manifest and popup settings
 - `tests/website.test.js`: static landing page tests for public-facing content and assets
+- `tests/readme.test.js`: root readme and docs index content tests
 
 ## Running tests
 
@@ -40,3 +41,4 @@ node --test tests/*.test.js
 - Client packaging tests keep the extension ZIP build workflow and publishing docs from regressing
 - Docker config tests also keep the Makefile stack lifecycle commands from drifting away from the intended Compose workflow
 - Website tests also verify that the featured hero artwork fills the preview screen without a nested frame wrapper
+- Readme tests keep the repo front page and docs index accessible to first-time users

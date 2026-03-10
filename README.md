@@ -1,65 +1,113 @@
 # YouTube AI Blocker
 
-This repository contains the server and browser client for YouTube AI Blocker.
+YouTube AI Blocker is an open source project for flagging, highlighting, and optionally blocking AI-made YouTube videos.
 
-## Repository structure
+It combines:
 
-- `server/`: Fastify API, Prisma schema, database access, and server-side logic
-- `client/`: Chromium browser extension that integrates with YouTube and the API
-- `website/`: static landing page for explaining the project, linking the source, and supporting discoverability
+- a shared server and database
+- a browser extension that works directly on YouTube
+- anonymous community voting to decide how confident the system should be about a video
 
-## Local development plan
+## Start Here
 
-Phase 1 starts with the server.
+If you just want to understand the project:
 
-Expected local setup flow:
+- Website: `https://your-website.example`
+- Local website preview: `website/index.html`
+- Documentation index: `docs/README.md`
 
-1. Copy `.env.example` to `.env`
-2. Start the API stack with `docker compose up --build`
-3. Optionally seed sample data with `docker compose exec api npm run seed`
-4. Build the browser extension after the API is stable
+Replace `https://your-website.example` with your real public website when it is available.
 
-## Notes
+## What It Does
 
-- The first version uses anonymous voting
-- One vote is allowed per device per video
-- Videos with no record are treated as `unknown`
-- Video score is point-based: upvotes add `+1`, downvotes add `-1`, and videos below `-5` become `unflagged`
-- The client should default to the official API server, but allow a custom server URL
+- Lets users mark a YouTube video as AI-made
+- Lets other users vote for or against that flag
+- Shows confidence levels directly on YouTube
+- Can optionally block flagged videos from feeds and watch pages
+- Keeps the system open and community-driven instead of using a closed detection model
 
-## Current repository status
+## How It Works
 
-- `server/` contains the Fastify API, Prisma schema, and Docker image definition
-- `client/` is reserved for the Chromium extension
-- `docker-compose.yml` starts the full API stack
+1. A user flags a video as AI-made.
+2. Other users vote up or down on that flag.
+3. The server stores the result and calculates the current score.
+4. The browser extension shows the video as `unknown`, `low`, `medium`, `high`, `disputed`, or `unflagged`.
+5. Users can choose whether flagged videos are only highlighted or also blocked.
 
-## Operations
+## For First-Time Users
 
-- First deploy or rebuild-and-start: `make deploy-stack`
-- Update a running stack without data loss: `make update-stack`
-- Stop the stack without data loss: `make stop-stack`
-- Start a previously stopped stack: `make start-stack`
-- Clean reset: `make reset-stack`
-- Manual database backup: `make backup-db`
+If you are not a developer, the easiest way to follow the project is:
 
-## Testing
+1. Visit the project website.
+2. Read the install instructions there.
+3. Use the browser store version when it is published.
+4. If you are testing early builds, use the manual install guide from the website.
 
-- Execute all current tests with `make test-all`
-- Test documentation lives in `docs/testing.md`
-- The test index lives in `tests/TEST_CATALOG.md`
+## Current Project Parts
 
-## Server docs
+- `server/`: API, database schema, and deployment logic
+- `client/`: browser extension
+- `website/`: public-facing project website
+- `docs/`: detailed documentation
 
-- API reference: `docs/api.md`
-- Deployment notes: `docs/server-deployment.md`
+## Useful Commands
 
-## Client docs
+These are the main commands most contributors or self-hosters will need:
 
-- Extension foundation: `docs/client-extension.md`
-- Extension packaging and publishing: `docs/client-publishing.md`
+- `make deploy-stack`: first deploy or rebuild-and-start the stack
+- `make update-stack`: update a running stack without data loss
+- `make stop-stack`: stop the stack without removing data
+- `make start-stack`: start a previously stopped stack
+- `make reset-stack`: remove the stack and database volume for a clean start
+- `make backup-db`: create a manual database backup
+- `make test-all`: run the current automated tests
+- `make build-extension`: build the Chromium extension package
+- `make build-firefox-addon`: build the Firefox add-on package
 
-## Website
+## Contributing
 
-- `website/` contains a static marketing and project-information page
-- Open `website/index.html` directly in a browser to preview it locally
-- `docker compose up --build -d` also starts the website container on `WEBSITE_PORT` (default `8080`)
+Contributions are welcome.
+
+Good first ways to help:
+
+- report bugs or confusing behavior
+- improve detection and voting UX
+- test the extension on different YouTube layouts
+- improve documentation for non-technical users
+- help with Firefox support and store publishing
+
+If you want to contribute code:
+
+1. Read the relevant docs in `docs/`
+2. Make a focused change
+3. Run `make test-all`
+4. Open a pull request or share the patch
+
+## Documentation
+
+Start with the documentation index:
+
+- `docs/README.md`
+
+Detailed docs:
+
+- `docs/api.md`
+- `docs/server-deployment.md`
+- `docs/client-extension.md`
+- `docs/client-publishing.md`
+- `docs/testing.md`
+
+## Project Status
+
+The repository already includes:
+
+- a Fastify API with PostgreSQL and Prisma
+- a Chromium extension with highlighting, voting, and blocking
+- Firefox packaging support
+- a separate website container for the public project page
+
+## License and Source
+
+This project is open source. The GitHub repository is:
+
+- `https://github.com/MattiKiwi/Youtube-AI-Blocker`
