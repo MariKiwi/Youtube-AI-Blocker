@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube AI Blocker | Flag, Highlight, and Block AI Videos</title>
+  <meta
+    name="description"
+    content="YouTube AI Blocker is an open source browser extension that highlights suspected AI-made YouTube videos, lets the community vote, and can block flagged videos automatically."
+  >
+  <meta
+    name="keywords"
+    content="YouTube AI blocker, AI video detector, browser extension, block AI videos, community moderation, open source YouTube extension"
+  >
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#ff2f43">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="YouTube AI Blocker">
+  <meta
+    property="og:description"
+    content="An open source extension for flagging, highlighting, and blocking AI-made YouTube videos with community voting."
+  >
+  <meta property="og:site_name" content="YouTube AI Blocker">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="YouTube AI Blocker">
+  <meta
+    name="twitter:description"
+    content="Community-driven detection for AI-made YouTube videos, with highlighting, voting, and optional blocking."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "YouTube AI Blocker",
+      "applicationCategory": "BrowserApplication",
+      "operatingSystem": "Chromium-based browsers",
+      "description": "An open source browser extension that highlights suspected AI-made YouTube videos, supports anonymous community voting, and can block flagged videos.",
+      "isAccessibleForFree": true,
+      "sameAs": "https://github.com/MattiKiwi/Youtube-AI-Blocker"
+    }
+  </script>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <a class="brand" href="#top" aria-label="YouTube AI Blocker home">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__text">YouTube AI Blocker</span>
+        </a>
+        <div class="topbar__links">
+          <a href="#how-it-works">How it works</a>
+          <a href="#features">Features</a>
+          <a href="#faq">FAQ</a>
+          <a class="button button--ghost" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </nav>
+
+      <section class="hero__content" id="top">
+        <div class="hero__copy">
+          <p class="eyebrow">Community-driven AI video detection</p>
+          <h1>See AI-made YouTube videos before you waste time on them.</h1>
+          <p class="hero__lede">
+            YouTube AI Blocker is an open source extension that lets users flag suspicious AI videos,
+            vote on them anonymously, highlight confidence levels directly on YouTube, and block flagged
+            videos if that is how you want to browse.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">View source on GitHub</a>
+            <a class="button button--secondary" href="#how-it-works">See how it works</a>
+          </div>
+          <ul class="hero__bullets">
+            <li>Open source and community-reviewed</li>
+            <li>Anonymous voting with one vote per device</li>
+            <li>Optional blocking, not forced filtering</li>
+          </ul>
+        </div>
+
+        <div class="hero__preview" aria-label="Feature preview">
+          <div class="preview-card preview-card--video">
+            <div class="preview-card__screen">
+              <img
+                class="preview-card__image preview-card__image--hero"
+                src="./assets/logan-voss-vJy0DdZ6NVk-unsplash.jpg"
+                alt="Decorative thumbnail artwork used for the featured video preview"
+              >
+              <div class="preview-video"></div>
+              <div class="preview-badge preview-badge--high">AI High · 18</div>
+            </div>
+            <div class="preview-card__bar">
+              <span class="preview-pill preview-pill--accent">Confidence High</span>
+              <span class="preview-pill">Score 18</span>
+              <span class="preview-pill">Upvote</span>
+              <span class="preview-pill">Downvote</span>
+            </div>
+          </div>
+
+          <div class="preview-card preview-card--feed">
+            <div class="feed-item">
+              <div class="feed-item__thumb">
+                <img
+                  class="feed-item__image"
+                  src="./assets/mario-ame-EUTXu9T36XU-unsplash.jpg"
+                  alt="Portrait thumbnail used for an example unknown video card"
+                >
+                <span class="feed-item__badge">AI Unknown</span>
+              </div>
+              <div class="feed-item__text">
+                <strong>Fresh upload under review</strong>
+                <span>Waiting for community signal</span>
+              </div>
+            </div>
+            <div class="feed-item feed-item--flagged">
+              <div class="feed-item__thumb">
+                <img
+                  class="feed-item__image"
+                  src="./assets/mario-ame-fSfv8RhkvCs-unsplash.jpg"
+                  alt="Portrait thumbnail used for an example flagged video card"
+                >
+                <span class="feed-item__badge feed-item__badge--hot">AI Medium · 7</span>
+              </div>
+              <div class="feed-item__text">
+                <strong>Likely AI-generated content</strong>
+                <span>Automatically highlighted in the feed</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="photo-credits" aria-label="Photo credits">
+            <p class="photo-credits__title">Photo credits</p>
+            <ul class="photo-credits__list">
+              <li>
+                Photo by <a href="https://unsplash.com/@imperioame?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noreferrer">Mario Amé</a>
+                on <a href="https://unsplash.com/photos/a-man-with-a-goatee-smiles-while-talking-on-a-cell-phone-EUTXu9T36XU?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noreferrer">Unsplash</a>
+              </li>
+              <li>
+                Photo by <a href="https://unsplash.com/@imperioame?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noreferrer">Mario Amé</a>
+                on <a href="https://unsplash.com/photos/a-man-with-a-surprised-look-on-his-face-fSfv8RhkvCs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noreferrer">Unsplash</a>
+              </li>
+              <li>
+                Photo by <a href="https://unsplash.com/@loganvoss?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noreferrer">Logan Voss</a>
+                on <a href="https://unsplash.com/photos/3d-text-reads-good-vibes-with-pink-marble-effect-vJy0DdZ6NVk?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noreferrer">Unsplash</a>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="section section--split" id="how-it-works">
+        <div class="section__heading">
+          <p class="eyebrow">How it works</p>
+          <h2>Simple flow, visible signal, no account required.</h2>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <span class="step__number">01</span>
+            <h3>Flag a video</h3>
+            <p>If a video looks AI-made, a user can create the first record directly from the YouTube page.</p>
+          </article>
+          <article class="step">
+            <span class="step__number">02</span>
+            <h3>Community votes</h3>
+            <p>Other users vote up or down. The score is point-based, so each vote immediately changes the signal.</p>
+          </article>
+          <article class="step">
+            <span class="step__number">03</span>
+            <h3>Confidence updates</h3>
+            <p>The extension highlights low, medium, high, disputed, unknown, or unflagged states directly on YouTube.</p>
+          </article>
+          <article class="step">
+            <span class="step__number">04</span>
+            <h3>Block if you want</h3>
+            <p>Users who prefer a cleaner feed can enable blocking and temporarily reveal videos when needed.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="features">
+        <div class="section__heading">
+          <p class="eyebrow">Features</p>
+          <h2>Built for real browsing, not a lab demo.</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <h3>Inline YouTube indicators</h3>
+            <p>Confidence badges, scores, and action buttons appear right where people are already looking.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Anonymous by design</h3>
+            <p>No accounts are required. Votes are tracked through a local anonymous device ID.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Point-based moderation</h3>
+            <p>Upvotes add one point, downvotes subtract one point, and heavily rejected videos can become unflagged.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Custom API support</h3>
+            <p>The extension defaults to the project API, but advanced users can point it to another compatible backend.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Open source backend</h3>
+            <p>The Fastify API and Prisma/PostgreSQL stack are public, inspectable, and ready for self-hosting.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Optional blocking</h3>
+            <p>Highlighting is the baseline. Blocking is user-controlled and can be switched on only if desired.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section--callout">
+        <div class="callout">
+          <div>
+            <p class="eyebrow">Why this matters</p>
+            <h2>AI spam scales faster than manual reporting.</h2>
+            <p>
+              The extension is meant to create a practical middle layer between “ignore it” and “wait for the platform.”
+              Users get a visible signal, the community gets a shared database, and the project stays transparent because
+              the code is public.
+            </p>
+          </div>
+          <div class="callout__stats" aria-label="Project highlights">
+            <div class="stat">
+              <strong>Open source</strong>
+              <span>GitHub repository and API code available</span>
+            </div>
+            <div class="stat">
+              <strong>Community driven</strong>
+              <span>Detection improves as more people vote</span>
+            </div>
+            <div class="stat">
+              <strong>Privacy-aware</strong>
+              <span>No mandatory sign-in or public profile system</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--split">
+        <div class="section__heading">
+          <p class="eyebrow">What users should know</p>
+          <h2>Clear expectations before installing.</h2>
+        </div>
+        <div class="info-grid">
+          <article class="info-card">
+            <h3>What gets stored</h3>
+            <p>The extension stores settings and one anonymous device ID locally so one browser can only vote once per video.</p>
+          </article>
+          <article class="info-card">
+            <h3>What “unknown” means</h3>
+            <p>Unknown is not a clean bill of health. It only means the community has not created a record yet.</p>
+          </article>
+          <article class="info-card">
+            <h3>How confidence works</h3>
+            <p>Confidence is based on score ranges, not machine learning. It is an explicit community signal.</p>
+          </article>
+          <article class="info-card">
+            <h3>Who should use it</h3>
+            <p>Anyone who wants a more transparent way to spot synthetic, AI-heavy, or spammy videos in their feed.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section--faq" id="faq">
+        <div class="section__heading">
+          <p class="eyebrow">FAQ</p>
+          <h2>Questions people will ask before they trust it.</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary>Is this official YouTube moderation?</summary>
+            <p>No. It is an independent community moderation layer delivered through a browser extension.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Does it use AI to detect AI videos?</summary>
+            <p>Not in the current version. The detection signal is community voting backed by a shared API and video database.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can I inspect the code?</summary>
+            <p>Yes. The extension and the API are open source and linked directly to the public GitHub repository.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can I run my own backend?</summary>
+            <p>Yes. The extension supports changing the API server URL, so compatible self-hosted servers are possible.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="section section--final">
+        <div class="final-card">
+          <p class="eyebrow">Source and project status</p>
+          <h2>Follow development, inspect the code, or contribute.</h2>
+          <p>
+            The project includes a Fastify API, a PostgreSQL-backed video database, and a Chromium extension that integrates
+            directly into YouTube. If you want to review the source, open issues, or contribute, start on GitHub.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">Open GitHub</a>
+            <a class="button button--secondary" href="../docs/api.md">Read API docs</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Open source YouTube AI moderation tooling.</p>
+      <p>&copy; <span id="currentYear"></span> YouTube AI Blocker</p>
+    </footer>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

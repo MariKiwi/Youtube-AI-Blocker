@@ -40,9 +40,10 @@ Purpose:
 - Verifies that the Compose and Docker configuration required to run the API stack exists and stays wired correctly
 
 Coverage:
-- `docker-compose.yml` defines both `api` and `postgres`
+- `docker-compose.yml` defines `api`, `website`, and `postgres`
 - Compose wires API startup to PostgreSQL health
 - The server Dockerfile installs dependencies, generates Prisma, and starts through the container entrypoint
+- The website Dockerfile serves the static landing page through Nginx
 - The root environment example includes the required deployment variables
 - Backup and reset operational scripts exist and reference the expected Docker commands
 
@@ -58,3 +59,14 @@ Coverage:
 - The content script includes watch-page action-row injection scaffolding, interactive flag/vote controls, per-device active vote state, card-level bulk lookups, blocking overlays with reveal controls, and transient toast feedback states
 - The extension includes a stable `[YAIB]` logger prefix for filtering console output
 - The content CSS includes dark-mode-safe variables, active vote button styling, card highlight/badge styling, blocking overlays, and toast styling for action feedback
+
+## `tests/website.test.js`
+
+Purpose:
+- Verifies that the static project website exists and includes the expected public-facing content and assets
+
+Coverage:
+- The landing page includes SEO metadata, core project messaging, FAQ content, and the live GitHub source link
+- The website stylesheet includes themed responsive layout rules for the landing page
+- The hero preview artwork fills the preview screen directly without relying on a nested frame wrapper
+- The website script provides lightweight progressive enhancement for staged reveals and footer year output

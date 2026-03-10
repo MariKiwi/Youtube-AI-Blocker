@@ -9,7 +9,8 @@ From the repository root:
 1. Copy `.env.example` to `.env`
 2. Run `docker compose up --build -d`
 3. Optionally seed data with `docker compose exec api npm run seed`
-4. Create manual backups with `make backup-db`
+4. Open the website on `http://localhost:8080` unless `WEBSITE_PORT` was changed
+5. Create manual backups with `make backup-db`
 
 The `api` container:
 - Builds the server image
@@ -17,11 +18,17 @@ The `api` container:
 - Runs `prisma migrate deploy`
 - Starts the Fastify server
 
+The `website` container:
+- Builds a separate static image from `website/`
+- Serves the landing page through Nginx
+- Is independently deployable from the API image even though both are managed by the same Compose file
+
 ## Production recommendation
 
 Use:
 - Environment variables for all secrets and runtime settings
 - HTTPS in front of the API
+- HTTPS in front of the website
 - Restricted CORS origins for the production extension and website
 - Persistent storage for PostgreSQL if Postgres runs in the same stack
 
@@ -32,6 +39,7 @@ The current Compose file is suitable for a single-host production deployment whe
 - `.env` contains strong PostgreSQL credentials
 - `.env` uses a production-specific `POSTGRES_VOLUME_NAME`
 - The host is protected by HTTPS through a reverse proxy
+- The website port is either published directly or placed behind the same reverse proxy
 - Backups are configured for the Postgres volume
 - CORS is locked to the real extension and site origins
 

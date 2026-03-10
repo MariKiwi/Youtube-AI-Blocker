@@ -6,6 +6,7 @@ This repository contains the server and browser client for YouTube AI Blocker.
 
 - `server/`: Fastify API, Prisma schema, database access, and server-side logic
 - `client/`: Chromium browser extension that integrates with YouTube and the API
+- `website/`: static landing page for explaining the project, linking the source, and supporting discoverability
 
 ## Local development plan
 
@@ -51,3 +52,9 @@ Expected local setup flow:
 ## Client docs
 
 - Extension foundation: `docs/client-extension.md`
+
+## Website
+
+- `website/` contains a static marketing and project-information page
+- Open `website/index.html` directly in a browser to preview it locally
+- `docker compose up --build -d` also starts the website container on `WEBSITE_PORT` (default `8080`)
