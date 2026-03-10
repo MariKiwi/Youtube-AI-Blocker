@@ -1,80 +1,98 @@
-# YouTube AI Blocker
+<h1 align="center">YouTube AI Blocker</h1>
 
-YouTube AI Blocker is an open source project for flagging, highlighting, and optionally blocking AI-made YouTube videos.
+<p align="center">
+  Open source community-driven detection, highlighting, and optional blocking for AI-made YouTube videos.
+</p>
 
-It combines:
+<p align="center">
+  <b>Install:</b>
+  <a href="https://chromewebstore.google.com/">Chrome Web Store (placeholder)</a> |
+  <a href="https://addons.mozilla.org/">Firefox Add-ons (placeholder)</a> |
+  <a href="https://github.com/MattiKiwi/Youtube-AI-Blocker/releases">Manual Releases</a> |
+  <a href="https://your-website.example">Website (placeholder)</a>
+</p>
 
-- a shared server and database
-- a browser extension that works directly on YouTube
-- anonymous community voting to decide how confident the system should be about a video
+<p align="center">
+  <b>Documentation:</b>
+  <a href="docs/README.md">Docs Index</a> |
+  <a href="docs/client-extension.md">Extension</a> |
+  <a href="docs/client-publishing.md">Publishing</a> |
+  <a href="docs/api.md">API</a> |
+  <a href="docs/server-deployment.md">Deployment</a>
+</p>
 
-## Start Here
 
-If you just want to understand the project:
+## What Is This?
 
-- Website: `https://your-website.example`
-- Local website preview: `website/index.html`
-- Documentation index: `docs/README.md`
+YouTube AI Blocker is a project that helps users spot AI-made YouTube videos before clicking on them or spending time watching them.
 
-Replace `https://your-website.example` with your real public website when it is available.
+It works through:
+
+- a shared API and database
+- a browser extension that integrates directly into YouTube
+- anonymous community voting that decides how strong the AI flag should be
+
+Instead of relying on a closed or hidden moderation model, the system is meant to stay transparent and community-driven.
 
 ## What It Does
 
-- Lets users mark a YouTube video as AI-made
-- Lets other users vote for or against that flag
-- Shows confidence levels directly on YouTube
-- Can optionally block flagged videos from feeds and watch pages
-- Keeps the system open and community-driven instead of using a closed detection model
+- mark a video as AI-made
+- vote for or against an existing AI flag
+- show visible confidence levels on YouTube
+- highlight suspicious videos in feeds and on watch pages
+- optionally block flagged videos if the user enables that setting
 
 ## How It Works
 
 1. A user flags a video as AI-made.
 2. Other users vote up or down on that flag.
-3. The server stores the result and calculates the current score.
-4. The browser extension shows the video as `unknown`, `low`, `medium`, `high`, `disputed`, or `unflagged`.
-5. Users can choose whether flagged videos are only highlighted or also blocked.
+3. The server stores the result and updates the score.
+4. The extension shows that video as `unknown`, `low`, `medium`, `high`, `disputed`, or `unflagged`.
+5. Users decide whether they want highlighting only or full blocking.
 
 ## For First-Time Users
 
-If you are not a developer, the easiest way to follow the project is:
+If you are new to GitHub or development, you do not need to understand the codebase to understand the project.
 
-1. Visit the project website.
-2. Read the install instructions there.
-3. Use the browser store version when it is published.
-4. If you are testing early builds, use the manual install guide from the website.
+Start here:
+
+1. Open the website when it is published.
+2. Read the install section there.
+3. Use the browser store version when available.
+4. If you are trying early builds, use the manual install guide on the website.
 
 ## Current Project Parts
 
-- `server/`: API, database schema, and deployment logic
 - `client/`: browser extension
-- `website/`: public-facing project website
+- `server/`: API and database backend
+- `website/`: public-facing website
 - `docs/`: detailed documentation
 
-## Useful Commands
+## Important Commands
 
-These are the main commands most contributors or self-hosters will need:
+For most contributors or self-hosters, these are the commands that matter:
 
-- `make deploy-stack`: first deploy or rebuild-and-start the stack
-- `make update-stack`: update a running stack without data loss
-- `make stop-stack`: stop the stack without removing data
-- `make start-stack`: start a previously stopped stack
-- `make reset-stack`: remove the stack and database volume for a clean start
-- `make backup-db`: create a manual database backup
-- `make test-all`: run the current automated tests
-- `make build-extension`: build the Chromium extension package
-- `make build-firefox-addon`: build the Firefox add-on package
+- `make deploy-stack`
+- `make update-stack`
+- `make stop-stack`
+- `make start-stack`
+- `make reset-stack`
+- `make backup-db`
+- `make test-all`
+- `make build-extension`
+- `make build-firefox-addon`
 
 ## Contributing
 
-Contributions are welcome.
+Contributions are welcome, including from people who are not full-time developers.
 
-Good first ways to help:
+Useful ways to contribute:
 
-- report bugs or confusing behavior
-- improve detection and voting UX
-- test the extension on different YouTube layouts
-- improve documentation for non-technical users
-- help with Firefox support and store publishing
+- report bugs
+- improve the extension UX
+- test YouTube layout compatibility
+- improve documentation for normal users
+- help with packaging and store publishing
 
 If you want to contribute code:
 
@@ -83,31 +101,31 @@ If you want to contribute code:
 3. Run `make test-all`
 4. Open a pull request or share the patch
 
-## Documentation
+## Detailed Documentation
 
-Start with the documentation index:
+Start with:
 
-- `docs/README.md`
+- [Documentation Index](docs/README.md)
 
-Detailed docs:
+Main docs:
 
-- `docs/api.md`
-- `docs/server-deployment.md`
-- `docs/client-extension.md`
-- `docs/client-publishing.md`
-- `docs/testing.md`
+- [Extension Guide](docs/client-extension.md)
+- [Publishing Guide](docs/client-publishing.md)
+- [API Reference](docs/api.md)
+- [Deployment Guide](docs/server-deployment.md)
+- [Testing Guide](docs/testing.md)
 
 ## Project Status
 
 The repository already includes:
 
 - a Fastify API with PostgreSQL and Prisma
-- a Chromium extension with highlighting, voting, and blocking
+- a Chromium extension with flagging, voting, highlighting, and blocking
 - Firefox packaging support
-- a separate website container for the public project page
+- a separate website container for the public landing page
 
-## License and Source
+## Source
 
-This project is open source. The GitHub repository is:
+GitHub repository:
 
-- `https://github.com/MattiKiwi/Youtube-AI-Blocker`
+- https://github.com/MattiKiwi/Youtube-AI-Blocker
