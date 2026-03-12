@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 
-const root = "/home/mari/Documents/Youtube AI Blocker";
+const root = path.resolve(import.meta.dirname, "..");
 
 test("client and website avoid unsafe HTML/script injection patterns in dynamic paths", async () => {
   const contentScript = await readFile(`${root}/client/content/content.js`, "utf8");

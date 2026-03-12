@@ -1,4 +1,4 @@
-FROM nginx:1.29-alpine
+FROM node:22-alpine AS builder
 
 ARG PUBLIC_WEBSITE_URL=https://your-website.example
 ARG CHROME_WEB_STORE_URL=https://chromewebstore.google.com/
@@ -11,8 +11,9 @@ ARG UMAMI_WEBSITE_ID=
 ARG UMAMI_HOST_URL=
 ARG UMAMI_DOMAINS=
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY . /usr/share/nginx/html
+WORKDIR /app
+
+COPY . .
 
 RUN PUBLIC_WEBSITE_URL="$PUBLIC_WEBSITE_URL" \
     CHROME_WEB_STORE_URL="$CHROME_WEB_STORE_URL" \
@@ -23,8 +24,13 @@ RUN PUBLIC_WEBSITE_URL="$PUBLIC_WEBSITE_URL" \
     UMAMI_WEBSITE_ID="$UMAMI_WEBSITE_ID" \
     UMAMI_HOST_URL="$UMAMI_HOST_URL" \
     UMAMI_DOMAINS="$UMAMI_DOMAINS" \
-    node /usr/share/nginx/html/build-public-config.mjs /usr/share/nginx/html/public-config.js && \
+    node /app/build-public-config.mjs /app/public-config.js && \
     GOOGLE_SITE_VERIFICATION="$GOOGLE_SITE_VERIFICATION" \
-    node /usr/share/nginx/html/inject-google-verification.mjs /usr/share/nginx/html/index.html
+    node /app/inject-google-verification.mjs /app/index.html
+
+FROM nginx:1.29-alpine
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app /usr/share/nginx/html
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD wget -q -O /dev/null http://127.0.0.1:80/ || exit 1

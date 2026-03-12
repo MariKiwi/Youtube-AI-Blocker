@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 
-const root = "/home/mari/Documents/Youtube AI Blocker";
+const root = path.resolve(import.meta.dirname, "..");
 
 test("docker compose defines api, website, and postgres services", async () => {
   const compose = await readFile(`${root}/docker-compose.yml`, "utf8");
@@ -39,6 +40,7 @@ test("website Dockerfile serves the static landing page through nginx", async ()
   const dockerfile = await readFile(`${root}/website/Dockerfile`, "utf8");
   const nginxConfig = await readFile(`${root}/website/nginx.conf`, "utf8");
 
+  assert.match(dockerfile, /FROM node:22-alpine AS builder/);
   assert.match(dockerfile, /FROM nginx:1\.29-alpine/);
   assert.match(dockerfile, /ARG PUBLIC_WEBSITE_URL=/);
   assert.match(dockerfile, /ARG CHROME_WEB_STORE_URL=/);
@@ -50,8 +52,10 @@ test("website Dockerfile serves the static landing page through nginx", async ()
   assert.match(dockerfile, /ARG UMAMI_WEBSITE_ID=/);
   assert.match(dockerfile, /ARG UMAMI_HOST_URL=/);
   assert.match(dockerfile, /ARG UMAMI_DOMAINS=/);
+  assert.match(dockerfile, /WORKDIR \/app/);
+  assert.match(dockerfile, /COPY \. \./);
   assert.match(dockerfile, /COPY nginx\.conf \/etc\/nginx\/conf\.d\/default\.conf/);
-  assert.match(dockerfile, /COPY \. \/usr\/share\/nginx\/html/);
+  assert.match(dockerfile, /COPY --from=builder \/app \/usr\/share\/nginx\/html/);
   assert.match(dockerfile, /build-public-config\.mjs/);
   assert.match(dockerfile, /inject-google-verification\.mjs/);
   assert.doesNotMatch(dockerfile, /sed -i/);

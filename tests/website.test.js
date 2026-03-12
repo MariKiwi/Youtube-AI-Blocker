@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 
-const root = "/home/mari/Documents/Youtube AI Blocker";
+const root = path.resolve(import.meta.dirname, "..");
 
 test("website landing page includes core project messaging and SEO metadata", async () => {
   const html = await readFile(`${root}/website/index.html`, "utf8");

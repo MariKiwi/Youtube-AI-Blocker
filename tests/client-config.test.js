@@ -3,8 +3,9 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import path from "node:path";
 
-const root = "/home/mari/Documents/Youtube AI Blocker";
+const root = path.resolve(import.meta.dirname, "..");
 const execFileAsync = promisify(execFile);
 
 test("client manifest declares popup, background, content script, and storage permission", async () => {
