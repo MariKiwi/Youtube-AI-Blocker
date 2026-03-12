@@ -43,8 +43,9 @@ Coverage:
 - `docker-compose.yml` defines `api`, `website`, and `postgres`
 - Compose wires API startup to PostgreSQL health
 - The server Dockerfile installs dependencies, generates Prisma, and starts through the container entrypoint
-- The website Dockerfile serves the static landing page through Nginx
-- The root environment example includes the required deployment variables
+- The website Dockerfile serves the static landing page through Nginx and accepts build-time public link config
+- The website Dockerfile accepts build-time Search Console and Umami configuration
+- The root environment example includes the required deployment variables for the stack and extension packaging
 - Backup and reset operational scripts exist and reference the expected Docker commands
 - Make targets exist for deploy, update, stop, and start stack lifecycle operations
 
@@ -60,7 +61,7 @@ Coverage:
 - The content script includes watch-page action-row injection scaffolding, interactive flag/vote controls, per-device active vote state, card-level bulk lookups, blocking overlays with reveal controls, and transient toast feedback states
 - The extension includes a stable `[YAIB]` logger prefix for filtering console output
 - The content CSS includes dark-mode-safe variables, active vote button styling, card highlight/badge styling, blocking overlays, and toast styling for action feedback
-- The repository includes Chromium and Firefox packaging scripts, build targets, and publishing docs for generating clean unpacked bundles and store upload ZIPs
+- The repository includes Chromium and Firefox packaging scripts, build targets, and publishing docs for generating clean unpacked bundles and store upload ZIPs with deploy-time API URL, website URL, and Firefox add-on metadata injection
 
 ## `tests/website.test.js`
 
@@ -68,7 +69,8 @@ Purpose:
 - Verifies that the static project website exists and includes the expected public-facing content and assets
 
 Coverage:
-- The landing page includes SEO metadata, core project messaging, FAQ content, and the live GitHub source link
+- The landing page includes SEO metadata, core project messaging, FAQ content, and env-configurable public link targets
+- The website includes a privacy settings surface and opt-in analytics consent UI
 - The website stylesheet includes themed responsive layout rules for the landing page
 - The hero preview artwork fills the preview screen directly without relying on a nested frame wrapper
-- The website script provides lightweight progressive enhancement for staged reveals and footer year output
+- The website script provides lightweight progressive enhancement for staged reveals, footer year output, public link patching from the generated config file, and Umami consent gating

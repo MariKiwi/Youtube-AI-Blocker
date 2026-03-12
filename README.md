@@ -101,6 +101,28 @@ If you want to contribute code:
 3. Run `make test-all`
 4. Open a pull request or share the patch
 
+## Deploy Configuration
+
+The root `.env` file is the main deployment config for the stack and packaged extensions.
+
+Useful values include:
+
+- `PUBLIC_WEBSITE_URL`
+- `PUBLIC_API_BASE_URL`
+- `EXTENSION_DEFAULT_API_BASE_URL`
+- `CHROME_WEB_STORE_URL`
+- `FIREFOX_ADDONS_URL`
+- `GITHUB_SOURCE_URL`
+- `GITHUB_RELEASES_URL`
+- `GOOGLE_SITE_VERIFICATION`
+- `UMAMI_SCRIPT_URL`
+- `UMAMI_WEBSITE_ID`
+- `UMAMI_HOST_URL`
+- `UMAMI_DOMAINS`
+- `FIREFOX_ADDON_ID`
+
+If you want the built extension to point at your production API by default, set those values in `.env` before running `make build-extension` or `make build-firefox-addon`.
+
 ## Detailed Documentation
 
 Start with:

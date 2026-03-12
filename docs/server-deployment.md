@@ -23,6 +23,52 @@ The `website` container:
 - Serves the landing page through Nginx
 - Is independently deployable from the API image even though both are managed by the same Compose file
 
+## Shared deployment values
+
+The root `.env` file is also used as the packaging source of truth for the browser extension builds.
+
+Key values:
+
+- `PUBLIC_WEBSITE_URL`: public website URL
+- `PUBLIC_API_BASE_URL`: public API URL
+- `EXTENSION_DEFAULT_API_BASE_URL`: default API URL written into packaged extensions
+- `CHROME_WEB_STORE_URL`: public Chrome listing URL used on the website
+- `FIREFOX_ADDONS_URL`: public Firefox listing URL used on the website
+- `GITHUB_SOURCE_URL`: public source repository URL used on the website
+- `GITHUB_RELEASES_URL`: public release download URL used on the website
+- `GOOGLE_SITE_VERIFICATION`: Google Search Console verification token written into the built website homepage
+- `UMAMI_SCRIPT_URL`: Umami script URL for opt-in analytics
+- `UMAMI_WEBSITE_ID`: Umami website ID for opt-in analytics
+- `UMAMI_HOST_URL`: optional Umami host URL attribute when needed by your Umami deployment
+- `UMAMI_DOMAINS`: optional Umami domains attribute for domain restriction
+- `FIREFOX_ADDON_ID`: Firefox add-on ID for packaged builds
+
+Recommended pattern:
+
+- `PUBLIC_WEBSITE_URL` should be the public landing page domain
+- `PUBLIC_API_BASE_URL` should be the public API origin the extension should call
+- `EXTENSION_DEFAULT_API_BASE_URL` should usually match `PUBLIC_API_BASE_URL`
+- `CORS_ALLOWED_ORIGINS` should explicitly include the website origin and any other browser origins you intend to allow
+
+This keeps the deployed API, website, and packaged extension pointing at the same environment.
+
+## Website analytics and verification
+
+The website supports two deploy-time integrations:
+
+- Google Search Console verification via `GOOGLE_SITE_VERIFICATION`
+- Umami analytics via `UMAMI_*` variables
+
+Current behavior:
+
+- Search Console verification is written into the built homepage HTML during the website image build
+- Umami is not loaded by default
+- Umami is only injected after explicit visitor consent
+- The site stores the consent choice in a first-party cookie so the preference can be remembered
+- Visitors can reopen privacy settings from the site footer and revoke analytics later
+
+This is a conservative implementation intended to support GDPR/DSGVO-friendly opt-in analytics. It is not legal advice, and the final legal review remains your responsibility.
+
 ## Production recommendation
 
 Use:

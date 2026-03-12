@@ -28,7 +28,7 @@
         <div class="topbar__links">
           <a href="./index.html#install">Install</a>
           <a href="./index.html#features">Features</a>
-          <a href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">GitHub</a>
+          <a data-public-link="githubSourceUrl" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">GitHub</a>
         </div>
       </nav>
 
@@ -94,8 +94,8 @@
         <div class="install-note">
           <h3>Quick links</h3>
           <div class="hero__actions">
-            <a class="button button--primary" href="https://github.com/MattiKiwi/Youtube-AI-Blocker/releases" target="_blank" rel="noreferrer">Open releases</a>
-            <a class="button button--secondary" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">View source</a>
+            <a class="button button--primary" data-public-link="githubReleasesUrl" href="https://github.com/MattiKiwi/Youtube-AI-Blocker/releases" target="_blank" rel="noreferrer">Open releases</a>
+            <a class="button button--secondary" data-public-link="githubSourceUrl" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">View source</a>
             <a class="button button--secondary" href="./index.html#install">Back to install section</a>
           </div>
         </div>
@@ -104,10 +104,32 @@
 
     <footer class="footer">
       <p>Open source YouTube AI moderation tooling.</p>
+      <p>
+        <button class="footer__link-button" type="button" data-open-privacy-settings>Privacy settings</button>
+      </p>
       <p>&copy; <span id="currentYear"></span> YouTube AI Blocker</p>
     </footer>
   </div>
 
+  <aside class="consent-panel" id="consentPanel" aria-live="polite" hidden>
+    <div class="consent-panel__card">
+      <p class="consent-panel__eyebrow">Privacy</p>
+      <h2 class="consent-panel__title">Analytics stay off until you allow them.</h2>
+      <p class="consent-panel__body">
+        This site can use Umami for privacy-focused traffic analytics, but only after explicit consent.
+        Your choice is stored in a necessary first-party cookie so the site can remember it.
+      </p>
+      <p class="consent-panel__body consent-panel__body--muted">
+        This is intended to support a GDPR/DSGVO-friendly opt-in flow, but it is not legal advice.
+      </p>
+      <div class="consent-panel__actions">
+        <button class="button button--primary" type="button" data-consent-action="accept">Allow analytics</button>
+        <button class="button button--secondary" type="button" data-consent-action="decline">Decline</button>
+      </div>
+    </div>
+  </aside>
+
+  <script src="./public-config.js"></script>
   <script src="./script.js"></script>
 </body>
 </html>

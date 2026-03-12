@@ -21,9 +21,11 @@ Current pieces:
 
 These settings are stored through `chrome.storage.sync` when available.
 
-Default local API:
+Source-tree default local API:
 
 - `http://127.0.0.1:3000`
+
+Packaged builds can override this through the root `.env` file. `make build-extension` and `make build-firefox-addon` stamp the built extension with `EXTENSION_DEFAULT_API_BASE_URL` and the matching API host permission.
 
 ## Current scope
 

@@ -27,6 +27,7 @@
     name="twitter:description"
     content="Community-driven detection for AI-made YouTube videos, with highlighting, voting, and optional blocking."
   >
+  <!-- YAIB_GOOGLE_SITE_VERIFICATION -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -61,7 +62,7 @@
           <a href="#how-it-works">How it works</a>
           <a href="#features">Features</a>
           <a href="#faq">FAQ</a>
-          <a class="button button--ghost" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="button button--ghost" data-public-link="githubSourceUrl" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">GitHub</a>
         </div>
       </nav>
 
@@ -75,7 +76,7 @@
             videos if that is how you want to browse.
           </p>
           <div class="hero__actions">
-            <a class="button button--primary" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">View source on GitHub</a>
+            <a class="button button--primary" data-public-link="githubSourceUrl" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">View source on GitHub</a>
             <a class="button button--secondary" href="#how-it-works">See how it works</a>
           </div>
           <ul class="hero__bullets">
@@ -171,19 +172,19 @@
             <p class="install-card__eyebrow">Preferred</p>
             <h3>Chrome Web Store</h3>
             <p>Use the official store install once the listing is published.</p>
-            <a class="button button--primary" href="#" aria-disabled="true">Chrome listing soon</a>
+            <a class="button button--primary" data-public-link="chromeWebStoreUrl" href="https://chromewebstore.google.com/" aria-disabled="true">Chrome listing soon</a>
           </article>
           <article class="install-card">
             <p class="install-card__eyebrow">Planned</p>
             <h3>Firefox Add-ons</h3>
             <p>Firefox packaging and store submission will come after the Chromium release is stable.</p>
-            <a class="button button--secondary" href="#" aria-disabled="true">Firefox listing soon</a>
+            <a class="button button--secondary" data-public-link="firefoxAddonsUrl" href="https://addons.mozilla.org/" aria-disabled="true">Firefox listing soon</a>
           </article>
           <article class="install-card">
             <p class="install-card__eyebrow">Manual</p>
             <h3>GitHub Releases</h3>
             <p>Download packaged releases and follow the manual install instructions for local testing or self-hosted distribution.</p>
-            <a class="button button--secondary" href="https://github.com/MattiKiwi/Youtube-AI-Blocker/releases" target="_blank" rel="noreferrer">Open releases</a>
+            <a class="button button--secondary" data-public-link="githubReleasesUrl" href="https://github.com/MattiKiwi/Youtube-AI-Blocker/releases" target="_blank" rel="noreferrer">Open releases</a>
           </article>
         </div>
         <div class="install-note">
@@ -347,7 +348,7 @@
             directly into YouTube. If you want to review the source, open issues, or contribute, start on GitHub.
           </p>
           <div class="hero__actions">
-            <a class="button button--primary" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">Open GitHub</a>
+            <a class="button button--primary" data-public-link="githubSourceUrl" href="https://github.com/MattiKiwi/Youtube-AI-Blocker" target="_blank" rel="noreferrer">Open GitHub</a>
             <a class="button button--secondary" href="../docs/api.md">Read API docs</a>
           </div>
         </div>
@@ -356,10 +357,32 @@
 
     <footer class="footer">
       <p>Open source YouTube AI moderation tooling.</p>
+      <p>
+        <button class="footer__link-button" type="button" data-open-privacy-settings>Privacy settings</button>
+      </p>
       <p>&copy; <span id="currentYear"></span> YouTube AI Blocker</p>
     </footer>
   </div>
 
+  <aside class="consent-panel" id="consentPanel" aria-live="polite" hidden>
+    <div class="consent-panel__card">
+      <p class="consent-panel__eyebrow">Privacy</p>
+      <h2 class="consent-panel__title">Analytics stay off until you allow them.</h2>
+      <p class="consent-panel__body">
+        This site can use Umami for privacy-focused traffic analytics, but only after explicit consent.
+        Your choice is stored in a necessary first-party cookie so the site can remember it.
+      </p>
+      <p class="consent-panel__body consent-panel__body--muted">
+        This is intended to support a GDPR/DSGVO-friendly opt-in flow, but it is not legal advice.
+      </p>
+      <div class="consent-panel__actions">
+        <button class="button button--primary" type="button" data-consent-action="accept">Allow analytics</button>
+        <button class="button button--secondary" type="button" data-consent-action="decline">Decline</button>
+      </div>
+    </div>
+  </aside>
+
+  <script src="./public-config.js"></script>
   <script src="./script.js"></script>
 </body>
 </html>

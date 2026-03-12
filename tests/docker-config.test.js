@@ -14,6 +14,16 @@ test("docker compose defines api, website, and postgres services", async () => {
   assert.match(compose, /depends_on:\n\s+postgres:\n\s+condition: service_healthy/m);
   assert.match(compose, /DATABASE_URL: postgresql:\/\//);
   assert.match(compose, /WEBSITE_PORT:-8080/);
+  assert.match(compose, /PUBLIC_WEBSITE_URL: \$\{PUBLIC_WEBSITE_URL:-https:\/\/your-website\.example\}/);
+  assert.match(compose, /CHROME_WEB_STORE_URL: \$\{CHROME_WEB_STORE_URL:-https:\/\/chromewebstore\.google\.com\/\}/);
+  assert.match(compose, /FIREFOX_ADDONS_URL: \$\{FIREFOX_ADDONS_URL:-https:\/\/addons\.mozilla\.org\/\}/);
+  assert.match(compose, /GITHUB_SOURCE_URL: \$\{GITHUB_SOURCE_URL:-https:\/\/github\.com\/MattiKiwi\/Youtube-AI-Blocker\}/);
+  assert.match(compose, /GITHUB_RELEASES_URL: \$\{GITHUB_RELEASES_URL:-https:\/\/github\.com\/MattiKiwi\/Youtube-AI-Blocker\/releases\}/);
+  assert.match(compose, /GOOGLE_SITE_VERIFICATION: \$\{GOOGLE_SITE_VERIFICATION:-\}/);
+  assert.match(compose, /UMAMI_SCRIPT_URL: \$\{UMAMI_SCRIPT_URL:-\}/);
+  assert.match(compose, /UMAMI_WEBSITE_ID: \$\{UMAMI_WEBSITE_ID:-\}/);
+  assert.match(compose, /UMAMI_HOST_URL: \$\{UMAMI_HOST_URL:-\}/);
+  assert.match(compose, /UMAMI_DOMAINS: \$\{UMAMI_DOMAINS:-\}/);
   assert.match(compose, /name: \$\{POSTGRES_VOLUME_NAME:-youtube-ai-blocker-postgres-data\}/);
 });
 
@@ -30,8 +40,20 @@ test("website Dockerfile serves the static landing page through nginx", async ()
   const nginxConfig = await readFile(`${root}/website/nginx.conf`, "utf8");
 
   assert.match(dockerfile, /FROM nginx:1\.29-alpine/);
+  assert.match(dockerfile, /ARG PUBLIC_WEBSITE_URL=/);
+  assert.match(dockerfile, /ARG CHROME_WEB_STORE_URL=/);
+  assert.match(dockerfile, /ARG FIREFOX_ADDONS_URL=/);
+  assert.match(dockerfile, /ARG GITHUB_SOURCE_URL=/);
+  assert.match(dockerfile, /ARG GITHUB_RELEASES_URL=/);
+  assert.match(dockerfile, /ARG GOOGLE_SITE_VERIFICATION=/);
+  assert.match(dockerfile, /ARG UMAMI_SCRIPT_URL=/);
+  assert.match(dockerfile, /ARG UMAMI_WEBSITE_ID=/);
+  assert.match(dockerfile, /ARG UMAMI_HOST_URL=/);
+  assert.match(dockerfile, /ARG UMAMI_DOMAINS=/);
   assert.match(dockerfile, /COPY nginx\.conf \/etc\/nginx\/conf\.d\/default\.conf/);
   assert.match(dockerfile, /COPY \. \/usr\/share\/nginx\/html/);
+  assert.match(dockerfile, /generate-public-config\.sh/);
+  assert.match(dockerfile, /google-site-verification/);
   assert.match(nginxConfig, /try_files \$uri \$uri\/ \/index\.html/);
   assert.match(nginxConfig, /expires 7d/);
 });
@@ -39,6 +61,20 @@ test("website Dockerfile serves the static landing page through nginx", async ()
 test("compose environment example includes required deployment variables", async () => {
   const envExample = await readFile(`${root}/.env.example`, "utf8");
 
+  assert.match(envExample, /^PUBLIC_WEBSITE_URL=/m);
+  assert.match(envExample, /^PUBLIC_API_BASE_URL=/m);
+  assert.match(envExample, /^EXTENSION_DEFAULT_API_BASE_URL=/m);
+  assert.match(envExample, /^CHROME_WEB_STORE_URL=/m);
+  assert.match(envExample, /^FIREFOX_ADDONS_URL=/m);
+  assert.match(envExample, /^GITHUB_SOURCE_URL=/m);
+  assert.match(envExample, /^GITHUB_RELEASES_URL=/m);
+  assert.match(envExample, /^GOOGLE_SITE_VERIFICATION=/m);
+  assert.match(envExample, /^UMAMI_SCRIPT_URL=/m);
+  assert.match(envExample, /^UMAMI_WEBSITE_ID=/m);
+  assert.match(envExample, /^UMAMI_HOST_URL=/m);
+  assert.match(envExample, /^UMAMI_DOMAINS=/m);
+  assert.match(envExample, /^FIREFOX_ADDON_ID=/m);
+  assert.match(envExample, /^FIREFOX_MIN_VERSION=/m);
   assert.match(envExample, /^API_PORT=/m);
   assert.match(envExample, /^WEBSITE_IMAGE_NAME=/m);
   assert.match(envExample, /^WEBSITE_IMAGE_TAG=/m);

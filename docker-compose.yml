@@ -35,6 +35,17 @@ services:
     build:
       context: ./website
       dockerfile: Dockerfile
+      args:
+        PUBLIC_WEBSITE_URL: ${PUBLIC_WEBSITE_URL:-https://your-website.example}
+        CHROME_WEB_STORE_URL: ${CHROME_WEB_STORE_URL:-https://chromewebstore.google.com/}
+        FIREFOX_ADDONS_URL: ${FIREFOX_ADDONS_URL:-https://addons.mozilla.org/}
+        GITHUB_SOURCE_URL: ${GITHUB_SOURCE_URL:-https://github.com/MattiKiwi/Youtube-AI-Blocker}
+        GITHUB_RELEASES_URL: ${GITHUB_RELEASES_URL:-https://github.com/MattiKiwi/Youtube-AI-Blocker/releases}
+        GOOGLE_SITE_VERIFICATION: ${GOOGLE_SITE_VERIFICATION:-}
+        UMAMI_SCRIPT_URL: ${UMAMI_SCRIPT_URL:-}
+        UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
+        UMAMI_HOST_URL: ${UMAMI_HOST_URL:-}
+        UMAMI_DOMAINS: ${UMAMI_DOMAINS:-}
     restart: unless-stopped
     ports:
       - "${WEBSITE_PORT:-8080}:80"

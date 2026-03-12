@@ -50,9 +50,16 @@ The popup currently supports:
 - API server URL
 - Reset to default settings
 
-Default local API URL:
+Default local API URL in the source tree:
 
 - `http://127.0.0.1:3000`
+
+Packaged builds do not need to keep that local default. The build scripts read the root `.env` file and stamp the packaged extension with:
+
+- `EXTENSION_DEFAULT_API_BASE_URL`
+- `PUBLIC_API_BASE_URL`
+- `PUBLIC_WEBSITE_URL`
+- `FIREFOX_ADDON_ID` for Firefox builds
 
 Additional debug option:
 

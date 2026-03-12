@@ -1,8 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 
 const root = "/home/mari/Documents/Youtube AI Blocker";
+const execFileAsync = promisify(execFile);
 
 test("client manifest declares popup, background, content script, and storage permission", async () => {
   const manifestText = await readFile(`${root}/client/manifest.json`, "utf8");
@@ -140,11 +143,20 @@ test("extension packaging workflow exists for local builds and store upload zips
   assert.match(buildScript, /CLIENT_DIR=.*client/);
   assert.match(buildScript, /DIST_DIR=.*dist/);
   assert.match(buildScript, /ZIP_PATH=.*youtube-ai-blocker-extension\.zip/);
+  assert.match(buildScript, /ENV_PATH=.*\.env/);
+  assert.match(buildScript, /EXTENSION_DEFAULT_API_BASE_URL/);
+  assert.match(buildScript, /PUBLIC_WEBSITE_URL/);
   assert.match(buildScript, /cp -R "\$CLIENT_DIR"\/\. "\$BUILD_DIR"\//);
+  assert.match(buildScript, /manifest\.host_permissions/);
+  assert.match(buildScript, /manifest\.homepage_url/);
+  assert.match(buildScript, /Failed to update default apiBaseUrl/);
   assert.match(buildScript, /bsdtar -a -cf "\$ZIP_PATH" \./);
   assert.match(firefoxBuildScript, /FIREFOX_ADDON_ID/);
   assert.match(firefoxBuildScript, /browser_specific_settings/);
   assert.match(firefoxBuildScript, /strict_min_version/);
+  assert.match(firefoxBuildScript, /EXTENSION_DEFAULT_API_BASE_URL/);
+  assert.match(firefoxBuildScript, /manifest\.host_permissions/);
+  assert.match(firefoxBuildScript, /manifest\.homepage_url/);
   assert.match(firefoxBuildScript, /youtube-ai-blocker-firefox-addon\.zip/);
   assert.match(makefile, /^build-extension:\n\tsh \.\/scripts\/build-extension\.sh/m);
   assert.match(makefile, /^build-firefox-addon:\n\tsh \.\/scripts\/build-firefox-addon\.sh/m);
@@ -154,4 +166,46 @@ test("extension packaging workflow exists for local builds and store upload zips
   assert.match(publishingDoc, /Firefox Add-ons/i);
   assert.match(publishingDoc, /dist\/youtube-ai-blocker-extension\.zip/);
   assert.match(publishingDoc, /dist\/youtube-ai-blocker-firefox-addon\.zip/);
+});
+
+test("build scripts stamp packaged extension defaults and manifest permissions from deploy config", async () => {
+  const env = {
+    ...process.env,
+    PUBLIC_WEBSITE_URL: "https://yaib.example",
+    PUBLIC_API_BASE_URL: "https://api.yaib.example",
+    EXTENSION_DEFAULT_API_BASE_URL: "https://api.yaib.example/v1",
+    FIREFOX_ADDON_ID: "firefox-addon@example.com",
+    FIREFOX_MIN_VERSION: "128.0",
+  };
+
+  await execFileAsync("sh", ["./scripts/build-extension.sh"], {
+    cwd: root,
+    env,
+  });
+
+  await execFileAsync("sh", ["./scripts/build-firefox-addon.sh"], {
+    cwd: root,
+    env,
+  });
+
+  const chromiumManifest = JSON.parse(await readFile(`${root}/dist/extension/manifest.json`, "utf8"));
+  const chromiumSettings = await readFile(`${root}/dist/extension/common/settings.js`, "utf8");
+  const firefoxManifest = JSON.parse(await readFile(`${root}/dist/firefox-addon/manifest.json`, "utf8"));
+  const firefoxSettings = await readFile(`${root}/dist/firefox-addon/common/settings.js`, "utf8");
+
+  assert.deepEqual(chromiumManifest.host_permissions, [
+    "https://www.youtube.com/*",
+    "https://api.yaib.example/*",
+  ]);
+  assert.equal(chromiumManifest.homepage_url, "https://yaib.example");
+  assert.match(chromiumSettings, /apiBaseUrl: "https:\/\/api\.yaib\.example\/v1"/);
+
+  assert.deepEqual(firefoxManifest.host_permissions, [
+    "https://www.youtube.com/*",
+    "https://api.yaib.example/*",
+  ]);
+  assert.equal(firefoxManifest.homepage_url, "https://yaib.example");
+  assert.equal(firefoxManifest.browser_specific_settings.gecko.id, "firefox-addon@example.com");
+  assert.equal(firefoxManifest.browser_specific_settings.gecko.strict_min_version, "128.0");
+  assert.match(firefoxSettings, /apiBaseUrl: "https:\/\/api\.yaib\.example\/v1"/);
 });

@@ -1,5 +1,21 @@
 # Client Publishing
 
+## Shared deployment config
+
+The extension build scripts read the repository root `.env` file before packaging.
+
+Important variables:
+
+- `PUBLIC_WEBSITE_URL`: public website/homepage URL for the packaged manifest
+- `PUBLIC_API_BASE_URL`: canonical public API URL
+- `EXTENSION_DEFAULT_API_BASE_URL`: default API URL written into the packaged extension settings
+- `FIREFOX_ADDON_ID`: Firefox add-on ID used in the packaged Gecko manifest
+- `FIREFOX_MIN_VERSION`: minimum Firefox version for the packaged add-on
+
+If `EXTENSION_DEFAULT_API_BASE_URL` is not set, the build falls back to `PUBLIC_API_BASE_URL`.
+
+The packaged extension manifest is also updated so `host_permissions` includes the configured API origin. That keeps the built extension aligned with the API it is meant to call.
+
 ## Build the extension package
 
 From the repository root:
@@ -74,5 +90,6 @@ To test the Firefox-targeted build locally:
 - The repository can generate the ZIP package automatically
 - Final CRX signing and distribution are handled by the Chrome Web Store
 - Firefox packaging is generated separately with build-time Gecko metadata
-- Host permission strategy may still need review before store submission if broader API origin support is required
+- The build scripts stamp the packaged manifests with the configured public website URL and API host permission
+- Keep the API URL in `.env`, the server CORS config, and any public website install links aligned before publishing
 - Store publication also requires a publisher account and listing content outside the repository

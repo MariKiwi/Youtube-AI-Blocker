@@ -29,6 +29,16 @@ test("website landing page includes core project messaging and SEO metadata", as
   assert.match(html, /Logan Voss/);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /FAQ/);
+  assert.match(html, /YAIB_GOOGLE_SITE_VERIFICATION/);
+  assert.match(html, /data-public-link="chromeWebStoreUrl"/);
+  assert.match(html, /data-public-link="firefoxAddonsUrl"/);
+  assert.match(html, /data-public-link="githubSourceUrl"/);
+  assert.match(html, /data-public-link="githubReleasesUrl"/);
+  assert.match(html, /data-open-privacy-settings/);
+  assert.match(html, /consentPanel/);
+  assert.match(html, /Allow analytics/);
+  assert.match(html, /Decline/);
+  assert.match(html, /\.\/public-config\.js/);
 });
 
 test("website manual install guide exists and links the user through unpacked install flow", async () => {
@@ -41,11 +51,18 @@ test("website manual install guide exists and links the user through unpacked in
   assert.match(html, /Load unpacked/);
   assert.match(html, /dist\/extension\//);
   assert.match(html, /github\.com\/MattiKiwi\/Youtube-AI-Blocker\/releases/);
+  assert.match(html, /data-public-link="githubReleasesUrl"/);
+  assert.match(html, /data-public-link="githubSourceUrl"/);
+  assert.match(html, /data-open-privacy-settings/);
+  assert.match(html, /Allow analytics/);
+  assert.match(html, /\.\/public-config\.js/);
 });
 
 test("website assets define themed styling and lightweight behavior", async () => {
   const css = await readFile(`${root}/website/styles.css`, "utf8");
   const js = await readFile(`${root}/website/script.js`, "utf8");
+  const publicConfig = await readFile(`${root}/website/public-config.js`, "utf8");
+  const publicConfigScript = await readFile(`${root}/website/generate-public-config.sh`, "utf8");
 
   assert.match(css, /color-scheme: light dark/);
   assert.match(css, /Space Grotesk/);
@@ -55,6 +72,9 @@ test("website assets define themed styling and lightweight behavior", async () =
   assert.match(css, /\.install-grid/);
   assert.match(css, /\.install-card/);
   assert.match(css, /\.install-note/);
+  assert.match(css, /\.consent-panel/);
+  assert.match(css, /\.consent-panel__actions/);
+  assert.match(css, /\.footer__link-button/);
   assert.match(css, /\.steps--manual/);
   assert.match(css, /\.page-title/);
   assert.match(css, /\.photo-credits/);
@@ -63,7 +83,22 @@ test("website assets define themed styling and lightweight behavior", async () =
   assert.match(css, /object-fit: cover/);
   assert.match(css, /\.feed-item__image/);
   assert.match(css, /@media \(prefers-color-scheme: dark\)/);
+  assert.match(publicConfig, /YouTubeAiBlockerPublicConfig/);
+  assert.match(publicConfig, /chromeWebStoreUrl/);
+  assert.match(publicConfig, /githubReleasesUrl/);
+  assert.match(publicConfig, /umamiScriptUrl/);
+  assert.match(publicConfig, /umamiWebsiteId/);
+  assert.match(publicConfigScript, /PUBLIC_WEBSITE_URL/);
+  assert.match(publicConfigScript, /CHROME_WEB_STORE_URL/);
+  assert.match(publicConfigScript, /GITHUB_SOURCE_URL/);
+  assert.match(publicConfigScript, /UMAMI_SCRIPT_URL/);
+  assert.match(publicConfigScript, /UMAMI_WEBSITE_ID/);
   assert.match(js, /IntersectionObserver/);
   assert.match(js, /currentYear/);
   assert.match(js, /data-reveal/);
+  assert.match(js, /data-public-link/);
+  assert.match(js, /YouTubeAiBlockerPublicConfig/);
+  assert.match(js, /yaib_analytics_consent/);
+  assert.match(js, /data-yaib-umami/);
+  assert.match(js, /data-open-privacy-settings/);
 });
