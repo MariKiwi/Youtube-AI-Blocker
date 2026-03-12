@@ -39,7 +39,7 @@ node --test tests/*.test.js
 - Rate-limit tests verify write-endpoint throttling without needing a real network server
 - Website tests keep the landing page SEO metadata, GitHub link, and core messaging from silently regressing
 - Client packaging tests keep the extension ZIP build workflow, deploy-time config stamping, and publishing docs from regressing
-- Docker config tests also keep the Makefile stack lifecycle commands from drifting away from the intended Compose workflow
+- Docker config tests also keep the Makefile stack lifecycle commands and Postgres-volume deploy warning path from drifting away from the intended Compose workflow
 - Website tests also verify that the featured hero artwork fills the preview screen without a nested frame wrapper
 - Website tests also verify that deploy-time public link config is present for store/source/release links
 - Website tests also verify that Search Console placeholders and opt-in Umami consent wiring stay present

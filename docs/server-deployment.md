@@ -102,6 +102,14 @@ To update after code changes:
 make update-stack
 ```
 
+Important PostgreSQL note:
+
+- PostgreSQL only uses `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` when initializing a fresh data directory
+- If the named Postgres volume already exists, changing those values in `.env` will not rewrite the existing database credentials
+- `make deploy-stack` now warns when the configured Postgres volume already exists
+- If you intended a clean first deploy with new credentials, run `make reset-stack` before deploying
+- If you need to preserve data, keep using the original credentials or restore a backup into a fresh volume
+
 To stop the stack without removing data:
 
 ```bash

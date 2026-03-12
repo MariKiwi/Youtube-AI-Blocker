@@ -8,7 +8,7 @@ build-firefox-addon:
 	sh ./scripts/build-firefox-addon.sh
 
 deploy-stack:
-	docker compose up --build -d
+	sh ./scripts/deploy-stack.sh
 
 update-stack:
 	docker compose up --build -d

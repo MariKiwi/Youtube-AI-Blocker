@@ -46,7 +46,7 @@ Coverage:
 - The website Dockerfile serves the static landing page through Nginx and accepts build-time public link config
 - The website Dockerfile accepts build-time Search Console and Umami configuration
 - The root environment example includes the required deployment variables for the stack and extension packaging
-- Backup and reset operational scripts exist and reference the expected Docker commands
+- Backup, deploy warning, and reset operational scripts exist and reference the expected Docker commands
 - Make targets exist for deploy, update, stop, and start stack lifecycle operations
 
 ## `tests/client-config.test.js`
