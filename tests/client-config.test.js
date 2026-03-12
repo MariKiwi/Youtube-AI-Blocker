@@ -54,9 +54,8 @@ test("content script scaffold includes interactive watch page controls", async (
   assert.match(contentScript, /Upvote/);
   assert.match(contentScript, /Downvote/);
   assert.match(contentScript, /API Error/);
-  assert.match(contentScript, /data-yaib-action="flag"/);
-  assert.match(contentScript, /data-yaib-action="upvote"/);
-  assert.match(contentScript, /data-yaib-action="downvote"/);
+  assert.match(contentScript, /buildActionButton/);
+  assert.match(contentScript, /button\.dataset\.yaibAction = action/);
   assert.match(contentScript, /handleFlag/);
   assert.match(contentScript, /handleVote/);
   assert.match(contentScript, /Saving flag/);
@@ -85,6 +84,7 @@ test("content script scaffold includes interactive watch page controls", async (
   assert.match(contentScript, /renderScheduled/);
   assert.match(contentScript, /rerenderRequested/);
   assert.match(contentScript, /Watch-page API request failed/);
+  assert.doesNotMatch(contentScript, /\.innerHTML\s*=/);
 });
 
 test("logger utility provides a stable filterable prefix", async () => {

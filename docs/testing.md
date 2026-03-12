@@ -13,6 +13,7 @@ This keeps the early test setup simple and avoids introducing a larger test stac
 - `tests/docker-config.test.js`: deployment config tests for Compose and Docker
 - `tests/client-config.test.js`: extension scaffold tests for manifest and popup settings
 - `tests/website.test.js`: static landing page tests for public-facing content and assets
+- `tests/security.test.js`: injection-hardening regression tests for client, website, and build paths
 
 ## Running tests
 
@@ -42,3 +43,4 @@ node --test tests/*.test.js
 - Website tests also verify that the featured hero artwork fills the preview screen without a nested frame wrapper
 - Website tests also verify that deploy-time public link config is present for store/source/release links
 - Website tests also verify that Search Console placeholders and opt-in Umami consent wiring stay present
+- Security tests keep URL validation, safe DOM construction, and shell-safe website build injection from regressing

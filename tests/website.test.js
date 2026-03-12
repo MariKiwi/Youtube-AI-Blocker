@@ -66,6 +66,8 @@ test("website assets define themed styling and lightweight behavior", async () =
   const js = await readFile(`${root}/website/script.js`, "utf8");
   const publicConfig = await readFile(`${root}/website/public-config.js`, "utf8");
   const publicConfigScript = await readFile(`${root}/website/generate-public-config.sh`, "utf8");
+  const publicConfigBuilder = await readFile(`${root}/website/build-public-config.mjs`, "utf8");
+  const googleInjector = await readFile(`${root}/website/inject-google-verification.mjs`, "utf8");
 
   assert.match(css, /color-scheme: light dark/);
   assert.match(css, /Space Grotesk/);
@@ -92,11 +94,13 @@ test("website assets define themed styling and lightweight behavior", async () =
   assert.match(publicConfig, /githubReleasesUrl/);
   assert.match(publicConfig, /umamiScriptUrl/);
   assert.match(publicConfig, /umamiWebsiteId/);
-  assert.match(publicConfigScript, /PUBLIC_WEBSITE_URL/);
-  assert.match(publicConfigScript, /CHROME_WEB_STORE_URL/);
-  assert.match(publicConfigScript, /GITHUB_SOURCE_URL/);
-  assert.match(publicConfigScript, /UMAMI_SCRIPT_URL/);
-  assert.match(publicConfigScript, /UMAMI_WEBSITE_ID/);
+  assert.match(publicConfigScript, /build-public-config\.mjs/);
+  assert.match(publicConfigBuilder, /PUBLIC_WEBSITE_URL/);
+  assert.match(publicConfigBuilder, /CHROME_WEB_STORE_URL/);
+  assert.match(publicConfigBuilder, /GITHUB_SOURCE_URL/);
+  assert.match(publicConfigBuilder, /UMAMI_SCRIPT_URL/);
+  assert.match(publicConfigBuilder, /UMAMI_WEBSITE_ID/);
+  assert.match(googleInjector, /escapeHtmlAttribute/);
   assert.match(js, /IntersectionObserver/);
   assert.match(js, /currentYear/);
   assert.match(js, /data-reveal/);
@@ -108,4 +112,5 @@ test("website assets define themed styling and lightweight behavior", async () =
   assert.match(js, /cookieBannerStatus/);
   assert.match(js, /cookie-settings-fab--raised/);
   assert.match(js, /showConsentBanner/);
+  assert.match(js, /sanitizeHttpUrl/);
 });

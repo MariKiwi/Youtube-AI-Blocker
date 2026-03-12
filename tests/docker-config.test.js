@@ -52,8 +52,9 @@ test("website Dockerfile serves the static landing page through nginx", async ()
   assert.match(dockerfile, /ARG UMAMI_DOMAINS=/);
   assert.match(dockerfile, /COPY nginx\.conf \/etc\/nginx\/conf\.d\/default\.conf/);
   assert.match(dockerfile, /COPY \. \/usr\/share\/nginx\/html/);
-  assert.match(dockerfile, /generate-public-config\.sh/);
-  assert.match(dockerfile, /google-site-verification/);
+  assert.match(dockerfile, /build-public-config\.mjs/);
+  assert.match(dockerfile, /inject-google-verification\.mjs/);
+  assert.doesNotMatch(dockerfile, /sed -i/);
   assert.match(nginxConfig, /try_files \$uri \$uri\/ \/index\.html/);
   assert.match(nginxConfig, /expires 7d/);
 });

@@ -13,6 +13,24 @@
   );
   const hasUmamiConfig = Boolean(publicConfig.umamiScriptUrl && publicConfig.umamiWebsiteId);
 
+  function sanitizeHttpUrl(value) {
+    if (typeof value !== "string") {
+      return "";
+    }
+
+    try {
+      const url = new URL(value);
+
+      if (url.protocol !== "http:" && url.protocol !== "https:") {
+        return "";
+      }
+
+      return url.toString();
+    } catch {
+      return "";
+    }
+  }
+
   function readCookie(name) {
     const cookieValue = document.cookie
       .split("; ")
@@ -96,18 +114,26 @@
       return;
     }
 
+    const scriptUrl = sanitizeHttpUrl(publicConfig.umamiScriptUrl);
+
+    if (!scriptUrl) {
+      return;
+    }
+
     const script = document.createElement("script");
     script.async = true;
-    script.src = publicConfig.umamiScriptUrl;
+    script.src = scriptUrl;
     script.setAttribute("data-website-id", publicConfig.umamiWebsiteId);
     script.setAttribute("data-yaib-umami", "true");
     script.setAttribute("data-do-not-track", "true");
 
-    if (publicConfig.umamiHostUrl) {
-      script.setAttribute("data-host-url", publicConfig.umamiHostUrl);
+    const hostUrl = sanitizeHttpUrl(publicConfig.umamiHostUrl);
+
+    if (hostUrl) {
+      script.setAttribute("data-host-url", hostUrl);
     }
 
-    if (publicConfig.umamiDomains) {
+    if (typeof publicConfig.umamiDomains === "string" && publicConfig.umamiDomains.trim()) {
       script.setAttribute("data-domains", publicConfig.umamiDomains);
     }
 
@@ -139,7 +165,7 @@
 
   for (const node of document.querySelectorAll("[data-public-link]")) {
     const key = node.getAttribute("data-public-link");
-    const href = typeof key === "string" ? publicConfig[key] : "";
+    const href = typeof key === "string" ? sanitizeHttpUrl(publicConfig[key]) : "";
 
     if (!href) {
       continue;

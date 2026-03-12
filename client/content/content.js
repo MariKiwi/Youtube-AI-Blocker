@@ -180,16 +180,29 @@
   function buildBlockOverlay(video, variant = "card") {
     const overlay = document.createElement("div");
     overlay.className = `${BLOCK_OVERLAY_CLASS} ${BLOCK_OVERLAY_CLASS}--${variant}`;
-    overlay.innerHTML = `
-      <div class="yaib-block-overlay__panel">
-        <p class="yaib-block-overlay__eyebrow">AI Video Hidden</p>
-        <h3 class="yaib-block-overlay__title">${formatConfidenceLabel(video)}</h3>
-        <p class="yaib-block-overlay__meta">Score ${video.score}</p>
-        <button class="yaib-block-overlay__button" type="button" data-yaib-reveal-video-id="${video.youtubeVideoId}">
-          Show anyway
-        </button>
-      </div>
-    `;
+    const panel = document.createElement("div");
+    panel.className = "yaib-block-overlay__panel";
+
+    const eyebrow = document.createElement("p");
+    eyebrow.className = "yaib-block-overlay__eyebrow";
+    eyebrow.textContent = "AI Video Hidden";
+
+    const title = document.createElement("h3");
+    title.className = "yaib-block-overlay__title";
+    title.textContent = formatConfidenceLabel(video);
+
+    const meta = document.createElement("p");
+    meta.className = "yaib-block-overlay__meta";
+    meta.textContent = `Score ${video.score}`;
+
+    const button = document.createElement("button");
+    button.className = "yaib-block-overlay__button";
+    button.type = "button";
+    button.dataset.yaibRevealVideoId = String(video.youtubeVideoId ?? "");
+    button.textContent = "Show anyway";
+
+    panel.append(eyebrow, title, meta, button);
+    overlay.append(panel);
 
     return overlay;
   }
@@ -346,20 +359,17 @@
 
   function renderUnknownState(root) {
     const isPending = pendingAction === "flag";
-
-    root.innerHTML = `
-      <span class="yaib-pill yaib-pill--unknown"><strong>AI</strong> Unknown</span>
-      <button class="yaib-button" type="button" data-yaib-action="flag" ${isPending ? "disabled" : ""}>
-        ${isPending ? "Flagging..." : "Flag as AI"}
-      </button>
-    `;
+    root.replaceChildren(
+      buildPill("yaib-pill yaib-pill--unknown", "AI", "Unknown"),
+      buildActionButton("flag", isPending ? "Flagging..." : "Flag as AI", isPending),
+    );
   }
 
   function renderErrorState(root) {
-    root.innerHTML = `
-      <span class="yaib-pill yaib-pill--disputed"><strong>AI</strong> API Error</span>
-      <button class="yaib-button" type="button" disabled>Check API</button>
-    `;
+    root.replaceChildren(
+      buildPill("yaib-pill yaib-pill--disputed", "AI", "API Error"),
+      buildActionButton("", "Check API", true),
+    );
   }
 
   function renderKnownState(root, video) {
@@ -370,16 +380,59 @@
     const isUpvoteActive = video.currentDeviceVote === "up";
     const isDownvoteActive = video.currentDeviceVote === "down";
 
-    root.innerHTML = `
-      <span class="yaib-pill ${confidenceClass}"><strong>AI</strong> ${label}</span>
-      <span class="yaib-pill"><strong>Score</strong> ${video.score}</span>
-      <button class="yaib-button ${isUpvoteActive ? "yaib-button--active" : ""}" type="button" data-yaib-action="upvote" aria-pressed="${isUpvoteActive ? "true" : "false"}" ${isUpvotePending ? "disabled" : ""}>
-        ${isUpvotePending ? "Voting..." : "Upvote"}
-      </button>
-      <button class="yaib-button ${isDownvoteActive ? "yaib-button--active" : ""}" type="button" data-yaib-action="downvote" aria-pressed="${isDownvoteActive ? "true" : "false"}" ${isDownvotePending ? "disabled" : ""}>
-        ${isDownvotePending ? "Voting..." : "Downvote"}
-      </button>
-    `;
+    const upvoteButton = buildActionButton(
+      "upvote",
+      isUpvotePending ? "Voting..." : "Upvote",
+      isUpvotePending,
+      isUpvoteActive,
+    );
+    const downvoteButton = buildActionButton(
+      "downvote",
+      isDownvotePending ? "Voting..." : "Downvote",
+      isDownvotePending,
+      isDownvoteActive,
+    );
+
+    root.replaceChildren(
+      buildPill(`yaib-pill ${confidenceClass}`, "AI", label),
+      buildPill("yaib-pill", "Score", String(video.score)),
+      upvoteButton,
+      downvoteButton,
+    );
+  }
+
+  function buildPill(className, strongText, valueText) {
+    const pill = document.createElement("span");
+    pill.className = className;
+
+    const strong = document.createElement("strong");
+    strong.textContent = strongText;
+
+    pill.append(strong, document.createTextNode(` ${valueText}`));
+    return pill;
+  }
+
+  function buildActionButton(action, label, disabled = false, active = false) {
+    const button = document.createElement("button");
+    button.className = `yaib-button${active ? " yaib-button--active" : ""}`;
+    button.type = "button";
+    button.textContent = label;
+
+    if (action) {
+      button.dataset.yaibAction = action;
+    }
+
+    if (active) {
+      button.setAttribute("aria-pressed", "true");
+    } else if (action === "upvote" || action === "downvote") {
+      button.setAttribute("aria-pressed", "false");
+    }
+
+    if (disabled) {
+      button.disabled = true;
+    }
+
+    return button;
   }
 
   function renderToast() {

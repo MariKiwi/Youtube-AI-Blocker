@@ -21,7 +21,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return undefined;
   }
 
-  fetch(message.url, message.options)
+  let requestUrl;
+
+  try {
+    requestUrl = new URL(String(message.url));
+  } catch {
+    sendResponse({
+      error: "Invalid request URL",
+    });
+    return true;
+  }
+
+  if (requestUrl.protocol !== "http:" && requestUrl.protocol !== "https:") {
+    sendResponse({
+      error: "Invalid request URL",
+    });
+    return true;
+  }
+
+  fetch(requestUrl.toString(), message.options)
     .then(async (response) => {
       let data = null;
 

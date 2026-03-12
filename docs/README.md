@@ -17,6 +17,7 @@ If you are new to the project, start here and then open the area you care about.
 ## Project Quality Docs
 
 - `testing.md`: how tests are organized and run
+- `security.md`: current injection hardening and remaining security work
 
 ## Suggested Reading Order
 

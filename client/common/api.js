@@ -1,4 +1,24 @@
 (function bootstrapApi(global) {
+  function validateHttpUrl(value) {
+    if (typeof value !== "string" || !value.trim()) {
+      throw new Error("Invalid API base URL");
+    }
+
+    let url;
+
+    try {
+      url = new URL(value);
+    } catch {
+      throw new Error("Invalid API base URL");
+    }
+
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+      throw new Error("Invalid API base URL");
+    }
+
+    return url.toString();
+  }
+
   async function extensionFetch(url, options) {
     if (!global.chrome?.runtime?.sendMessage) {
       const response = await fetch(url, options);
@@ -46,7 +66,7 @@
   }
 
   function createApiClient(settings) {
-    const baseUrl = trimTrailingSlash(settings.apiBaseUrl);
+    const baseUrl = trimTrailingSlash(validateHttpUrl(settings.apiBaseUrl));
 
     async function request(path, options = {}, retryCount = 0) {
       try {

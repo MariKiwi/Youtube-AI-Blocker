@@ -63,6 +63,17 @@ Coverage:
 - The content CSS includes dark-mode-safe variables, active vote button styling, card highlight/badge styling, blocking overlays, and toast styling for action feedback
 - The repository includes Chromium and Firefox packaging scripts, build targets, and publishing docs for generating clean unpacked bundles and store upload ZIPs with deploy-time API URL, website URL, and Firefox add-on metadata injection
 
+## `tests/security.test.js`
+
+Purpose:
+- Verifies that current injection hardening remains in place across the extension, website, and website build pipeline
+
+Coverage:
+- The extension content script avoids `innerHTML` in API-driven UI rendering paths
+- The website runtime validates public URLs before applying them to links or scripts
+- The website build avoids shell-based HTML substitution and uses escaped file generation instead
+- Extension network entry points validate request URLs before use
+
 ## `tests/website.test.js`
 
 Purpose:

@@ -23,11 +23,8 @@ RUN PUBLIC_WEBSITE_URL="$PUBLIC_WEBSITE_URL" \
     UMAMI_WEBSITE_ID="$UMAMI_WEBSITE_ID" \
     UMAMI_HOST_URL="$UMAMI_HOST_URL" \
     UMAMI_DOMAINS="$UMAMI_DOMAINS" \
-    sh /usr/share/nginx/html/generate-public-config.sh /usr/share/nginx/html/public-config.js && \
-    GOOGLE_META_TAG="" && \
-    if [ -n "$GOOGLE_SITE_VERIFICATION" ]; then \
-      GOOGLE_META_TAG="<meta name=\"google-site-verification\" content=\"$GOOGLE_SITE_VERIFICATION\">"; \
-    fi && \
-    sed -i "s|<!-- YAIB_GOOGLE_SITE_VERIFICATION -->|$GOOGLE_META_TAG|g" /usr/share/nginx/html/index.html
+    node /usr/share/nginx/html/build-public-config.mjs /usr/share/nginx/html/public-config.js && \
+    GOOGLE_SITE_VERIFICATION="$GOOGLE_SITE_VERIFICATION" \
+    node /usr/share/nginx/html/inject-google-verification.mjs /usr/share/nginx/html/index.html
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD wget -q -O /dev/null http://127.0.0.1:80/ || exit 1
