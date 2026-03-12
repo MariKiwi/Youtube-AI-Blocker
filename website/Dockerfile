@@ -3,8 +3,8 @@ FROM nginx:1.29-alpine
 ARG PUBLIC_WEBSITE_URL=https://your-website.example
 ARG CHROME_WEB_STORE_URL=https://chromewebstore.google.com/
 ARG FIREFOX_ADDONS_URL=https://addons.mozilla.org/
-ARG GITHUB_SOURCE_URL=https://github.com/MattiKiwi/Youtube-AI-Blocker
-ARG GITHUB_RELEASES_URL=https://github.com/MattiKiwi/Youtube-AI-Blocker/releases
+ARG GITHUB_SOURCE_URL=https://github.com/MariKiwi/Youtube-AI-Blocker
+ARG GITHUB_RELEASES_URL=https://github.com/MariKiwi/Youtube-AI-Blocker/releases
 ARG GOOGLE_SITE_VERIFICATION=
 ARG UMAMI_SCRIPT_URL=
 ARG UMAMI_WEBSITE_ID=

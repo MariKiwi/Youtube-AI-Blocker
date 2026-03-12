@@ -16,11 +16,11 @@ test("website landing page includes core project messaging and SEO metadata", as
   assert.match(html, /GitHub Releases/);
   assert.match(html, /\.\/manual-install\.html/);
   assert.match(html, /third-party extension installs/i);
-  assert.match(html, /github\.com\/MattiKiwi\/Youtube-AI-Blocker\/releases/);
+  assert.match(html, /github\.com\/MariKiwi\/Youtube-AI-Blocker\/releases/);
   assert.match(html, /How it works/);
   assert.match(html, /anonymous voting/i);
   assert.match(html, /optional blocking/i);
-  assert.match(html, /https:\/\/github\.com\/MattiKiwi\/Youtube-AI-Blocker/);
+  assert.match(html, /https:\/\/github\.com\/MariKiwi\/Youtube-AI-Blocker/);
   assert.match(html, /mario-ame-EUTXu9T36XU-unsplash\.jpg/);
   assert.match(html, /mario-ame-fSfv8RhkvCs-unsplash\.jpg/);
   assert.match(html, /logan-voss-vJy0DdZ6NVk-unsplash\.jpg/);
@@ -52,7 +52,7 @@ test("website manual install guide exists and links the user through unpacked in
   assert.match(html, /Developer mode/);
   assert.match(html, /Load unpacked/);
   assert.match(html, /dist\/extension\//);
-  assert.match(html, /github\.com\/MattiKiwi\/Youtube-AI-Blocker\/releases/);
+  assert.match(html, /github\.com\/MariKiwi\/Youtube-AI-Blocker\/releases/);
   assert.match(html, /data-public-link="githubReleasesUrl"/);
   assert.match(html, /data-public-link="githubSourceUrl"/);
   assert.match(html, /data-open-cookie-settings/);

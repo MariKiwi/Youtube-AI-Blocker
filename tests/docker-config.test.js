@@ -17,8 +17,8 @@ test("docker compose defines api, website, and postgres services", async () => {
   assert.match(compose, /PUBLIC_WEBSITE_URL: \$\{PUBLIC_WEBSITE_URL:-https:\/\/your-website\.example\}/);
   assert.match(compose, /CHROME_WEB_STORE_URL: \$\{CHROME_WEB_STORE_URL:-https:\/\/chromewebstore\.google\.com\/\}/);
   assert.match(compose, /FIREFOX_ADDONS_URL: \$\{FIREFOX_ADDONS_URL:-https:\/\/addons\.mozilla\.org\/\}/);
-  assert.match(compose, /GITHUB_SOURCE_URL: \$\{GITHUB_SOURCE_URL:-https:\/\/github\.com\/MattiKiwi\/Youtube-AI-Blocker\}/);
-  assert.match(compose, /GITHUB_RELEASES_URL: \$\{GITHUB_RELEASES_URL:-https:\/\/github\.com\/MattiKiwi\/Youtube-AI-Blocker\/releases\}/);
+  assert.match(compose, /GITHUB_SOURCE_URL: \$\{GITHUB_SOURCE_URL:-https:\/\/github\.com\/MariKiwi\/Youtube-AI-Blocker\}/);
+  assert.match(compose, /GITHUB_RELEASES_URL: \$\{GITHUB_RELEASES_URL:-https:\/\/github\.com\/MariKiwi\/Youtube-AI-Blocker\/releases\}/);
   assert.match(compose, /GOOGLE_SITE_VERIFICATION: \$\{GOOGLE_SITE_VERIFICATION:-\}/);
   assert.match(compose, /UMAMI_SCRIPT_URL: \$\{UMAMI_SCRIPT_URL:-\}/);
   assert.match(compose, /UMAMI_WEBSITE_ID: \$\{UMAMI_WEBSITE_ID:-\}/);

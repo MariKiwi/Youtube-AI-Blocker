@@ -8,7 +8,7 @@
   <b>Install:</b>
   <a href="https://chromewebstore.google.com/">Chrome Web Store (placeholder)</a> |
   <a href="https://addons.mozilla.org/">Firefox Add-ons (placeholder)</a> |
-  <a href="https://github.com/MattiKiwi/Youtube-AI-Blocker/releases">Manual Releases</a> |
+  <a href="https://github.com/MariKiwi/Youtube-AI-Blocker/releases">Manual Releases</a> |
   <a href="https://your-website.example">Website (placeholder)</a>
 </p>
 
@@ -150,4 +150,4 @@ The repository already includes:
 
 GitHub repository:
 
-- https://github.com/MattiKiwi/Youtube-AI-Blocker
+- https://github.com/MariKiwi/Youtube-AI-Blocker
