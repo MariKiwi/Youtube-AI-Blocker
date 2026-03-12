@@ -110,7 +110,7 @@
   }
 
   function ensureUmami() {
-    if (!hasUmamiConfig || document.querySelector('script[data-yaib-umami="true"]')) {
+    if (!hasUmamiConfig) {
       return;
     }
 
@@ -120,22 +120,19 @@
       return;
     }
 
+    const existingUmamiScript = [...document.scripts].find((node) => (
+      sanitizeHttpUrl(node.src) === scriptUrl
+      && node.getAttribute("data-website-id") === String(publicConfig.umamiWebsiteId)
+    ));
+
+    if (existingUmamiScript) {
+      return;
+    }
+
     const script = document.createElement("script");
-    script.async = true;
+    script.defer = true;
     script.src = scriptUrl;
-    script.setAttribute("data-website-id", publicConfig.umamiWebsiteId);
-    script.setAttribute("data-yaib-umami", "true");
-    script.setAttribute("data-do-not-track", "true");
-
-    const hostUrl = sanitizeHttpUrl(publicConfig.umamiHostUrl);
-
-    if (hostUrl) {
-      script.setAttribute("data-host-url", hostUrl);
-    }
-
-    if (typeof publicConfig.umamiDomains === "string" && publicConfig.umamiDomains.trim()) {
-      script.setAttribute("data-domains", publicConfig.umamiDomains);
-    }
+    script.setAttribute("data-website-id", String(publicConfig.umamiWebsiteId));
 
     document.head.appendChild(script);
   }
@@ -149,7 +146,10 @@
     }
 
     if (consentValue === CONSENT_DECLINED) {
-      const umamiScript = document.querySelector('script[data-yaib-umami="true"]');
+      const umamiScript = [...document.scripts].find((node) => (
+        sanitizeHttpUrl(node.src) === sanitizeHttpUrl(publicConfig.umamiScriptUrl)
+        && node.getAttribute("data-website-id") === String(publicConfig.umamiWebsiteId)
+      ));
 
       if (umamiScript) {
         umamiScript.remove();

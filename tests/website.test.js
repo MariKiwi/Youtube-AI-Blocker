@@ -108,7 +108,12 @@ test("website assets define themed styling and lightweight behavior", async () =
   assert.match(js, /data-public-link/);
   assert.match(js, /YouTubeAiBlockerPublicConfig/);
   assert.match(js, /yaib_analytics_consent/);
-  assert.match(js, /data-yaib-umami/);
+  assert.match(js, /script\.defer = true/);
+  assert.match(js, /data-website-id/);
+  assert.doesNotMatch(js, /data-yaib-umami/);
+  assert.doesNotMatch(js, /data-do-not-track/);
+  assert.doesNotMatch(js, /data-host-url/);
+  assert.doesNotMatch(js, /data-domains/);
   assert.match(js, /data-open-cookie-settings/);
   assert.match(js, /cookieBannerStatus/);
   assert.match(js, /cookie-settings-fab--raised/);
