@@ -6,10 +6,10 @@
 
 <p align="center">
   <b>Install:</b>
-  <a href="https://chromewebstore.google.com/">Chrome Web Store (placeholder)</a> |
-  <a href="https://addons.mozilla.org/">Firefox Add-ons (placeholder)</a> |
+  <a href="https://chromewebstore.google.com/">Chrome Web Store (Coming Soon)</a> |
+  <a href="https://addons.mozilla.org/">Firefox Add-ons (Coming Soon)</a> |
   <a href="https://github.com/MariKiwi/Youtube-AI-Blocker/releases">Manual Releases</a> |
-  <a href="https://your-website.example">Website (placeholder)</a>
+  <a href="https://yaib.codecurrent.eu">Website</a>
 </p>
 
 <p align="center">
