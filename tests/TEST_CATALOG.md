@@ -43,6 +43,7 @@ Coverage:
 - `docker-compose.yml` defines `api`, `website`, and `postgres`
 - Compose wires API startup to PostgreSQL health
 - The server Dockerfile installs dependencies, generates Prisma, and starts through the container entrypoint
+- The repository includes committed Prisma migrations so `prisma migrate deploy` can create tables on fresh servers
 - The website Dockerfile serves the static landing page through Nginx and accepts build-time public link config
 - The website Dockerfile accepts build-time Search Console and Umami configuration
 - The root environment example includes the required deployment variables for the stack and extension packaging

@@ -36,6 +36,16 @@ test("server Dockerfile runs Prisma and starts the API", async () => {
   assert.match(dockerfile, /CMD \["sh", "scripts\/container-start\.sh"\]/);
 });
 
+test("server repository includes committed Prisma migrations for deploy", async () => {
+  const migrationSql = await readFile(`${root}/server/prisma/migrations/20260312235000_initial_schema/migration.sql`, "utf8");
+  const migrationLock = await readFile(`${root}/server/prisma/migrations/migration_lock.toml`, "utf8");
+
+  assert.match(migrationSql, /CREATE TABLE "videos"/);
+  assert.match(migrationSql, /CREATE TABLE "votes"/);
+  assert.match(migrationSql, /CREATE TYPE "VideoStatus"/);
+  assert.match(migrationLock, /provider = "postgresql"/);
+});
+
 test("website Dockerfile serves the static landing page through nginx", async () => {
   const dockerfile = await readFile(`${root}/website/Dockerfile`, "utf8");
   const nginxConfig = await readFile(`${root}/website/nginx.conf`, "utf8");

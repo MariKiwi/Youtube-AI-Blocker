@@ -15,7 +15,7 @@ From the repository root:
 The `api` container:
 - Builds the server image
 - Waits for PostgreSQL
-- Runs `prisma migrate deploy`
+- Runs `prisma migrate deploy` using the committed Prisma migrations in `server/prisma/migrations/`
 - Starts the Fastify server
 
 The `website` container:
@@ -95,6 +95,12 @@ Recommended production flow:
 cp .env.example .env
 make deploy-stack
 ```
+
+Important migration note:
+
+- Fresh servers depend on the committed Prisma migrations under `server/prisma/migrations/`
+- If those migration files are missing from the deployed checkout, `prisma migrate deploy` will succeed without creating the tables
+- In that broken state, health checks may still pass while API reads fail with Prisma `P2021` table-not-found errors
 
 To update after code changes:
 
