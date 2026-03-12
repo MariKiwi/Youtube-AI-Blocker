@@ -25,7 +25,7 @@ mkdir -p "$BUILD_DIR"
 cp -R "$CLIENT_DIR"/. "$BUILD_DIR"/
 
 node -e '
-const fs = require("node:fs");
+const fs = require("fs");
 
 const manifestPath = process.argv[1];
 const settingsPath = process.argv[2];

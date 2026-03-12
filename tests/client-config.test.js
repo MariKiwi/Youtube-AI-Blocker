@@ -150,6 +150,7 @@ test("extension packaging workflow exists for local builds and store upload zips
   assert.match(buildScript, /cp -R "\$CLIENT_DIR"\/\. "\$BUILD_DIR"\//);
   assert.match(buildScript, /manifest\.host_permissions/);
   assert.match(buildScript, /manifest\.homepage_url/);
+  assert.match(buildScript, /const fs = require\("fs"\);/);
   assert.match(buildScript, /Failed to update default apiBaseUrl/);
   assert.match(buildScript, /bsdtar -a -cf "\$ZIP_PATH" \./);
   assert.match(firefoxBuildScript, /FIREFOX_ADDON_ID/);
@@ -158,6 +159,7 @@ test("extension packaging workflow exists for local builds and store upload zips
   assert.match(firefoxBuildScript, /EXTENSION_DEFAULT_API_BASE_URL/);
   assert.match(firefoxBuildScript, /manifest\.host_permissions/);
   assert.match(firefoxBuildScript, /manifest\.homepage_url/);
+  assert.match(firefoxBuildScript, /const fs = require\("fs"\);/);
   assert.match(firefoxBuildScript, /youtube-ai-blocker-firefox-addon\.zip/);
   assert.match(makefile, /^build-extension:\n\tsh \.\/scripts\/build-extension\.sh/m);
   assert.match(makefile, /^build-firefox-addon:\n\tsh \.\/scripts\/build-firefox-addon\.sh/m);
