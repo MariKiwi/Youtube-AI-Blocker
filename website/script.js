@@ -4,9 +4,13 @@
   const CONSENT_DECLINED = "declined";
   const publicConfig = globalThis.YouTubeAiBlockerPublicConfig ?? {};
   const yearNode = document.getElementById("currentYear");
-  const consentPanel = document.getElementById("consentPanel");
-  const privacyButtons = [...document.querySelectorAll("[data-open-privacy-settings]")];
+  const cookieBanner = document.getElementById("cookieBanner");
+  const cookieBannerStatus = document.getElementById("cookieBannerStatus");
+  const privacyButtons = [...document.querySelectorAll("[data-open-cookie-settings]")];
   const consentButtons = [...document.querySelectorAll("[data-consent-action]")];
+  const acceptAnalyticsButtons = consentButtons.filter(
+    (button) => button.getAttribute("data-consent-action") === "accept",
+  );
   const hasUmamiConfig = Boolean(publicConfig.umamiScriptUrl && publicConfig.umamiWebsiteId);
 
   function readCookie(name) {
@@ -37,22 +41,54 @@
     return "";
   }
 
-  function showConsentPanel() {
-    if (!consentPanel) {
+  function updateConsentStatus(consentValue) {
+    if (!cookieBannerStatus) {
       return;
     }
 
-    consentPanel.hidden = false;
-    consentPanel.classList.add("consent-panel--visible");
+    if (!hasUmamiConfig) {
+      cookieBannerStatus.textContent = "Analytics are not configured on this deployment. Only necessary cookies can be used right now.";
+      return;
+    }
+
+    if (consentValue === CONSENT_ACCEPTED) {
+      cookieBannerStatus.textContent = "Current choice: analytics allowed.";
+      return;
+    }
+
+    if (consentValue === CONSENT_DECLINED) {
+      cookieBannerStatus.textContent = "Current choice: only necessary cookies are active.";
+      return;
+    }
+
+    cookieBannerStatus.textContent = "Choose whether this site may load Umami analytics.";
   }
 
-  function hideConsentPanel() {
-    if (!consentPanel) {
+  function showConsentBanner() {
+    if (!cookieBanner) {
       return;
     }
 
-    consentPanel.classList.remove("consent-panel--visible");
-    consentPanel.hidden = true;
+    updateConsentStatus(getConsentState());
+    cookieBanner.hidden = false;
+    cookieBanner.classList.add("cookie-banner--visible");
+
+    for (const button of privacyButtons) {
+      button.classList.add("cookie-settings-fab--raised");
+    }
+  }
+
+  function hideConsentBanner() {
+    if (!cookieBanner) {
+      return;
+    }
+
+    cookieBanner.classList.remove("cookie-banner--visible");
+    cookieBanner.hidden = true;
+
+    for (const button of privacyButtons) {
+      button.classList.remove("cookie-settings-fab--raised");
+    }
   }
 
   function ensureUmami() {
@@ -80,6 +116,7 @@
 
   function applyConsent(consentValue) {
     writeCookie(CONSENT_COOKIE_NAME, consentValue, 31536000);
+    updateConsentStatus(consentValue);
 
     if (consentValue === CONSENT_ACCEPTED) {
       ensureUmami();
@@ -93,7 +130,7 @@
       }
     }
 
-    hideConsentPanel();
+    hideConsentBanner();
   }
 
   if (yearNode) {
@@ -116,7 +153,19 @@
   }
 
   for (const button of privacyButtons) {
-    button.addEventListener("click", showConsentPanel);
+    button.addEventListener("click", showConsentBanner);
+  }
+
+  for (const button of acceptAnalyticsButtons) {
+    button.disabled = !hasUmamiConfig;
+
+    if (!hasUmamiConfig) {
+      button.setAttribute("aria-disabled", "true");
+      button.title = "Analytics are not configured on this deployment.";
+    } else {
+      button.removeAttribute("aria-disabled");
+      button.removeAttribute("title");
+    }
   }
 
   for (const button of consentButtons) {
@@ -124,6 +173,11 @@
       const action = button.getAttribute("data-consent-action");
 
       if (action === "accept") {
+        if (!hasUmamiConfig) {
+          showConsentBanner();
+          return;
+        }
+
         applyConsent(CONSENT_ACCEPTED);
         return;
       }
@@ -132,14 +186,14 @@
     });
   }
 
-  if (hasUmamiConfig) {
-    const consentState = getConsentState();
+  const consentState = getConsentState();
 
-    if (consentState === CONSENT_ACCEPTED) {
-      ensureUmami();
-    } else if (!consentState) {
-      showConsentPanel();
-    }
+  if (hasUmamiConfig && consentState === CONSENT_ACCEPTED) {
+    ensureUmami();
+  }
+
+  if (!consentState) {
+    showConsentBanner();
   }
 
   const schemaNode = document.querySelector('script[type="application/ld+json"]');

@@ -34,10 +34,12 @@ test("website landing page includes core project messaging and SEO metadata", as
   assert.match(html, /data-public-link="firefoxAddonsUrl"/);
   assert.match(html, /data-public-link="githubSourceUrl"/);
   assert.match(html, /data-public-link="githubReleasesUrl"/);
-  assert.match(html, /data-open-privacy-settings/);
-  assert.match(html, /consentPanel/);
-  assert.match(html, /Allow analytics/);
-  assert.match(html, /Decline/);
+  assert.match(html, /data-open-cookie-settings/);
+  assert.match(html, /cookie-settings-fab/);
+  assert.match(html, /cookieBanner/);
+  assert.match(html, /Accept analytics/);
+  assert.match(html, /Decline non-essential cookies/);
+  assert.match(html, /Cookie consent/);
   assert.match(html, /\.\/public-config\.js/);
 });
 
@@ -53,8 +55,9 @@ test("website manual install guide exists and links the user through unpacked in
   assert.match(html, /github\.com\/MattiKiwi\/Youtube-AI-Blocker\/releases/);
   assert.match(html, /data-public-link="githubReleasesUrl"/);
   assert.match(html, /data-public-link="githubSourceUrl"/);
-  assert.match(html, /data-open-privacy-settings/);
-  assert.match(html, /Allow analytics/);
+  assert.match(html, /data-open-cookie-settings/);
+  assert.match(html, /cookie-settings-fab/);
+  assert.match(html, /Accept analytics/);
   assert.match(html, /\.\/public-config\.js/);
 });
 
@@ -72,9 +75,10 @@ test("website assets define themed styling and lightweight behavior", async () =
   assert.match(css, /\.install-grid/);
   assert.match(css, /\.install-card/);
   assert.match(css, /\.install-note/);
-  assert.match(css, /\.consent-panel/);
-  assert.match(css, /\.consent-panel__actions/);
-  assert.match(css, /\.footer__link-button/);
+  assert.match(css, /\.cookie-banner/);
+  assert.match(css, /\.cookie-banner__actions/);
+  assert.match(css, /\.cookie-settings-fab/);
+  assert.match(css, /\.cookie-settings-fab--raised/);
   assert.match(css, /\.steps--manual/);
   assert.match(css, /\.page-title/);
   assert.match(css, /\.photo-credits/);
@@ -100,5 +104,8 @@ test("website assets define themed styling and lightweight behavior", async () =
   assert.match(js, /YouTubeAiBlockerPublicConfig/);
   assert.match(js, /yaib_analytics_consent/);
   assert.match(js, /data-yaib-umami/);
-  assert.match(js, /data-open-privacy-settings/);
+  assert.match(js, /data-open-cookie-settings/);
+  assert.match(js, /cookieBannerStatus/);
+  assert.match(js, /cookie-settings-fab--raised/);
+  assert.match(js, /showConsentBanner/);
 });
