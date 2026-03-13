@@ -121,7 +121,7 @@ if (settingsScript === nextSettingsScript) {
 fs.writeFileSync(settingsPath, nextSettingsScript);
 ' "$BUILD_DIR/manifest.json" "$BUILD_DIR/common/settings.js" "$FIREFOX_ADDON_ID" "$FIREFOX_MIN_VERSION" "$EXTENSION_DEFAULT_API_BASE_URL" "$PUBLIC_WEBSITE_URL" "$EXTENSION_VERSION" "$EXTENSION_DEFAULT_BLOCKING_ENABLED" "$EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS"
 
-python3 - <<'PYTHONZIP'
+python3 - <<PYTHONZIP
 from pathlib import Path
 import zipfile
 
