@@ -17,6 +17,8 @@ existing_extension_default_blocking_enabled="${EXTENSION_DEFAULT_BLOCKING_ENABLE
 existing_extension_default_debug_unknown_indicators="${EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS-}"
 existing_firefox_addon_id="${FIREFOX_ADDON_ID-}"
 existing_firefox_min_version="${FIREFOX_MIN_VERSION-}"
+existing_firefox_data_collection_required="${FIREFOX_DATA_COLLECTION_REQUIRED-}"
+existing_firefox_data_collection_optional="${FIREFOX_DATA_COLLECTION_OPTIONAL-}"
 
 if [ -f "$ENV_PATH" ]; then
   set -a
@@ -57,6 +59,14 @@ if [ -n "${existing_firefox_min_version}" ]; then
   export FIREFOX_MIN_VERSION="$existing_firefox_min_version"
 fi
 
+if [ -n "${existing_firefox_data_collection_required}" ]; then
+  export FIREFOX_DATA_COLLECTION_REQUIRED="$existing_firefox_data_collection_required"
+fi
+
+if [ -n "${existing_firefox_data_collection_optional}" ]; then
+  export FIREFOX_DATA_COLLECTION_OPTIONAL="$existing_firefox_data_collection_optional"
+fi
+
 EXTENSION_DEFAULT_API_BASE_URL="${EXTENSION_DEFAULT_API_BASE_URL:-${PUBLIC_API_BASE_URL:-http://127.0.0.1:3000}}"
 PUBLIC_WEBSITE_URL="${PUBLIC_WEBSITE_URL:-https://your-website.example}"
 EXTENSION_VERSION="${EXTENSION_VERSION:-0.1.0}"
@@ -64,6 +74,8 @@ EXTENSION_DEFAULT_BLOCKING_ENABLED="${EXTENSION_DEFAULT_BLOCKING_ENABLED:-false}
 EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS="${EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS:-false}"
 FIREFOX_ADDON_ID="${FIREFOX_ADDON_ID:-youtube-ai-blocker@example.com}"
 FIREFOX_MIN_VERSION="${FIREFOX_MIN_VERSION:-121.0}"
+FIREFOX_DATA_COLLECTION_REQUIRED="${FIREFOX_DATA_COLLECTION_REQUIRED:-websiteActivity}"
+FIREFOX_DATA_COLLECTION_OPTIONAL="${FIREFOX_DATA_COLLECTION_OPTIONAL:-}"
 
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
@@ -82,6 +94,14 @@ const websiteUrl = process.argv[6];
 const extensionVersion = process.argv[7];
 const blockingEnabled = process.argv[8] === "true";
 const debugUnknownIndicators = process.argv[9] === "true";
+const requiredDataCollection = process.argv[10]
+  .split(",")
+  .map((entry) => entry.trim())
+  .filter(Boolean);
+const optionalDataCollection = process.argv[11]
+  .split(",")
+  .map((entry) => entry.trim())
+  .filter(Boolean);
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 const apiOrigin = new URL(apiBaseUrl).origin;
 
@@ -89,6 +109,10 @@ manifest.browser_specific_settings = {
   gecko: {
     id: addonId,
     strict_min_version: minVersion,
+    data_collection_permissions: {
+      required: requiredDataCollection.length > 0 ? requiredDataCollection : ["websiteActivity"],
+      ...(optionalDataCollection.length > 0 ? { optional: optionalDataCollection } : {}),
+    },
   },
 };
 delete manifest.background;
@@ -127,7 +151,7 @@ if (settingsScript === nextSettingsScript) {
 }
 
 fs.writeFileSync(settingsPath, nextSettingsScript);
-' "$BUILD_DIR/manifest.json" "$BUILD_DIR/common/settings.js" "$FIREFOX_ADDON_ID" "$FIREFOX_MIN_VERSION" "$EXTENSION_DEFAULT_API_BASE_URL" "$PUBLIC_WEBSITE_URL" "$EXTENSION_VERSION" "$EXTENSION_DEFAULT_BLOCKING_ENABLED" "$EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS"
+' "$BUILD_DIR/manifest.json" "$BUILD_DIR/common/settings.js" "$FIREFOX_ADDON_ID" "$FIREFOX_MIN_VERSION" "$EXTENSION_DEFAULT_API_BASE_URL" "$PUBLIC_WEBSITE_URL" "$EXTENSION_VERSION" "$EXTENSION_DEFAULT_BLOCKING_ENABLED" "$EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS" "$FIREFOX_DATA_COLLECTION_REQUIRED" "$FIREFOX_DATA_COLLECTION_OPTIONAL"
 
 python3 - <<PYTHONZIP
 from pathlib import Path
@@ -150,3 +174,4 @@ echo "  Zip:       $ZIP_PATH"
 echo "  Add-on ID: $FIREFOX_ADDON_ID"
 echo "  API:       $EXTENSION_DEFAULT_API_BASE_URL"
 echo "  Website:   $PUBLIC_WEBSITE_URL"
+echo "  Data:      required=$FIREFOX_DATA_COLLECTION_REQUIRED optional=$FIREFOX_DATA_COLLECTION_OPTIONAL"

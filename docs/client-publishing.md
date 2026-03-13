@@ -11,6 +11,8 @@ Important variables:
 - `EXTENSION_DEFAULT_API_BASE_URL`: default API URL written into the packaged extension settings
 - `FIREFOX_ADDON_ID`: Firefox add-on ID used in the packaged Gecko manifest
 - `FIREFOX_MIN_VERSION`: minimum Firefox version for the packaged add-on
+- `FIREFOX_DATA_COLLECTION_REQUIRED`: comma-separated Firefox `data_collection_permissions.required` values for AMO
+- `FIREFOX_DATA_COLLECTION_OPTIONAL`: comma-separated Firefox `data_collection_permissions.optional` values for AMO
 
 If `EXTENSION_DEFAULT_API_BASE_URL` is not set, the build falls back to `PUBLIC_API_BASE_URL`.
 
@@ -45,7 +47,7 @@ This produces:
 Optional environment overrides:
 
 ```bash
-FIREFOX_ADDON_ID=your-addon-id@example.com FIREFOX_MIN_VERSION=121.0 make build-firefox-addon
+FIREFOX_ADDON_ID=your-addon-id@example.com FIREFOX_MIN_VERSION=121.0 FIREFOX_DATA_COLLECTION_REQUIRED=websiteActivity make build-firefox-addon
 ```
 
 ## Local install flow

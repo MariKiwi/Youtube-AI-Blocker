@@ -188,8 +188,11 @@ test("extension packaging workflow exists for local builds and store upload zips
   assert.match(buildScript, /Failed to update packaged default settings/);
   assert.match(buildScript, /zipfile\.ZipFile/);
   assert.match(firefoxBuildScript, /FIREFOX_ADDON_ID/);
+  assert.match(firefoxBuildScript, /FIREFOX_DATA_COLLECTION_REQUIRED/);
+  assert.match(firefoxBuildScript, /FIREFOX_DATA_COLLECTION_OPTIONAL/);
   assert.match(firefoxBuildScript, /browser_specific_settings/);
   assert.match(firefoxBuildScript, /strict_min_version/);
+  assert.match(firefoxBuildScript, /data_collection_permissions/);
   assert.match(firefoxBuildScript, /EXTENSION_DEFAULT_API_BASE_URL/);
   assert.match(firefoxBuildScript, /EXTENSION_VERSION/);
   assert.match(firefoxBuildScript, /EXTENSION_DEFAULT_BLOCKING_ENABLED/);
@@ -219,6 +222,8 @@ test("build scripts stamp packaged extension defaults and manifest permissions f
     EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS: "true",
     FIREFOX_ADDON_ID: "firefox-addon@example.com",
     FIREFOX_MIN_VERSION: "128.0",
+    FIREFOX_DATA_COLLECTION_REQUIRED: "websiteActivity,personallyIdentifyingInfo",
+    FIREFOX_DATA_COLLECTION_OPTIONAL: "technicalAndInteraction",
   };
 
   await execFileAsync("sh", ["./scripts/build-extension.sh"], {
@@ -261,6 +266,10 @@ test("build scripts stamp packaged extension defaults and manifest permissions f
   });
   assert.equal(firefoxManifest.browser_specific_settings.gecko.id, "firefox-addon@example.com");
   assert.equal(firefoxManifest.browser_specific_settings.gecko.strict_min_version, "128.0");
+  assert.deepEqual(firefoxManifest.browser_specific_settings.gecko.data_collection_permissions, {
+    required: ["websiteActivity", "personallyIdentifyingInfo"],
+    optional: ["technicalAndInteraction"],
+  });
   assert.equal(firefoxManifest.background.service_worker, undefined);
   assert.match(firefoxSettings, /apiBaseUrl: "https:\/\/api\.yaib\.example\/v1"/);
   assert.match(firefoxSettings, /blockingEnabled: true/);
