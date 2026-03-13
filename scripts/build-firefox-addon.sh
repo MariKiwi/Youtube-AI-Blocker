@@ -91,6 +91,14 @@ manifest.browser_specific_settings = {
     strict_min_version: minVersion,
   },
 };
+delete manifest.background;
+manifest.background = {
+  scripts: [
+    "common/logger.js",
+    "common/settings.js",
+    "background/background.js",
+  ],
+};
 manifest.host_permissions = [
   "https://www.youtube.com/*",
   `${apiOrigin}/*`,

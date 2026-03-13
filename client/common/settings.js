@@ -84,6 +84,13 @@
     return saveSettings(DEFAULT_SETTINGS);
   }
 
+  function hydrateSettings(input) {
+    return {
+      ...DEFAULT_SETTINGS,
+      ...(input && typeof input === "object" ? input : {}),
+    };
+  }
+
   function createDeviceId() {
     if (global.crypto?.randomUUID) {
       return global.crypto.randomUUID();
@@ -120,5 +127,6 @@
     getDeviceId,
     saveSettings,
     resetSettings,
+    hydrateSettings,
   };
 }(globalThis));

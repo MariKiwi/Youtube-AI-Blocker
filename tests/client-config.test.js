@@ -57,6 +57,15 @@ test("shared client settings define default API and blocking values", async () =
   assert.match(settingsScript, /crypto\?\.randomUUID/);
 });
 
+test("settings hydration preserves saved values while filling missing keys from packaged defaults", async () => {
+  const settingsScript = await readFile(`${root}/client/common/settings.js`, "utf8");
+  const backgroundScript = await readFile(`${root}/client/background/background.js`, "utf8");
+
+  assert.match(settingsScript, /function hydrateSettings/);
+  assert.match(backgroundScript, /hydrateSettings\(storedSettings\)/);
+  assert.match(backgroundScript, /storage\.get\(\[settingsApi\.STORAGE_KEY\]/);
+});
+
 test("content script scaffold includes interactive watch page controls", async () => {
   const contentScript = await readFile(`${root}/client/content/content.js`, "utf8");
 
@@ -106,6 +115,13 @@ test("logger utility provides a stable filterable prefix", async () => {
   assert.match(loggerScript, /console\.info/);
   assert.match(loggerScript, /console\.warn/);
   assert.match(loggerScript, /console\.error/);
+});
+
+test("background script supports both service worker and Firefox background script contexts", async () => {
+  const backgroundScript = await readFile(`${root}/client/background/background.js`, "utf8");
+
+  assert.match(backgroundScript, /typeof importScripts === "function"/);
+  assert.match(backgroundScript, /importScripts\("\.\.\/common\/logger\.js", "\.\.\/common\/settings\.js"\)/);
 });
 
 test("content CSS defines dark mode variables and toast styles for injected controls", async () => {
@@ -232,8 +248,16 @@ test("build scripts stamp packaged extension defaults and manifest permissions f
   ]);
   assert.equal(firefoxManifest.homepage_url, "https://yaib.example");
   assert.equal(firefoxManifest.version, "0.1.1");
+  assert.deepEqual(firefoxManifest.background, {
+    scripts: [
+      "common/logger.js",
+      "common/settings.js",
+      "background/background.js",
+    ],
+  });
   assert.equal(firefoxManifest.browser_specific_settings.gecko.id, "firefox-addon@example.com");
   assert.equal(firefoxManifest.browser_specific_settings.gecko.strict_min_version, "128.0");
+  assert.equal(firefoxManifest.background.service_worker, undefined);
   assert.match(firefoxSettings, /apiBaseUrl: "https:\/\/api\.yaib\.example\/v1"/);
   assert.match(firefoxSettings, /blockingEnabled: true/);
   assert.match(firefoxSettings, /debugUnknownIndicators: true/);

@@ -1,4 +1,6 @@
-importScripts("../common/logger.js", "../common/settings.js");
+if (typeof importScripts === "function") {
+  importScripts("../common/logger.js", "../common/settings.js");
+}
 
 const logger = globalThis.YouTubeAiBlockerLogger;
 
@@ -9,8 +11,19 @@ chrome.runtime.onInstalled.addListener(async () => {
     return;
   }
 
-  const existing = await settingsApi.getSettings();
-  await settingsApi.saveSettings(existing);
+  const storage = chrome?.storage?.sync;
+  let storedSettings = {};
+
+  if (storage?.get) {
+    storedSettings = await new Promise((resolve) => {
+      storage.get([settingsApi.STORAGE_KEY], (result) => resolve(result[settingsApi.STORAGE_KEY] ?? {}));
+    });
+  } else {
+    const existing = await settingsApi.getSettings();
+    storedSettings = existing;
+  }
+
+  await settingsApi.saveSettings(settingsApi.hydrateSettings(storedSettings));
   const deviceId = await settingsApi.getDeviceId();
   logger.info("Extension installed and settings initialized");
   logger.info("Anonymous device ID initialized", { deviceId });
