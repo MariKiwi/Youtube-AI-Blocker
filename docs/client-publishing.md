@@ -93,3 +93,9 @@ To test the Firefox-targeted build locally:
 - The build scripts stamp the packaged manifests with the configured public website URL and API host permission
 - Keep the API URL in `.env`, the server CORS config, and any public website install links aligned before publishing
 - Store publication also requires a publisher account and listing content outside the repository
+
+The packaged extension also includes the project logo icons from `client/icons/`, which are referenced by the extension manifest for browser UI and store packaging.
+
+When both shell environment variables and `.env` are present, the explicit shell environment values take precedence during packaging.
+
+Packaged builds can also stamp `EXTENSION_VERSION`, `EXTENSION_DEFAULT_BLOCKING_ENABLED`, and `EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS` from the root `.env`.

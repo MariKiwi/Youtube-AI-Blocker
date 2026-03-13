@@ -14,12 +14,22 @@ test("client manifest declares popup, background, content script, and storage pe
 
   assert.equal(manifest.manifest_version, 3);
   assert.equal(manifest.action.default_popup, "popup/popup.html");
+  assert.deepEqual(manifest.action.default_icon, {
+    16: "icons/icon-16.png",
+    32: "icons/icon-32.png",
+  });
   assert.equal(manifest.background.service_worker, "background/background.js");
   assert.ok(manifest.permissions.includes("storage"));
   assert.ok(manifest.content_scripts[0].matches.includes("https://www.youtube.com/*"));
   assert.ok(manifest.content_scripts[0].css.includes("content/content.css"));
   assert.ok(manifest.content_scripts[0].js.includes("common/logger.js"));
   assert.ok(manifest.host_permissions.includes("http://127.0.0.1:3000/*"));
+  assert.deepEqual(manifest.icons, {
+    16: "icons/icon-16.png",
+    32: "icons/icon-32.png",
+    48: "icons/icon-48.png",
+    128: "icons/icon-128.png",
+  });
 });
 
 test("popup scaffold exposes blocking and API server settings", async () => {
@@ -146,17 +156,23 @@ test("extension packaging workflow exists for local builds and store upload zips
   assert.match(buildScript, /ZIP_PATH=.*youtube-ai-blocker-extension\.zip/);
   assert.match(buildScript, /ENV_PATH=.*\.env/);
   assert.match(buildScript, /EXTENSION_DEFAULT_API_BASE_URL/);
+  assert.match(buildScript, /EXTENSION_VERSION/);
+  assert.match(buildScript, /EXTENSION_DEFAULT_BLOCKING_ENABLED/);
+  assert.match(buildScript, /EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS/);
   assert.match(buildScript, /PUBLIC_WEBSITE_URL/);
   assert.match(buildScript, /cp -R "\$CLIENT_DIR"\/\. "\$BUILD_DIR"\//);
   assert.match(buildScript, /manifest\.host_permissions/);
   assert.match(buildScript, /manifest\.homepage_url/);
   assert.match(buildScript, /const fs = require\("fs"\);/);
-  assert.match(buildScript, /Failed to update default apiBaseUrl/);
+  assert.match(buildScript, /Failed to update packaged default settings/);
   assert.match(buildScript, /bsdtar -a -cf "\$ZIP_PATH" \./);
   assert.match(firefoxBuildScript, /FIREFOX_ADDON_ID/);
   assert.match(firefoxBuildScript, /browser_specific_settings/);
   assert.match(firefoxBuildScript, /strict_min_version/);
   assert.match(firefoxBuildScript, /EXTENSION_DEFAULT_API_BASE_URL/);
+  assert.match(firefoxBuildScript, /EXTENSION_VERSION/);
+  assert.match(firefoxBuildScript, /EXTENSION_DEFAULT_BLOCKING_ENABLED/);
+  assert.match(firefoxBuildScript, /EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS/);
   assert.match(firefoxBuildScript, /manifest\.host_permissions/);
   assert.match(firefoxBuildScript, /manifest\.homepage_url/);
   assert.match(firefoxBuildScript, /const fs = require\("fs"\);/);
@@ -177,6 +193,9 @@ test("build scripts stamp packaged extension defaults and manifest permissions f
     PUBLIC_WEBSITE_URL: "https://yaib.example",
     PUBLIC_API_BASE_URL: "https://api.yaib.example",
     EXTENSION_DEFAULT_API_BASE_URL: "https://api.yaib.example/v1",
+    EXTENSION_VERSION: "0.1.1",
+    EXTENSION_DEFAULT_BLOCKING_ENABLED: "true",
+    EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS: "true",
     FIREFOX_ADDON_ID: "firefox-addon@example.com",
     FIREFOX_MIN_VERSION: "128.0",
   };
@@ -201,14 +220,20 @@ test("build scripts stamp packaged extension defaults and manifest permissions f
     "https://api.yaib.example/*",
   ]);
   assert.equal(chromiumManifest.homepage_url, "https://yaib.example");
+  assert.equal(chromiumManifest.version, "0.1.1");
   assert.match(chromiumSettings, /apiBaseUrl: "https:\/\/api\.yaib\.example\/v1"/);
+  assert.match(chromiumSettings, /blockingEnabled: true/);
+  assert.match(chromiumSettings, /debugUnknownIndicators: true/);
 
   assert.deepEqual(firefoxManifest.host_permissions, [
     "https://www.youtube.com/*",
     "https://api.yaib.example/*",
   ]);
   assert.equal(firefoxManifest.homepage_url, "https://yaib.example");
+  assert.equal(firefoxManifest.version, "0.1.1");
   assert.equal(firefoxManifest.browser_specific_settings.gecko.id, "firefox-addon@example.com");
   assert.equal(firefoxManifest.browser_specific_settings.gecko.strict_min_version, "128.0");
   assert.match(firefoxSettings, /apiBaseUrl: "https:\/\/api\.yaib\.example\/v1"/);
+  assert.match(firefoxSettings, /blockingEnabled: true/);
+  assert.match(firefoxSettings, /debugUnknownIndicators: true/);
 });

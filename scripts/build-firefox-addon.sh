@@ -9,6 +9,15 @@ BUILD_DIR="$DIST_DIR/firefox-addon"
 ZIP_PATH="$DIST_DIR/youtube-ai-blocker-firefox-addon.zip"
 ENV_PATH="$ROOT_DIR/.env"
 
+existing_public_api_base_url="${PUBLIC_API_BASE_URL-}"
+existing_extension_default_api_base_url="${EXTENSION_DEFAULT_API_BASE_URL-}"
+existing_public_website_url="${PUBLIC_WEBSITE_URL-}"
+existing_extension_version="${EXTENSION_VERSION-}"
+existing_extension_default_blocking_enabled="${EXTENSION_DEFAULT_BLOCKING_ENABLED-}"
+existing_extension_default_debug_unknown_indicators="${EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS-}"
+existing_firefox_addon_id="${FIREFOX_ADDON_ID-}"
+existing_firefox_min_version="${FIREFOX_MIN_VERSION-}"
+
 if [ -f "$ENV_PATH" ]; then
   set -a
   # shellcheck disable=SC1090
@@ -16,8 +25,43 @@ if [ -f "$ENV_PATH" ]; then
   set +a
 fi
 
+if [ -n "${existing_public_api_base_url}" ]; then
+  export PUBLIC_API_BASE_URL="$existing_public_api_base_url"
+fi
+
+if [ -n "${existing_extension_default_api_base_url}" ]; then
+  export EXTENSION_DEFAULT_API_BASE_URL="$existing_extension_default_api_base_url"
+fi
+
+if [ -n "${existing_public_website_url}" ]; then
+  export PUBLIC_WEBSITE_URL="$existing_public_website_url"
+fi
+
+if [ -n "${existing_extension_version}" ]; then
+  export EXTENSION_VERSION="$existing_extension_version"
+fi
+
+if [ -n "${existing_extension_default_blocking_enabled}" ]; then
+  export EXTENSION_DEFAULT_BLOCKING_ENABLED="$existing_extension_default_blocking_enabled"
+fi
+
+if [ -n "${existing_extension_default_debug_unknown_indicators}" ]; then
+  export EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS="$existing_extension_default_debug_unknown_indicators"
+fi
+
+if [ -n "${existing_firefox_addon_id}" ]; then
+  export FIREFOX_ADDON_ID="$existing_firefox_addon_id"
+fi
+
+if [ -n "${existing_firefox_min_version}" ]; then
+  export FIREFOX_MIN_VERSION="$existing_firefox_min_version"
+fi
+
 EXTENSION_DEFAULT_API_BASE_URL="${EXTENSION_DEFAULT_API_BASE_URL:-${PUBLIC_API_BASE_URL:-http://127.0.0.1:3000}}"
 PUBLIC_WEBSITE_URL="${PUBLIC_WEBSITE_URL:-https://your-website.example}"
+EXTENSION_VERSION="${EXTENSION_VERSION:-0.1.0}"
+EXTENSION_DEFAULT_BLOCKING_ENABLED="${EXTENSION_DEFAULT_BLOCKING_ENABLED:-false}"
+EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS="${EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS:-false}"
 FIREFOX_ADDON_ID="${FIREFOX_ADDON_ID:-youtube-ai-blocker@example.com}"
 FIREFOX_MIN_VERSION="${FIREFOX_MIN_VERSION:-121.0}"
 
@@ -35,6 +79,9 @@ const addonId = process.argv[3];
 const minVersion = process.argv[4];
 const apiBaseUrl = process.argv[5];
 const websiteUrl = process.argv[6];
+const extensionVersion = process.argv[7];
+const blockingEnabled = process.argv[8] === "true";
+const debugUnknownIndicators = process.argv[9] === "true";
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 const apiOrigin = new URL(apiBaseUrl).origin;
 
@@ -49,21 +96,30 @@ manifest.host_permissions = [
   `${apiOrigin}/*`,
 ];
 manifest.homepage_url = websiteUrl;
+manifest.version = extensionVersion;
 
 fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 
 const settingsScript = fs.readFileSync(settingsPath, "utf8");
-const nextSettingsScript = settingsScript.replace(
+let nextSettingsScript = settingsScript.replace(
   /apiBaseUrl: "[^"]+"/,
   `apiBaseUrl: "${apiBaseUrl}"`,
 );
+nextSettingsScript = nextSettingsScript.replace(
+  /blockingEnabled: (true|false)/,
+  `blockingEnabled: ${blockingEnabled}`,
+);
+nextSettingsScript = nextSettingsScript.replace(
+  /debugUnknownIndicators: (true|false)/,
+  `debugUnknownIndicators: ${debugUnknownIndicators}`,
+);
 
 if (settingsScript === nextSettingsScript) {
-  throw new Error("Failed to update default apiBaseUrl in built settings.js");
+  throw new Error("Failed to update packaged default settings in built settings.js");
 }
 
 fs.writeFileSync(settingsPath, nextSettingsScript);
-' "$BUILD_DIR/manifest.json" "$BUILD_DIR/common/settings.js" "$FIREFOX_ADDON_ID" "$FIREFOX_MIN_VERSION" "$EXTENSION_DEFAULT_API_BASE_URL" "$PUBLIC_WEBSITE_URL"
+' "$BUILD_DIR/manifest.json" "$BUILD_DIR/common/settings.js" "$FIREFOX_ADDON_ID" "$FIREFOX_MIN_VERSION" "$EXTENSION_DEFAULT_API_BASE_URL" "$PUBLIC_WEBSITE_URL" "$EXTENSION_VERSION" "$EXTENSION_DEFAULT_BLOCKING_ENABLED" "$EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS"
 
 (
   cd "$BUILD_DIR"

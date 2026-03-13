@@ -88,3 +88,9 @@ This creates:
 
 - `dist/firefox-addon/`: Firefox-targeted unpacked add-on bundle
 - `dist/youtube-ai-blocker-firefox-addon.zip`: ZIP package for Firefox Add-ons upload
+
+The packaged extension also includes the project logo icons from `client/icons/`, which are referenced by the extension manifest for browser UI and store packaging.
+
+When both shell environment variables and `.env` are present, the explicit shell environment values take precedence during packaging.
+
+Packaged builds can also stamp `EXTENSION_VERSION`, `EXTENSION_DEFAULT_BLOCKING_ENABLED`, and `EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS` from the root `.env`.

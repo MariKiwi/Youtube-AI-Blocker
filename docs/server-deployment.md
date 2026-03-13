@@ -32,6 +32,9 @@ Key values:
 - `PUBLIC_WEBSITE_URL`: public website URL
 - `PUBLIC_API_BASE_URL`: public API URL
 - `EXTENSION_DEFAULT_API_BASE_URL`: default API URL written into packaged extensions
+- `EXTENSION_VERSION`: version written into packaged extension manifests
+- `EXTENSION_DEFAULT_BLOCKING_ENABLED`: default blocking setting written into packaged extensions
+- `EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS`: default debug-indicator setting written into packaged extensions
 - `CHROME_WEB_STORE_URL`: public Chrome listing URL used on the website
 - `FIREFOX_ADDONS_URL`: public Firefox listing URL used on the website
 - `GITHUB_SOURCE_URL`: public source repository URL used on the website
