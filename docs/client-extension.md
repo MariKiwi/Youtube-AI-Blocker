@@ -72,3 +72,7 @@ To filter extension-specific logs in DevTools:
 3. Search for `[YAIB]`
 
 This removes most unrelated YouTube and browser noise from the console view.
+## Reload behavior
+
+When the extension is reloaded, updated, or temporarily disabled, Chrome can invalidate the content-script context while a YouTube page is still open. The client now treats that as a normal shutdown path, stops its observers, and waits for the page or extension to reload instead of logging it as an unexpected render failure.
+

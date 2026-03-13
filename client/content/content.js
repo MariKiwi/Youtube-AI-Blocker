@@ -54,11 +54,41 @@
   let lastRenderedCardSignature = "";
   let lastCardDiscoveryLogKey = null;
   let rerenderRequested = false;
+  let extensionContextInvalidated = false;
   const videoStateCache = new Map();
   const temporarilyRevealedVideoIds = new Set();
 
   function isWatchPage() {
     return global.location.pathname === "/watch";
+  }
+
+  function isExtensionContextInvalidatedError(error) {
+    const message = String(error?.message ?? error ?? "");
+    return message.includes("Extension context invalidated");
+  }
+
+  function handleExtensionContextInvalidated() {
+    extensionContextInvalidated = true;
+    renderScheduled = false;
+    rerenderRequested = false;
+
+    if (mutationObserver) {
+      mutationObserver.disconnect();
+      mutationObserver = null;
+    }
+
+    logger.info("Extension context invalidated; stopping page observers until reload");
+  }
+
+  function handleUnexpectedActionError(error) {
+    if (isExtensionContextInvalidatedError(error)) {
+      handleExtensionContextInvalidated();
+      return;
+    }
+
+    clearPendingAction();
+    setStatus(error.message, "error");
+    scheduleRender();
   }
 
   function getVideoIdFromLocation() {
@@ -566,29 +596,17 @@
     }
 
     if (button.dataset.yaibAction === "flag") {
-      handleFlag(videoId).catch((error) => {
-        clearPendingAction();
-        setStatus(error.message, "error");
-        scheduleRender();
-      });
+      handleFlag(videoId).catch(handleUnexpectedActionError);
       return;
     }
 
     if (button.dataset.yaibAction === "upvote") {
-      handleVote(videoId, "up").catch((error) => {
-        clearPendingAction();
-        setStatus(error.message, "error");
-        scheduleRender();
-      });
+      handleVote(videoId, "up").catch(handleUnexpectedActionError);
       return;
     }
 
     if (button.dataset.yaibAction === "downvote") {
-      handleVote(videoId, "down").catch((error) => {
-        clearPendingAction();
-        setStatus(error.message, "error");
-        scheduleRender();
-      });
+      handleVote(videoId, "down").catch(handleUnexpectedActionError);
     }
   }
 
@@ -697,6 +715,10 @@
   }
 
   function scheduleRender() {
+    if (extensionContextInvalidated) {
+      return;
+    }
+
     if (renderScheduled) {
       rerenderRequested = true;
       return;
@@ -720,6 +742,11 @@
           ]);
         })
         .catch((error) => {
+          if (isExtensionContextInvalidatedError(error)) {
+            handleExtensionContextInvalidated();
+            return;
+          }
+
           logger.error("Unexpected page render failure", error);
         })
         .finally(() => {
@@ -757,6 +784,10 @@
   }
 
   async function initializeClient() {
+    if (extensionContextInvalidated) {
+      return;
+    }
+
     const settings = await settingsApi.getSettings();
     const deviceId = await settingsApi.getDeviceId();
     const api = apiFactory.createApiClient(settings);
@@ -784,6 +815,11 @@
   }
 
   initializeClient().catch((error) => {
+    if (isExtensionContextInvalidatedError(error)) {
+      handleExtensionContextInvalidated();
+      return;
+    }
+
     logger.error("Content bootstrap failed", error);
   });
 }(globalThis));

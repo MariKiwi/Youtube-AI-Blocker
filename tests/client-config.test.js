@@ -104,6 +104,10 @@ test("content script scaffold includes interactive watch page controls", async (
   assert.match(contentScript, /yt-page-data-updated/);
   assert.match(contentScript, /renderScheduled/);
   assert.match(contentScript, /rerenderRequested/);
+  assert.match(contentScript, /extensionContextInvalidated/);
+  assert.match(contentScript, /isExtensionContextInvalidatedError/);
+  assert.match(contentScript, /handleExtensionContextInvalidated/);
+  assert.match(contentScript, /Extension context invalidated; stopping page observers until reload/);
   assert.match(contentScript, /Watch-page API request failed/);
   assert.doesNotMatch(contentScript, /\.innerHTML\s*=/);
 });
