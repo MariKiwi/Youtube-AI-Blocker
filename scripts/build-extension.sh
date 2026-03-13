@@ -101,11 +101,20 @@ if (settingsScript === nextSettingsScript) {
 fs.writeFileSync(settingsPath, nextSettingsScript);
 ' "$BUILD_DIR/manifest.json" "$BUILD_DIR/common/settings.js" "$EXTENSION_DEFAULT_API_BASE_URL" "$PUBLIC_WEBSITE_URL" "$EXTENSION_VERSION" "$EXTENSION_DEFAULT_BLOCKING_ENABLED" "$EXTENSION_DEFAULT_DEBUG_UNKNOWN_INDICATORS"
 
-(
-  cd "$BUILD_DIR"
-  rm -f "$ZIP_PATH"
-  bsdtar -a -cf "$ZIP_PATH" .
-)
+python3 - <<'PYTHONZIP'
+from pathlib import Path
+import zipfile
+
+build_dir = Path(r"$BUILD_DIR")
+zip_path = Path(r"$ZIP_PATH")
+if zip_path.exists():
+    zip_path.unlink()
+with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+    for path in sorted(build_dir.rglob("*")):
+        if path.is_dir():
+            continue
+        archive.write(path, path.relative_to(build_dir).as_posix())
+PYTHONZIP
 
 echo "Built extension bundle:"
 echo "  Directory: $BUILD_DIR"

@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 
 const root = path.resolve(import.meta.dirname, "..");
 const execFileAsync = promisify(execFile);
@@ -165,7 +166,7 @@ test("extension packaging workflow exists for local builds and store upload zips
   assert.match(buildScript, /manifest\.homepage_url/);
   assert.match(buildScript, /const fs = require\("fs"\);/);
   assert.match(buildScript, /Failed to update packaged default settings/);
-  assert.match(buildScript, /bsdtar -a -cf "\$ZIP_PATH" \./);
+  assert.match(buildScript, /zipfile\.ZipFile/);
   assert.match(firefoxBuildScript, /FIREFOX_ADDON_ID/);
   assert.match(firefoxBuildScript, /browser_specific_settings/);
   assert.match(firefoxBuildScript, /strict_min_version/);
@@ -236,4 +237,29 @@ test("build scripts stamp packaged extension defaults and manifest permissions f
   assert.match(firefoxSettings, /apiBaseUrl: "https:\/\/api\.yaib\.example\/v1"/);
   assert.match(firefoxSettings, /blockingEnabled: true/);
   assert.match(firefoxSettings, /debugUnknownIndicators: true/);
+});
+
+test("firefox add-on zip puts manifest at archive root", async () => {
+  const env = {
+    ...process.env,
+    PUBLIC_WEBSITE_URL: "https://yaib.example",
+    PUBLIC_API_BASE_URL: "https://api.yaib.example",
+    EXTENSION_DEFAULT_API_BASE_URL: "https://api.yaib.example/v1",
+    FIREFOX_ADDON_ID: "firefox-addon@example.com",
+    FIREFOX_MIN_VERSION: "128.0",
+  };
+
+  execFileSync("sh", ["./scripts/build-firefox-addon.sh"], {
+    cwd: root,
+    env,
+  });
+
+  const listing = execFileSync("python3", ["-c", "import sys, zipfile; z=zipfile.ZipFile(sys.argv[1]); sys.stdout.write(chr(10).join(z.namelist()))", `${root}/dist/youtube-ai-blocker-firefox-addon.zip`], {
+    cwd: root,
+    env,
+    encoding: "utf8",
+  });
+
+  assert.match(listing, /^manifest\.json$/m);
+  assert.doesNotMatch(listing, /^\.\/manifest\.json$/m);
 });
