@@ -106,11 +106,13 @@ a {
 }
 
 .brand__mark {
-  width: 18px;
-  height: 18px;
-  border-radius: 6px;
-  background: linear-gradient(135deg, var(--primary), var(--accent-strong));
-  box-shadow: 0 0 0 8px rgba(255, 47, 67, 0.08);
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  display: block;
+  object-fit: contain;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 0 0.5rem rgba(255, 47, 67, 0.08);
 }
 
 .brand__text,

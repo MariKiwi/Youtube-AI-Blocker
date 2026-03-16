@@ -47,6 +47,8 @@ test("website landing page includes core project messaging and SEO metadata", as
   assert.match(html, /Decline non-essential cookies/);
   assert.match(html, /Cookie consent/);
   assert.match(html, /\/public-config\.js/);
+  assert.match(html, /assets\/yaib-logo\.png/);
+  assert.match(html, /<img class="brand__mark" src="\/assets\/yaib-logo\.png"/);
 });
 
 test("website manual install guide exists and links the user through unpacked install flow", async () => {
@@ -68,6 +70,8 @@ test("website manual install guide exists and links the user through unpacked in
   assert.match(html, /cookie-settings-fab/);
   assert.match(html, /Accept analytics/);
   assert.match(html, /\/public-config\.js/);
+  assert.match(html, /assets\/yaib-logo\.png/);
+  assert.match(html, /<img class="brand__mark" src="\/assets\/yaib-logo\.png"/);
 });
 
 test("website build assets define themed styling and clean-route generation", async () => {
