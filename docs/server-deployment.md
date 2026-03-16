@@ -160,3 +160,8 @@ Backups are written to `BACKUP_DIR`, which defaults to `./backups`.
 - The API is stateless apart from the database
 - The built-in rate limiter is suitable for a single-instance prototype, not final multi-instance production
 - A stronger shared rate-limit store should be added later for scaled deployments
+
+
+## Website routing and sitemap
+
+The website container now generates clean folder-style routes during the image build, so public URLs can be served as `/` and `/manual-install/` instead of `index.html` and `manual-install.html`. The same build step also generates `sitemap.xml` automatically from the discovered HTML pages, using `PUBLIC_WEBSITE_URL` as the sitemap base URL.

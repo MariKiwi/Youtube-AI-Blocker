@@ -26,11 +26,13 @@ RUN PUBLIC_WEBSITE_URL="$PUBLIC_WEBSITE_URL" \
     UMAMI_DOMAINS="$UMAMI_DOMAINS" \
     node /app/build-public-config.mjs /app/public-config.js && \
     GOOGLE_SITE_VERIFICATION="$GOOGLE_SITE_VERIFICATION" \
-    node /app/inject-google-verification.mjs /app/index.html
+    node /app/inject-google-verification.mjs /app/index.html && \
+    PUBLIC_WEBSITE_URL="$PUBLIC_WEBSITE_URL" \
+    node /app/generate-site-output.mjs /app /app/.site-build
 
 FROM nginx:1.29-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app /usr/share/nginx/html
+COPY --from=builder /app/.site-build /usr/share/nginx/html
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD wget -q -O /dev/null http://127.0.0.1:80/ || exit 1

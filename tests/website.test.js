@@ -1,9 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import path from "node:path";
+import os from "node:os";
 
 const root = path.resolve(import.meta.dirname, "..");
+const execFileAsync = promisify(execFile);
 
 test("website landing page includes core project messaging and SEO metadata", async () => {
   const html = await readFile(`${root}/website/index.html`, "utf8");
@@ -15,7 +19,8 @@ test("website landing page includes core project messaging and SEO metadata", as
   assert.match(html, /Chrome Web Store/);
   assert.match(html, /Firefox Add-ons/);
   assert.match(html, /GitHub Releases/);
-  assert.match(html, /\.\/manual-install\.html/);
+  assert.match(html, /href="\/manual-install\/"/);
+  assert.doesNotMatch(html, /manual-install\.html/);
   assert.match(html, /third-party extension installs/i);
   assert.match(html, /github\.com\/MariKiwi\/Youtube-AI-Blocker\/releases/);
   assert.match(html, /How it works/);
@@ -41,7 +46,7 @@ test("website landing page includes core project messaging and SEO metadata", as
   assert.match(html, /Accept analytics/);
   assert.match(html, /Decline non-essential cookies/);
   assert.match(html, /Cookie consent/);
-  assert.match(html, /\.\/public-config\.js/);
+  assert.match(html, /\/public-config\.js/);
 });
 
 test("website manual install guide exists and links the user through unpacked install flow", async () => {
@@ -56,19 +61,25 @@ test("website manual install guide exists and links the user through unpacked in
   assert.match(html, /github\.com\/MariKiwi\/Youtube-AI-Blocker\/releases/);
   assert.match(html, /data-public-link="githubReleasesUrl"/);
   assert.match(html, /data-public-link="githubSourceUrl"/);
+  assert.match(html, /href="\/"/);
+  assert.match(html, /href="\/#install"/);
+  assert.doesNotMatch(html, /index\.html/);
   assert.match(html, /data-open-cookie-settings/);
   assert.match(html, /cookie-settings-fab/);
   assert.match(html, /Accept analytics/);
-  assert.match(html, /\.\/public-config\.js/);
+  assert.match(html, /\/public-config\.js/);
 });
 
-test("website assets define themed styling and lightweight behavior", async () => {
+test("website build assets define themed styling and clean-route generation", async () => {
   const css = await readFile(`${root}/website/styles.css`, "utf8");
   const js = await readFile(`${root}/website/script.js`, "utf8");
   const publicConfig = await readFile(`${root}/website/public-config.js`, "utf8");
   const publicConfigScript = await readFile(`${root}/website/generate-public-config.sh`, "utf8");
   const publicConfigBuilder = await readFile(`${root}/website/build-public-config.mjs`, "utf8");
   const googleInjector = await readFile(`${root}/website/inject-google-verification.mjs`, "utf8");
+  const siteOutputBuilder = await readFile(`${root}/website/generate-site-output.mjs`, "utf8");
+  const nginxConfig = await readFile(`${root}/website/nginx.conf`, "utf8");
+  const dockerfile = await readFile(`${root}/website/Dockerfile`, "utf8");
 
   assert.match(css, /color-scheme: light dark/);
   assert.match(css, /Space Grotesk/);
@@ -102,6 +113,14 @@ test("website assets define themed styling and lightweight behavior", async () =
   assert.match(publicConfigBuilder, /UMAMI_SCRIPT_URL/);
   assert.match(publicConfigBuilder, /UMAMI_WEBSITE_ID/);
   assert.match(googleInjector, /escapeHtmlAttribute/);
+  assert.match(siteOutputBuilder, /sitemap\.xml/);
+  assert.match(siteOutputBuilder, /routePathForHtml/);
+  assert.match(siteOutputBuilder, /outputPathForHtml/);
+  assert.match(siteOutputBuilder, /buildLegacyRedirect/);
+  assert.match(nginxConfig, /try_files \$uri \$uri\/ =404/);
+  assert.match(nginxConfig, /location = \/sitemap\.xml/);
+  assert.match(dockerfile, /generate-site-output\.mjs/);
+  assert.match(dockerfile, /COPY --from=builder \/app\/.site-build \/usr\/share\/nginx\/html/);
   assert.match(js, /IntersectionObserver/);
   assert.match(js, /currentYear/);
   assert.match(js, /data-reveal/);
@@ -119,4 +138,33 @@ test("website assets define themed styling and lightweight behavior", async () =
   assert.match(js, /cookie-settings-fab--raised/);
   assert.match(js, /showConsentBanner/);
   assert.match(js, /sanitizeHttpUrl/);
+});
+
+test("website build output generates clean routes, legacy redirects, and sitemap entries", async () => {
+  const outputDir = await mkdtemp(path.join(os.tmpdir(), 'yaib-site-'));
+
+  try {
+    await execFileAsync('node', [
+      `${root}/website/generate-site-output.mjs`,
+      `${root}/website`,
+      outputDir,
+    ], {
+      cwd: root,
+      env: {
+        ...process.env,
+        PUBLIC_WEBSITE_URL: 'https://yaib.example',
+      },
+    });
+
+    const sitemap = await readFile(path.join(outputDir, 'sitemap.xml'), 'utf8');
+    const cleanManualPage = await readFile(path.join(outputDir, 'manual-install', 'index.html'), 'utf8');
+    const legacyRedirect = await readFile(path.join(outputDir, 'manual-install.html'), 'utf8');
+
+    assert.match(sitemap, /<loc>https:\/\/yaib\.example\/<\/loc>/);
+    assert.match(sitemap, /<loc>https:\/\/yaib\.example\/manual-install\/<\/loc>/);
+    assert.match(cleanManualPage, /Manual Install \| YouTube AI Blocker/);
+    assert.match(legacyRedirect, /url=\/manual-install\//);
+  } finally {
+    await rm(outputDir, { recursive: true, force: true });
+  }
 });
