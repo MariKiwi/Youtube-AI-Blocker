@@ -164,4 +164,4 @@ Backups are written to `BACKUP_DIR`, which defaults to `./backups`.
 
 ## Website routing and sitemap
 
-The website container now generates clean folder-style routes during the image build, so public URLs can be served as `/` and `/manual-install/` instead of `index.html` and `manual-install.html`. The same build step also generates `sitemap.xml` automatically from the discovered HTML pages, using `PUBLIC_WEBSITE_URL` as the sitemap base URL.
+The website container now generates clean folder-style routes during the image build, so public URLs can be served as `/` and `/manual-install/` instead of `index.html` and `manual-install.html`. The same build step also generates `sitemap.xml` automatically from the discovered HTML pages, using `PUBLIC_WEBSITE_URL` as the sitemap base URL. It also emits `robots.txt` with a `Sitemap:` entry so crawlers can discover the sitemap directly.

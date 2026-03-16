@@ -129,7 +129,15 @@ async function main() {
     '',
   ].join("\n");
 
+  const robotsTxt = [
+    'User-agent: *',
+    'Allow: /',
+    `Sitemap: ${baseUrl}/sitemap.xml`,
+    '',
+  ].join("\n");
+
   await writeFile(path.join(outputDir, "sitemap.xml"), sitemapXml);
+  await writeFile(path.join(outputDir, "robots.txt"), robotsTxt);
 }
 
 main().catch((error) => {

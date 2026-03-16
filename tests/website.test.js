@@ -157,11 +157,13 @@ test("website build output generates clean routes, legacy redirects, and sitemap
     });
 
     const sitemap = await readFile(path.join(outputDir, 'sitemap.xml'), 'utf8');
+    const robots = await readFile(path.join(outputDir, 'robots.txt'), 'utf8');
     const cleanManualPage = await readFile(path.join(outputDir, 'manual-install', 'index.html'), 'utf8');
     const legacyRedirect = await readFile(path.join(outputDir, 'manual-install.html'), 'utf8');
 
     assert.match(sitemap, /<loc>https:\/\/yaib\.example\/<\/loc>/);
     assert.match(sitemap, /<loc>https:\/\/yaib\.example\/manual-install\/<\/loc>/);
+    assert.match(robots, /Sitemap: https:\/\/yaib\.example\/sitemap\.xml/);
     assert.match(cleanManualPage, /Manual Install \| YouTube AI Blocker/);
     assert.match(legacyRedirect, /url=\/manual-install\//);
   } finally {

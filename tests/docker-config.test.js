@@ -65,11 +65,13 @@ test("website Dockerfile serves the static landing page through nginx", async ()
   assert.match(dockerfile, /WORKDIR \/app/);
   assert.match(dockerfile, /COPY \. \./);
   assert.match(dockerfile, /COPY nginx\.conf \/etc\/nginx\/conf\.d\/default\.conf/);
-  assert.match(dockerfile, /COPY --from=builder \/app \/usr\/share\/nginx\/html/);
+  assert.match(dockerfile, /generate-site-output\.mjs/);
+  assert.match(dockerfile, /COPY --from=builder \/app\/.site-build \/usr\/share\/nginx\/html/);
   assert.match(dockerfile, /build-public-config\.mjs/);
   assert.match(dockerfile, /inject-google-verification\.mjs/);
   assert.doesNotMatch(dockerfile, /sed -i/);
-  assert.match(nginxConfig, /try_files \$uri \$uri\/ \/index\.html/);
+  assert.match(nginxConfig, /try_files \$uri \$uri\/ =404/);
+  assert.match(nginxConfig, /location = \/sitemap\.xml/);
   assert.match(nginxConfig, /expires 7d/);
 });
 
