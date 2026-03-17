@@ -19,6 +19,7 @@ If you are new to the project, start here and then open the area you care about.
 
 - `testing.md`: how tests are organized and run
 - `security.md`: current injection hardening and remaining security work
+- `privacy-policy.md`: explains the repository-level privacy policy and how operators should adapt it for real deployments
 
 ## Suggested Reading Order
 

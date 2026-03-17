@@ -18,7 +18,8 @@
   <a href="docs/client-extension.md">Extension</a> |
   <a href="docs/client-publishing.md">Publishing</a> |
   <a href="docs/api.md">API</a> |
-  <a href="docs/server-deployment.md">Deployment</a>
+  <a href="docs/server-deployment.md">Deployment</a> |
+  <a href="PRIVACY.md">Privacy</a>
 </p>
 
 
