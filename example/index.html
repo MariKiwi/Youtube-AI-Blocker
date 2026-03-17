@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube AI Blocker Promo Mockup</title>
+  <meta
+    name="description"
+    content="Screenshot-ready promotional mockup for the YouTube AI Blocker Chrome Web Store listing."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="promo-page">
+    <section class="hero">
+      <div class="hero__copy">
+        <p class="eyebrow">Chrome Web Store screenshots</p>
+        <h1>Show what the extension does in one clean visual set.</h1>
+        <p class="hero__lede">
+          This mockup page is designed for taking storefront screenshots: the popup UI, feed labels,
+          watch-page actions, and optional blocking are all staged here in a polished layout.
+        </p>
+        <div class="hero__chips">
+          <span>Popup settings</span>
+          <span>Marked video cards</span>
+          <span>Watch-page actions</span>
+          <span>Blocking overlay</span>
+        </div>
+      </div>
+      <div class="hero__panel">
+        <p class="hero__panel-label">Suggested capture flow</p>
+        <ol class="capture-list">
+          <li>Take the full page for a summary screenshot.</li>
+          <li>Crop the popup card for settings-focused imagery.</li>
+          <li>Crop the feed grid to show marked thumbnails.</li>
+          <li>Crop the watch scene to show voting and blocking.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="showcase">
+      <article class="frame frame--popup">
+        <div class="frame__header">
+          <div>
+            <p class="frame__eyebrow">Screenshot 01</p>
+            <h2>Extension popup</h2>
+          </div>
+          <span class="frame__tag">1280 x 800</span>
+        </div>
+        <div class="capture-shell">
+          <div class="capture-surface capture-surface--popup">
+            <div class="browser browser--popup">
+              <div class="browser__chrome">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <section class="popup-card">
+                <header class="popup-card__header">
+                  <div>
+                    <p class="popup-card__eyebrow">Extension settings</p>
+                    <h3>YouTube AI Blocker</h3>
+                  </div>
+                  <span class="popup-card__status">Synced</span>
+                </header>
+                <div class="setting-row">
+                  <div>
+                    <strong>Block flagged videos</strong>
+                    <p>Hide flagged content instead of only highlighting it.</p>
+                  </div>
+                  <span class="switch switch--on" aria-hidden="true"></span>
+                </div>
+                <div class="setting-row">
+                  <div>
+                    <strong>Debug unknown indicators</strong>
+                    <p>Show temporary badges for unreviewed videos during testing.</p>
+                  </div>
+                  <span class="switch" aria-hidden="true"></span>
+                </div>
+                <label class="api-field">
+                  <span>API server URL</span>
+                  <span class="api-field__value">https://api.yaib.example</span>
+                </label>
+                <footer class="popup-card__footer">
+                  <button class="button button--muted" type="button">Reset</button>
+                  <button class="button button--accent" type="button">Save</button>
+                </footer>
+              </section>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="frame frame--feed">
+        <div class="frame__header">
+          <div>
+            <p class="frame__eyebrow">Screenshot 02</p>
+            <h2>Marked videos in the feed</h2>
+          </div>
+          <span class="frame__tag">1280 x 800</span>
+        </div>
+        <div class="capture-shell">
+          <div class="capture-surface">
+            <div class="browser">
+              <div class="browser__chrome browser__chrome--wide">
+                <span></span>
+                <span></span>
+                <span></span>
+                <div class="browser__url">youtube.com/feed/subscriptions</div>
+              </div>
+              <div class="youtube-shell">
+                <aside class="youtube-sidebar">
+                  <span>Home</span>
+                  <span>Subscriptions</span>
+                  <span>Playlists</span>
+                  <span>History</span>
+                </aside>
+                <section class="feed-grid">
+                  <article class="video-card video-card--high">
+                    <div class="video-card__thumb">
+                      <img src="../website/assets/mario-ame-fSfv8RhkvCs-unsplash.jpg" alt="Example high confidence card thumbnail">
+                      <span class="video-card__badge video-card__badge--high">AI High · 18</span>
+                    </div>
+                    <div class="video-card__body">
+                      <h3>Viral motivation speech generated overnight</h3>
+                      <p>Highlighted with the strongest warning state.</p>
+                    </div>
+                  </article>
+                  <article class="video-card video-card--medium">
+                    <div class="video-card__thumb">
+                      <img src="../website/assets/mario-ame-EUTXu9T36XU-unsplash.jpg" alt="Example medium confidence card thumbnail">
+                      <span class="video-card__badge video-card__badge--medium">AI Medium · 7</span>
+                    </div>
+                    <div class="video-card__body">
+                      <h3>Storytime channel with synthetic voice cues</h3>
+                      <p>Visible warning directly on the thumbnail card.</p>
+                    </div>
+                  </article>
+                  <article class="video-card video-card--unknown">
+                    <div class="video-card__thumb">
+                      <img src="../website/assets/logan-voss-vJy0DdZ6NVk-unsplash.jpg" alt="Example unknown card thumbnail">
+                      <span class="video-card__badge video-card__badge--unknown">AI Unknown</span>
+                    </div>
+                    <div class="video-card__body">
+                      <h3>Fresh upload under review</h3>
+                      <p>Useful for debug or early moderation workflows.</p>
+                    </div>
+                  </article>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="frame frame--watch">
+        <div class="frame__header">
+          <div>
+            <p class="frame__eyebrow">Screenshot 03</p>
+            <h2>Watch page actions and blocking</h2>
+          </div>
+          <span class="frame__tag">1280 x 800</span>
+        </div>
+        <div class="capture-shell">
+          <div class="capture-surface">
+            <div class="browser">
+              <div class="browser__chrome browser__chrome--wide">
+                <span></span>
+                <span></span>
+                <span></span>
+                <div class="browser__url">youtube.com/watch?v=demo123</div>
+              </div>
+              <section class="watch-scene">
+                <div class="watch-scene__video">
+                  <img src="../website/assets/logan-voss-vJy0DdZ6NVk-unsplash.jpg" alt="Example watch page video art">
+                  <div class="watch-overlay">
+                    <p class="watch-overlay__eyebrow">Blocking enabled</p>
+                    <h3>Flagged video hidden</h3>
+                    <p>Confidence high with a score of 18. Reveal temporarily if you still want to inspect it.</p>
+                    <button class="button button--overlay" type="button">Reveal once</button>
+                  </div>
+                </div>
+                <div class="action-rail">
+                  <span class="action-pill action-pill--high">AI High</span>
+                  <span class="action-pill">Score 18</span>
+                  <button class="action-button action-button--active" type="button">Upvoted</button>
+                  <button class="action-button" type="button">Downvote</button>
+                  <button class="action-button" type="button">Flag as AI</button>
+                </div>
+                <div class="watch-copy">
+                  <h3>Visible controls inside YouTube</h3>
+                  <p>The extension keeps the moderation signal, voting controls, and blocking state directly on the page where the decision happens.</p>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

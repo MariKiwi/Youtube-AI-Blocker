@@ -69,7 +69,8 @@ Current practical flow:
 2. Upload `dist/youtube-ai-blocker-extension.zip` in the Chrome Web Store dashboard
 3. Complete the listing metadata in the dashboard
 4. Add store-required assets such as screenshots, promotional images, and privacy disclosures
-5. Submit the package for review
+5. Use the screenshot mockup in `example/index.html` when you need staged listing images for the popup UI, marked videos, or blocking overlays
+6. Submit the package for review
 
 ## Firefox local testing flow
 

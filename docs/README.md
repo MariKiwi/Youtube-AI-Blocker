@@ -8,6 +8,7 @@ If you are new to the project, start here and then open the area you care about.
 
 - `client-extension.md`: how the current browser extension works
 - `client-publishing.md`: how to build release packages for Chromium and Firefox
+- `store-assets.md`: how to use the screenshot mockup in `example/` for storefront imagery
 
 ## Server and Deployment Docs
 
