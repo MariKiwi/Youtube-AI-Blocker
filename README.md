@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>Install:</b>
-  <a href="https://chromewebstore.google.com/">Chrome Web Store (Coming Soon)</a> |
+  <a href="https://chromewebstore.google.com/detail/youtube-ai-blocker/lhhjmajfackfpamfcjifjlencjhednal">Chrome Web Store (Coming Soon)</a> |
   <a href="https://addons.mozilla.org/en-US/firefox/addon/youtube-ai-blocker/">Firefox Add-ons</a> |
   <a href="https://github.com/MariKiwi/Youtube-AI-Blocker/releases">Manual Releases</a> |
   <a href="https://yaib.codecurrent.eu">Website</a>

@@ -15,10 +15,12 @@ test("website landing page includes core project messaging and SEO metadata", as
   assert.match(html, /<title>YouTube AI Blocker \| Flag, Highlight, and Block AI Videos<\/title>/);
   assert.match(html, /name="description"/);
   assert.match(html, /open source browser extension/i);
-  assert.match(html, /Store install when available, manual install when needed/i);
+  assert.match(html, /Install from the browser store, or use manual install if you need it/i);
   assert.match(html, /Chrome Web Store/);
+  assert.match(html, /Install from Chrome Web Store/);
   assert.match(html, /Firefox Add-ons/);
   assert.match(html, /GitHub Releases/);
+  assert.doesNotMatch(html, /Chrome listing soon/);
   assert.match(html, /href="\/manual-install\/"/);
   assert.doesNotMatch(html, /manual-install\.html/);
   assert.match(html, /third-party extension installs/i);
